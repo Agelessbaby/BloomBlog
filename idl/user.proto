@@ -1,0 +1,40 @@
+syntax = "proto3";
+package user;
+option go_package = "user";
+
+message BloomBlog_user_register_request {
+  string username = 1; // username, maximum 32 char
+  string password = 2; // password, maximum 32 char
+}
+
+message BloomBlog_user_register_response {
+  int32 status_code = 1; // status code, 0 for success, others for failure
+  optional string status_msg = 2; // description for status
+  int64 user_id = 3; // user id
+  string token = 4; // credential token
+}
+
+message BloomBlog_user_request {
+  int64 user_id = 1; // user id
+  string token = 2; // credential token
+}
+
+message BloomBlog_user_response {
+  int32 status_code = 1; // status code, 0 for success, others for failure
+  optional string status_msg = 2; // description for status
+  User user = 3; // user information
+}
+
+message User {
+  int64 id = 1; // user id
+  string name = 2; // user name
+  optional int64 follow_count = 3; // follow count
+  optional int64 follower_count = 4; // followers count
+  bool is_follow = 5; // true-followed，false-not followed
+}
+
+service UserSrv{
+  rpc Register (BloomBlog_user_register_request) returns (BloomBlog_user_register_response);
+  rpc Login (BloomBlog_user_register_request) returns (BloomBlog_user_register_response);
+  rpc GetUserById (BloomBlog_user_request) returns (BloomBlog_user_response);
+}

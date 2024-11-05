@@ -16,6 +16,7 @@ func NewCreateUserService(ctx context.Context) *CreateUserService {
 	return &CreateUserService{ctx: ctx}
 }
 
+// TODO use crypto algorithm for security
 func (s *CreateUserService) CreateUser(req *user.BloomBlogUserRegisterRequest) error {
 	users, err := db.QueryUser(s.ctx, req.Username)
 	if err != nil {

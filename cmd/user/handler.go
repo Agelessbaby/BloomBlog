@@ -6,6 +6,7 @@ import (
 	"github.com/Agelessbaby/BloomBlog/cmd/user/command"
 	user "github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user"
 	"github.com/Agelessbaby/BloomBlog/dal/pack"
+	"github.com/Agelessbaby/BloomBlog/util/jwt"
 )
 
 // UserSrvImpl implements the last service interface defined in the IDL.
@@ -13,11 +14,12 @@ type UserSrvImpl struct{}
 
 // Register implements the UserSrvImpl interface.
 func (s *UserSrvImpl) Register(ctx context.Context, req *user.BloomBlogUserRegisterRequest) (resp *user.BloomBlogUserRegisterResponse, err error) {
-	// TODO: Your code here...
+	// if username or password is null
 	if len(req.Username) == 0 || len(req.Password) == 0 {
 		resp = pack.BuildUserRegisterResp(errors.New("username or password is empty"))
 		return resp, nil
 	}
+
 	if err := command.NewCreateUserService(ctx).CreateUser(req); err != nil {
 		resp = pack.BuildUserRegisterResp(err)
 		return resp, nil
@@ -27,8 +29,25 @@ func (s *UserSrvImpl) Register(ctx context.Context, req *user.BloomBlogUserRegis
 
 // Login implements the UserSrvImpl interface.
 func (s *UserSrvImpl) Login(ctx context.Context, req *user.BloomBlogUserRegisterRequest) (resp *user.BloomBlogUserRegisterResponse, err error) {
-	// TODO: Your code here...
-	return
+	// if username or password is null
+	if len(req.Username) == 0 || len(req.Password) == 0 {
+		resp = pack.BuildUserLoginResponse(errors.New("username or password is empty"))
+		return resp, nil
+	}
+	userId, err := command.NewCheckUserService(ctx).CheckUser(req)
+	if err != nil {
+		resp = pack.BuildUserLoginResponse(err)
+		return resp, nil
+	}
+	token, err := jwt.GenJWT(userId)
+	if err != nil {
+		resp = pack.BuildUserLoginResponse(errors.New("creating signature failed"))
+		return resp, nil
+	}
+	resp = pack.BuildUserLoginResponse(nil)
+	resp.UserId = userId
+	resp.Token = token
+	return resp, nil
 }
 
 // GetUserById implements the UserSrvImpl interface.

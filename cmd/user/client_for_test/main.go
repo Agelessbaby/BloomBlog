@@ -13,8 +13,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	resp, err := client.Register(context.Background(), &user.BloomBlogUserRegisterRequest{
-		Username: "Tommy",
+	resp, err := client.Login(context.Background(), &user.BloomBlogUserRegisterRequest{
+		Username: "Tom",
 		Password: "123456",
 	})
 	if err != nil {

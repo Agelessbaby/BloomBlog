@@ -1,26 +1,3 @@
-// Copyright 2022 a76yyyy && CloudWeGo Authors
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-/*
- * @Author: a76yyyy q981331502@163.com
- * @Date: 2022-06-07 23:23:09
- * @LastEditors: a76yyyy q981331502@163.com
- * @LastEditTime: 2022-06-19 00:27:47
- * @FilePath: /tiktok/dal/db/user.go
- * @Description: User 数据库操作业务逻辑
- */
-
 package db
 
 import (
@@ -30,7 +7,6 @@ import (
 )
 
 // User Gorm Data Structures
-// User和Video是多对多关系，两个模型之间会有一个连接表 user_favorite_videos
 type User struct {
 	gorm.Model
 	UserName       string `gorm:"index:idx_username,unique;type:varchar(40);not null" json:"username"`

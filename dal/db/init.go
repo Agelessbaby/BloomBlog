@@ -49,12 +49,12 @@ func initDB() {
 		SkipDefaultTransaction: true,
 	})
 	if err != nil {
-		klog.Errorf("init DB err: %v using %s", err, dsn)
+		klog.Fatalf("init DB err: %v using %s", err, dsn)
 	}
 
 	// gorm open telemetry records database queries and reports DBStats metrics.
 	if err = DB.Use(otelgorm.NewPlugin()); err != nil {
-		klog.Errorf(err.Error())
+		klog.Fatal(err)
 	}
 
 	if err := DB.AutoMigrate(&User{}); err != nil {
@@ -63,11 +63,11 @@ func initDB() {
 
 	sqlDB, err := DB.DB()
 	if err != nil {
-		klog.Error(err)
+		klog.Fatal(err)
 	}
 
 	if sqlDB == nil {
-		klog.Error("sqlDB is nil")
+		klog.Fatal("sqlDB is nil")
 	}
 
 	if err := sqlDB.Ping(); err != nil {

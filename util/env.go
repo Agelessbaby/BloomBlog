@@ -1,15 +1,23 @@
 package env
 
 import (
+	"github.com/cloudwego/kitex/pkg/klog"
 	"path"
 	"runtime"
+	"time"
 )
 
 var (
-	ProjectRootPath = path.Dir(getoncurrentPath()) + "/"
+	ProjectRootPath = path.Dir(GetConcurrentPath()) + "/"
+	Loglevelmap     = map[string]klog.Level{"info": klog.LevelInfo, "debug": klog.LevelDebug, "error": klog.LevelError, "fatal": klog.LevelFatal}
 )
 
-func getoncurrentPath() string {
-	_, filename, _, _ := runtime.Caller(0) //0表示当前本行代码在什么位置
-	return path.Dir(filename)              //返回文件所在的目录
+func GetConcurrentPath() string {
+	_, filename, _, _ := runtime.Caller(0)
+	return path.Dir(filename) //return the dir that the code currently runs on
 }
+
+const (
+	TOKEN_EXPIRE = time.Hour * 24 * 7
+	JWT_SECRET   = "BloomBlog"
+)

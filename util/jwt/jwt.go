@@ -52,19 +52,19 @@ func GenJWT(userId int64) (string, error) {
 }
 func genJWT(header JwtHeader, payload JwtPayload, secret string) (string, error) {
 	var part1, part2, signature string
-	//header转成json，然后进行Base64编码
+	//turn header into json
 	if bs1, err := json.Marshal(header); err != nil {
 		return "", err
 	} else {
-		part1 = base64.RawURLEncoding.EncodeToString(bs1) //这里没有使用StdEncoding，RawURLEncoding的结果中不会包含=+/等url中的特殊字符
+		part1 = base64.RawURLEncoding.EncodeToString(bs1)
 	}
-	//payload转成json，然后进行Base64编码
+
 	if bs2, err := json.Marshal(payload); err != nil {
 		return "", err
 	} else {
 		part2 = base64.RawURLEncoding.EncodeToString(bs2)
 	}
-	//基于sha256的哈希认证算法。任意长度的字符串，经过sha256之后长度都变成了256 bits
+
 	h := hmac.New(sha256.New, []byte(secret))
 	//signature = HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload),secret)
 	h.Write([]byte(part1 + "." + part2))

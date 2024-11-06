@@ -13,12 +13,17 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	resp, err := client.Login(context.Background(), &user.BloomBlogUserRegisterRequest{
-		Username: "Tom",
+	loginResp, err := client.Login(context.TODO(), &user.BloomBlogUserRegisterRequest{
+		Username: "Jeff",
 		Password: "123456",
 	})
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(resp)
+	fmt.Println(loginResp)
+	getUserResp, err := client.GetUserById(context.TODO(), &user.BloomBlogUserRequest{
+		UserId: 1,
+		Token:  loginResp.Token,
+	})
+	fmt.Println(getUserResp)
 }

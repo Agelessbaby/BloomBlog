@@ -3,9 +3,12 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/Agelessbaby/BloomBlog/cmd/user/command"
 	user "github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user"
 	"github.com/Agelessbaby/BloomBlog/dal/pack"
+	env "github.com/Agelessbaby/BloomBlog/util"
+	"github.com/Agelessbaby/BloomBlog/util/errno"
 	"github.com/Agelessbaby/BloomBlog/util/jwt"
 )
 
@@ -52,6 +55,35 @@ func (s *UserSrvImpl) Login(ctx context.Context, req *user.BloomBlogUserRegister
 
 // GetUserById implements the UserSrvImpl interface.
 func (s *UserSrvImpl) GetUserById(ctx context.Context, req *user.BloomBlogUserRequest) (resp *user.BloomBlogUserResponse, err error) {
-	// TODO: Your code here...
-	return
+	_, payload, err := jwt.VerifyJwt(req.Token, env.JWT_SECRET)
+	if err != nil {
+		resp = pack.BuildUserUserResp(errno.ErrTokenInvalid)
+		return resp, nil
+	}
+	var from_id int64
+	fromid_val := payload.UserDefined["userid"]
+	switch v := fromid_val.(type) {
+	case int64:
+		from_id = v
+	case float64:
+		from_id = int64(v)
+	}
+	if from_id <= 0 {
+		resp = pack.BuildUserUserResp(errno.ErrTokenInvalid)
+		return resp, nil
+	}
+	if req.UserId <= 0 {
+		resp = pack.BuildUserUserResp(errno.ErrBind)
+		return resp, nil
+	}
+	user, err := command.NewGetUserService(ctx).GetUser(req, from_id)
+	if err != nil {
+		resp = pack.BuildUserUserResp(err)
+		return resp, nil
+	}
+
+	resp = pack.BuildUserUserResp(errno.Success)
+	resp.User = user
+	fmt.Println(resp)
+	return resp, nil
 }

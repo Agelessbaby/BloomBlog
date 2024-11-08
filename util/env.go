@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// This file is for env parameters
 var (
 	ProjectRootPath = path.Dir(GetConcurrentPath()) + "/"
 	Loglevelmap     = map[string]klog.Level{"info": klog.LevelInfo, "debug": klog.LevelDebug, "error": klog.LevelError, "fatal": klog.LevelFatal}

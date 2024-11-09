@@ -9,13 +9,8 @@ import (
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/retry"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
-	"github.com/kitex-contrib/obs-opentelemetry/provider"
-	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"github.com/spf13/viper"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 )
 
@@ -30,19 +25,20 @@ func initUserRpc(config *viper.Viper) {
 	}
 	ServiceName := config.GetString("Server.Name")
 
-	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(ServiceName),
-		provider.WithExportEndpoint("localhost:4317"),
-		provider.WithInsecure(),
-	)
-	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
-
-	go func() {
-		<-ch
-		p.Shutdown(context.Background())
-		os.Exit(0)
-	}()
+	//TODO Add tracing in future
+	//p := provider.NewOpenTelemetryProvider(
+	//	provider.WithServiceName(ServiceName),
+	//	provider.WithExportEndpoint("localhost:4317"),
+	//	provider.WithInsecure(),
+	//)
+	//ch := make(chan os.Signal, 1)
+	//signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+	//
+	//go func() {
+	//	<-ch
+	//	p.Shutdown(context.Background())
+	//	os.Exit(0)
+	//}()
 
 	c, err := usersrv.NewClient(
 		ServiceName,
@@ -53,8 +49,8 @@ func initUserRpc(config *viper.Viper) {
 		client.WithRPCTimeout(30*time.Second),             // rpc timeout
 		client.WithConnectTimeout(30000*time.Millisecond), // conn timeout
 		client.WithFailureRetry(retry.NewFailurePolicy()), // retry
-		client.WithSuite(tracing.NewClientSuite()),        // tracer
-		client.WithResolver(r),                            // resolver
+		//client.WithSuite(tracing.NewClientSuite()),        // tracer
+		client.WithResolver(r), // resolver
 		// Please keep the same as provider.WithServiceName
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: ServiceName}),
 	)

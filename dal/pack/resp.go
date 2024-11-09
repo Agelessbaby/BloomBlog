@@ -2,10 +2,11 @@ package pack
 
 import (
 	"github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user"
+	"github.com/Agelessbaby/BloomBlog/util/errno"
 )
 
 func BuildUserRegisterResp(err error) *user.BloomBlogUserRegisterResponse {
-	if err == nil {
+	if err == nil || err == errno.Success {
 		msg := "success"
 		return &user.BloomBlogUserRegisterResponse{StatusCode: int32(0), StatusMsg: &msg}
 	}
@@ -14,7 +15,7 @@ func BuildUserRegisterResp(err error) *user.BloomBlogUserRegisterResponse {
 }
 
 func BuildUserLoginResponse(err error) *user.BloomBlogUserRegisterResponse {
-	if err == nil {
+	if err == nil || err == errno.Success {
 		msg := "success"
 		return &user.BloomBlogUserRegisterResponse{StatusCode: int32(0), StatusMsg: &msg}
 	}
@@ -23,7 +24,7 @@ func BuildUserLoginResponse(err error) *user.BloomBlogUserRegisterResponse {
 }
 
 func BuildUserUserResp(err error) *user.BloomBlogUserResponse {
-	if err == nil {
+	if err == nil || err == errno.Success {
 		msg := "success"
 		return &user.BloomBlogUserResponse{StatusCode: int32(0), StatusMsg: &msg}
 	}

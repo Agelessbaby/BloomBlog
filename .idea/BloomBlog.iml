@@ -2,7 +2,17 @@
 <module type="WEB_MODULE" version="4">
   <component name="Go" enabled="true" />
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.etcd-data" />
+      <excludeFolder url="file://$MODULE_DIR$/.etcd-data/data" />
+      <excludeFolder url="file://$MODULE_DIR$/.mysql_data" />
+      <excludeFolder url="file://$MODULE_DIR$/.mysql_data/#innodb_redo" />
+      <excludeFolder url="file://$MODULE_DIR$/.mysql_data/#innodb_temp" />
+      <excludeFolder url="file://$MODULE_DIR$/.mysql_data/BloomBlog" />
+      <excludeFolder url="file://$MODULE_DIR$/.mysql_data/mysql" />
+      <excludeFolder url="file://$MODULE_DIR$/.mysql_data/performance_schema" />
+      <excludeFolder url="file://$MODULE_DIR$/.mysql_data/sys" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

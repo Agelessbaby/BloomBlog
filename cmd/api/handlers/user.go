@@ -5,10 +5,21 @@ import (
 	"github.com/Agelessbaby/BloomBlog/cmd/api/rpc"
 	"github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user"
 	"github.com/Agelessbaby/BloomBlog/dal/pack"
+	_ "github.com/Agelessbaby/BloomBlog/docs"
 	"github.com/Agelessbaby/BloomBlog/util/errno"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
+// Login handles user login
+// @Summary      User Login
+// @Description  Authenticate user with username and password
+// @Tags         User
+// @Accept       json
+// @Produce      json
+// @Param        loginParam  body      UserRegisterParam  true  "User login data"
+// @Success      200         {object}  user.BloomBlogUserRegisterResponse
+// @Failure      400         {object}  errno.ErrNo
+// @Router       /bloomblog/user/login [post]
 func Login(c context.Context, ctx *app.RequestContext) {
 	var loginParam UserRegisterParam
 	if err := ctx.Bind(&loginParam); err != nil {
@@ -16,7 +27,7 @@ func Login(c context.Context, ctx *app.RequestContext) {
 		return
 	}
 	if len(loginParam.UserName) == 0 || len(loginParam.PassWord) == 0 {
-		SendResponse(ctx, pack.BuildUserUserResp(errno.ErrBind))
+		SendResponse(ctx, pack.BuildUserLoginResponse(errno.ErrBind))
 		return
 	}
 	resp, err := rpc.Login(c, &user.BloomBlogUserRegisterRequest{
@@ -30,6 +41,16 @@ func Login(c context.Context, ctx *app.RequestContext) {
 	SendResponse(ctx, resp)
 }
 
+// Register handles user registration
+// @Summary      User Registration
+// @Description  Register a new user
+// @Tags         User
+// @Accept       json
+// @Produce      json
+// @Param        registerParam  body      UserRegisterParam  true  "User registration data"
+// @Success      200            {object}  user.BloomBlogUserRegisterResponse
+// @Failure      400            {object}  errno.ErrNo
+// @Router       /bloomblog/user/register [post]
 func Register(c context.Context, ctx *app.RequestContext) {
 	var registerParam UserRegisterParam
 	if err := ctx.Bind(&registerParam); err != nil {
@@ -54,4 +75,32 @@ func Register(c context.Context, ctx *app.RequestContext) {
 	SendResponse(ctx, resp)
 }
 
-func GetUserById(c context.Context, ctx *app.RequestContext) {}
+// GetUserById retrieves a user by ID
+// @Summary      Get User by ID
+// @Description  Get user information by ID and token
+// @Tags         User
+// @Accept       json
+// @Produce      json
+// @Param        userVar  body      UserParam  true  "User ID and token"
+// @Success      200      {object}  user.BloomBlogUserResponse
+// @Failure      400      {object}  errno.ErrNo
+// @Router       /bloomblog/user/getuserbyid [POST]
+func GetUserById(c context.Context, ctx *app.RequestContext) {
+	var userVar UserParam
+	if err := ctx.Bind(&userVar); err != nil {
+		SendResponse(ctx, pack.BuildUserUserResp(errno.ErrBind))
+	}
+	if len(userVar.Token) == 0 || userVar.UserId < 0 {
+		SendResponse(ctx, pack.BuildUserUserResp(errno.ErrBind))
+		return
+	}
+	resp, err := rpc.GetUserById(c, &user.BloomBlogUserRequest{
+		UserId: userVar.UserId,
+		Token:  userVar.Token,
+	})
+	if err != nil {
+		SendResponse(ctx, pack.BuildUserUserResp(errno.ConvertErr(err)))
+		return
+	}
+	SendResponse(ctx, resp)
+}

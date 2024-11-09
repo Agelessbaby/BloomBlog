@@ -82,3 +82,14 @@ func Login(ctx context.Context, req *user.BloomBlogUserRegisterRequest) (resp *u
 	}
 	return resp, nil
 }
+
+func GetUserById(ctx context.Context, req *user.BloomBlogUserRequest) (resp *user.BloomBlogUserResponse, err error) {
+	resp, err = userClient.GetUserById(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), *resp.StatusMsg)
+	}
+	return resp, nil
+}

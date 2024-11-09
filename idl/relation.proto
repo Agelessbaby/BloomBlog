@@ -1,0 +1,48 @@
+syntax = "proto3";
+package relation;
+option go_package = "relation";
+import "user.proto";
+
+message bloomblog_relation_action_request{
+  int64 user_id=1;
+  string token = 2; // credential token
+  int64 to_user_id = 3;
+  int32 action_type = 4; // 1-follow，2-unfollow
+}
+
+message bloomblog_relation_action_response {
+  int32 status_code = 1; // 0-success，others-failure
+  optional string status_msg = 2; // return statement description
+}
+
+//The users that current user follows
+message bloomblog_relation_follow_list_request {
+  int64 user_id = 1;
+  string token = 2;
+}
+
+message bloomblog_relation_follow_list_response {
+  int32 status_code = 1; //0-success others-failure
+  optional string status_msg = 2; // status description
+  repeated user.User user_list = 3; // user list
+}
+
+//The users that follows current user
+message bloomblog_relation_follower_list_request {
+  int64 user_id = 1; // 用户id
+  string token = 2; // 用户鉴权token
+}
+
+message bloomblog_relation_follower_list_response {
+  int32 status_code = 1;
+  optional string status_msg = 2;
+  repeated user.User user_list = 3;
+}
+
+service RelationSrv{
+  rpc RelationAction(bloomblog_relation_action_request) returns (bloomblog_relation_action_response); //follow or unfollow
+  rpc RelationFollowList(bloomblog_relation_follow_list_request) returns (bloomblog_relation_follow_list_response); //retrieve the user list that current user follows
+  rpc RelationFollowerList(bloomblog_relation_follower_list_request) returns (bloomblog_relation_follower_list_response); //retrieve the fans list of current user
+}
+
+//kitex -module github.com/Agelessbaby/BloomBlog -type protobuf -I ../../idl -service relation -protobuf Muser.proto=github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user ../../idl/relation.proto

@@ -2,20 +2,15 @@ Global:
   Source: "config(local)"
   ChangeMe: "v3"
 
+
 Etcd:
   Address: "127.0.0.1"
   Port: 2379
 
 Server:
-  Name: "BloomBlogUserServer"
+  Name: "BloomBlogRelationServer"
   Address: "127.0.0.1"
-  Port: 8081
-  Argon2ID:
-    Memory: 64*1024
-    Iterations: 3
-    Parallelism: 2
-    SaltLength: 16
-    keyLength: 32
+  Port: 8087
 
 Client:
   Echo: true

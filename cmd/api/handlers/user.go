@@ -10,17 +10,36 @@ import (
 )
 
 func Login(c context.Context, ctx *app.RequestContext) {
-
+	var loginParam UserRegisterParam
+	if err := ctx.Bind(&loginParam); err != nil {
+		SendResponse(ctx, pack.BuildUserLoginResponse(errno.ErrBind))
+		return
+	}
+	if len(loginParam.UserName) == 0 || len(loginParam.PassWord) == 0 {
+		SendResponse(ctx, pack.BuildUserUserResp(errno.ErrBind))
+		return
+	}
+	resp, err := rpc.Login(c, &user.BloomBlogUserRegisterRequest{
+		Username: loginParam.UserName,
+		Password: loginParam.PassWord,
+	})
+	if err != nil {
+		SendResponse(ctx, pack.BuildUserLoginResponse(errno.ConvertErr(err)))
+		return
+	}
+	SendResponse(ctx, resp)
 }
 
 func Register(c context.Context, ctx *app.RequestContext) {
 	var registerParam UserRegisterParam
 	if err := ctx.Bind(&registerParam); err != nil {
 		SendResponse(ctx, pack.BuildUserRegisterResp(errno.ErrBind))
+		return
 	}
 
 	if len(registerParam.UserName) == 0 || len(registerParam.PassWord) == 0 {
 		SendResponse(ctx, pack.BuildUserRegisterResp(errno.ErrBind))
+		return
 	}
 
 	resp, err := rpc.Register(c, &user.BloomBlogUserRegisterRequest{

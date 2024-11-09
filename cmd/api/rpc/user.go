@@ -71,3 +71,14 @@ func Register(ctx context.Context, req *user.BloomBlogUserRegisterRequest) (resp
 	}
 	return resp, nil
 }
+
+func Login(ctx context.Context, req *user.BloomBlogUserRegisterRequest) (resp *user.BloomBlogUserRegisterResponse, err error) {
+	resp, err = userClient.Login(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), *resp.StatusMsg)
+	}
+	return resp, nil
+}

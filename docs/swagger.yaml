@@ -1,0 +1,154 @@
+definitions:
+  errno.ErrNo:
+    properties:
+      errCode:
+        type: integer
+      errMsg:
+        type: string
+    type: object
+  handlers.UserParam:
+    properties:
+      token:
+        description: 用户鉴权token
+        type: string
+      user_id:
+        description: 用户id
+        type: integer
+    type: object
+  handlers.UserRegisterParam:
+    properties:
+      password:
+        description: 用户密码
+        type: string
+      username:
+        description: 用户名
+        type: string
+    type: object
+  user.BloomBlogUserRegisterResponse:
+    properties:
+      status_code:
+        description: status code, 0 for success, others for failure
+        type: integer
+      status_msg:
+        description: description for status
+        type: string
+      token:
+        description: credential token
+        type: string
+      user_id:
+        description: user id
+        type: integer
+    type: object
+  user.BloomBlogUserResponse:
+    properties:
+      status_code:
+        description: status code, 0 for success, others for failure
+        type: integer
+      status_msg:
+        description: description for status
+        type: string
+      user:
+        allOf:
+        - $ref: '#/definitions/user.User'
+        description: user information
+    type: object
+  user.User:
+    properties:
+      follow_count:
+        description: follow count
+        type: integer
+      follower_count:
+        description: followers count
+        type: integer
+      id:
+        description: user id
+        type: integer
+      is_follow:
+        description: true-followed，false-not followed
+        type: boolean
+      name:
+        description: user name
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /bloomblog/user/getuserbyid:
+    post:
+      consumes:
+      - application/json
+      description: Get user information by ID and token
+      parameters:
+      - description: User ID and token
+        in: body
+        name: userVar
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UserParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.BloomBlogUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.ErrNo'
+      summary: Get User by ID
+      tags:
+      - User
+  /bloomblog/user/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user with username and password
+      parameters:
+      - description: User login data
+        in: body
+        name: loginParam
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UserRegisterParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.BloomBlogUserRegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.ErrNo'
+      summary: User Login
+      tags:
+      - User
+  /bloomblog/user/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      parameters:
+      - description: User registration data
+        in: body
+        name: registerParam
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UserRegisterParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user.BloomBlogUserRegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errno.ErrNo'
+      summary: User Registration
+      tags:
+      - User
+swagger: "2.0"

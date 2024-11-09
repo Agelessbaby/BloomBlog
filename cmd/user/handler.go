@@ -27,7 +27,7 @@ func (s *UserSrvImpl) Register(ctx context.Context, req *user.BloomBlogUserRegis
 		resp = pack.BuildUserRegisterResp(err)
 		return resp, nil
 	}
-	return pack.BuildUserRegisterResp(nil), nil
+	return pack.BuildUserRegisterResp(errno.Success), nil
 }
 
 // Login implements the UserSrvImpl interface.
@@ -47,7 +47,7 @@ func (s *UserSrvImpl) Login(ctx context.Context, req *user.BloomBlogUserRegister
 		resp = pack.BuildUserLoginResponse(errors.New("creating signature failed"))
 		return resp, nil
 	}
-	resp = pack.BuildUserLoginResponse(nil)
+	resp = pack.BuildUserLoginResponse(errno.Success)
 	resp.UserId = userId
 	resp.Token = token
 	return resp, nil

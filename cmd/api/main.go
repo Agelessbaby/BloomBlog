@@ -141,7 +141,7 @@ func registerGroup(h *server.Hertz) {
 	user := bloomblog.Group("/user")
 	user.POST("/login/", handlers.Login)
 	user.POST("/register/", handlers.Register)
-	user.GET("/", handlers.GetUserById)
+	user.POST("/getuserbyid", handlers.GetUserById)
 	//TODO add the following groups here
 }
 

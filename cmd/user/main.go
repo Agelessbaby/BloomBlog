@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	user "github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user/usersrv"
@@ -10,8 +9,6 @@ import (
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
-	"github.com/kitex-contrib/obs-opentelemetry/provider"
-	"github.com/kitex-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"net"
 )
@@ -36,21 +33,15 @@ func main() {
 		klog.Fatal(err)
 	}
 
-	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(ServiceName),
-		provider.WithExportEndpoint("localhost:4317"),
-		provider.WithInsecure(),
-	)
-	defer p.Shutdown(context.Background())
-
 	svr := user.NewServer(new(UserSrvImpl),
 		server.WithServiceAddr(addr), // address
 		//server.WithMiddleware(middleware.CommonMiddleware),                 // middleware
 		//server.WithMiddleware(middleware.ServerMiddleware),                 // middleware
 		server.WithRegistry(r), // registry
 		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}), // limit
-		server.WithMuxTransport(),                  // Multiplex
-		server.WithSuite(tracing.NewServerSuite()), // trace
+		server.WithMuxTransport(), // Multiplex
+		//TODO add tracing
+		//server.WithSuite(tracing.NewServerSuite()), // trace
 		// Please keep the same as provider.WithServiceName
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: ServiceName}))
 

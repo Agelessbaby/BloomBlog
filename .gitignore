@@ -1,1 +1,3 @@
 cmd/api/api
+./.mysql-data
+./.etcd-data

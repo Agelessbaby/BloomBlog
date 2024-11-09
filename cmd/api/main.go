@@ -4,10 +4,6 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
-
 	"github.com/Agelessbaby/BloomBlog/cmd/api/handlers"
 	"github.com/Agelessbaby/BloomBlog/cmd/api/rpc"
 	"github.com/Agelessbaby/BloomBlog/util/config"
@@ -23,9 +19,7 @@ import (
 	"github.com/hertz-contrib/gzip"
 	hz2config "github.com/hertz-contrib/http2/config"
 	"github.com/hertz-contrib/http2/factory"
-	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
 	etcd "github.com/hertz-contrib/registry/etcd"
-	"github.com/kitex-contrib/obs-opentelemetry/provider"
 	"time"
 )
 
@@ -82,25 +76,11 @@ func InitHertz() *server.Hertz {
 		}))
 	}
 
-	// 链路追踪
-	p := provider.NewOpenTelemetryProvider(
-		provider.WithServiceName(ServiceName),
-		provider.WithExportEndpoint("localhost:4317"),
-		provider.WithInsecure(),
-	)
-	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+	//TODO add tracing
+	//tracer, tracerCfg := hertztracing.NewServerTracer()
+	//opts = append(opts, tracer)
 
-	go func() {
-		<-ch
-		p.Shutdown(context.Background())
-		os.Exit(0)
-	}()
-
-	tracer, tracerCfg := hertztracing.NewServerTracer()
-	opts = append(opts, tracer)
-
-	// 网络库
+	// net lib
 	hertzNet := standard.NewTransporter
 	if hertzCfg.UseNetpoll {
 		hertzNet = netpoll.NewTransporter
@@ -136,8 +116,10 @@ func InitHertz() *server.Hertz {
 
 	// Hertz
 	h := server.Default(opts...)
-	h.Use(gzip.Gzip(gzip.DefaultCompression),
-		hertztracing.ServerMiddleware(tracerCfg))
+	//h.Use(gzip.Gzip(gzip.DefaultCompression),
+	//	hertztracing.ServerMiddleware(tracerCfg))
+	//TODO add tracing
+	h.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	// Protocol
 	if h2Enable {
@@ -169,7 +151,6 @@ func init() {
 }
 
 func main() {
-	//TODO later change the port into reading from the config file
 
 	h := InitHertz()
 

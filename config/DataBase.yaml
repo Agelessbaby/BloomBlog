@@ -12,5 +12,5 @@ Mysql:
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"
-  maxIdleConns: 10 # 空闲连接池中连接的最大数量
-  maxOpenConns: 100 # 打开数据库连接的最大数量
+  maxIdleConns: 10
+  maxOpenConns: 100

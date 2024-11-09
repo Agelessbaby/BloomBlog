@@ -20,6 +20,8 @@ import (
 	hz2config "github.com/hertz-contrib/http2/config"
 	"github.com/hertz-contrib/http2/factory"
 	etcd "github.com/hertz-contrib/registry/etcd"
+	"github.com/hertz-contrib/swagger"
+	swaggerFiles "github.com/swaggo/files"
 	"time"
 )
 
@@ -137,7 +139,7 @@ func InitHertz() *server.Hertz {
 // Register router groups
 func registerGroup(h *server.Hertz) {
 	bloomblog := h.Group("/bloomblog")
-
+	h.GET("/swagger/*any", swagger.WrapHandler(swaggerFiles.Handler))
 	user := bloomblog.Group("/user")
 	user.POST("/login/", handlers.Login)
 	user.POST("/register/", handlers.Register)

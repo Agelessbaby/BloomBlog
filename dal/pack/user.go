@@ -3,6 +3,7 @@ package pack
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user"
 	"github.com/Agelessbaby/BloomBlog/dal/db"
 	"gorm.io/gorm"
@@ -31,6 +32,7 @@ func User(ctx context.Context, u *db.User, fromID int64) (*user.User, error) {
 	if relation != nil {
 		isFollow = true
 	}
+	fmt.Println("aasffasdfasdf", isFollow)
 	return &user.User{
 		Id:            int64(u.ID),
 		Name:          u.UserName,

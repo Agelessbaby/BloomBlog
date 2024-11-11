@@ -58,7 +58,7 @@ func BuildRelationActionResp(err error) *relation.BloomblogRelationActionRespons
 }
 
 // BuildFollowingListResp build FollowingListResp from error
-func BuildFollowingListResp(err error) *relation.BloomblogRelationFollowerListResponse {
+func BuildFollowingListResp(err error) *relation.BloomblogRelationFollowListResponse {
 	if err == nil {
 		return followingListResp(errno.Success)
 	}
@@ -72,8 +72,8 @@ func BuildFollowingListResp(err error) *relation.BloomblogRelationFollowerListRe
 	return followingListResp(s)
 }
 
-func followingListResp(err errno.ErrNo) *relation.BloomblogRelationFollowerListResponse {
-	return &relation.BloomblogRelationFollowerListResponse{
+func followingListResp(err errno.ErrNo) *relation.BloomblogRelationFollowListResponse {
+	return &relation.BloomblogRelationFollowListResponse{
 		StatusCode: int32(err.ErrCode),
 		StatusMsg:  &err.ErrMsg,
 	}

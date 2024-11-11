@@ -13,14 +13,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	followresp, err := client.RelationAction(context.TODO(), &relation.BloomblogRelationActionRequest{
-		UserId:     0,
-		Token:      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIiLCJpc3MiOiJCbG9vbUJMb2ciLCJhdWQiOiIiLCJzdWIiOiIiLCJpYXQiOjE3MzEyMTA0MzMsIm5iZiI6MCwiZXhwIjoxNzMxOTAxNjMzLCJ1ZCI6eyJ1c2VyaWQiOjJ9fQ.b_9UvMPofEBUOiWXeXEmG-JVG4zwURbEE_FyX51XkYY",
-		ToUserId:   1,
-		ActionType: 1,
+	resp, err := client.RelationFollowerList(context.TODO(), &relation.BloomblogRelationFollowerListRequest{
+		UserId: 1,
+		Token:  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIiLCJpc3MiOiJCbG9vbUJMb2ciLCJhdWQiOiIiLCJzdWIiOiIiLCJpYXQiOjE3MzEzMTExNzAsIm5iZiI6MCwiZXhwIjoxNzMyMDAyMzcwLCJ1ZCI6eyJ1c2VyaWQiOjN9fQ.2mwVT7xI46NS_dvTZZOvcslbQ4X6z82oMWh07UQ9_tY",
 	})
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(followresp)
+	fmt.Println(resp)
 }

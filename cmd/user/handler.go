@@ -61,13 +61,7 @@ func (s *UserSrvImpl) GetUserById(ctx context.Context, req *user.BloomBlogUserRe
 		return resp, nil
 	}
 	var from_id int64
-	fromid_val := payload.UserDefined["userid"]
-	switch v := fromid_val.(type) {
-	case int64:
-		from_id = v
-	case float64:
-		from_id = int64(v)
-	}
+	from_id = jwt.GetUserIdFromPayload(payload)
 	if from_id <= 0 {
 		resp = pack.BuildUserUserResp(errno.ErrTokenInvalid)
 		return resp, nil

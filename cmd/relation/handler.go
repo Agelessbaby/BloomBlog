@@ -15,7 +15,6 @@ type RelationSrvImpl struct{}
 
 // RelationAction implements the RelationSrvImpl interface.
 func (s *RelationSrvImpl) RelationAction(ctx context.Context, req *relation.BloomblogRelationActionRequest) (resp *relation.BloomblogRelationActionResponse, err error) {
-	// TODO: Your code here...
 	_, payload, err := jwt.VerifyJwt(req.Token, env.JWT_SECRET)
 	if err != nil {
 		resp = pack.BuildRelationActionResp(errno.ErrTokenInvalid)
@@ -27,10 +26,9 @@ func (s *RelationSrvImpl) RelationAction(ctx context.Context, req *relation.Bloo
 		return resp, nil
 	}
 
-	user_id_val := payload.UserDefined["userid"]
-	user_id := int64(user_id_val.(float64))
+	user_id := jwt.GetUserIdFromPayload(payload)
 
-	if req.UserId == 0 || user_id > 0 {
+	if req.UserId == 0 && user_id > 0 {
 		req.UserId = user_id
 	}
 
@@ -49,12 +47,49 @@ func (s *RelationSrvImpl) RelationAction(ctx context.Context, req *relation.Bloo
 
 // RelationFollowList implements the RelationSrvImpl interface.
 func (s *RelationSrvImpl) RelationFollowList(ctx context.Context, req *relation.BloomblogRelationFollowListRequest) (resp *relation.BloomblogRelationFollowListResponse, err error) {
-	// TODO: Your code here...
-	return
+	_, payload, err := jwt.VerifyJwt(req.Token, env.JWT_SECRET)
+	if err != nil {
+		resp = pack.BuildFollowingListResp(errno.ErrTokenInvalid)
+	}
+	current_user_id := jwt.GetUserIdFromPayload(payload)
+
+	//Only when UserId not put in
+	//current_user_id is the user who launch this request, req.UserId is the user whose following list is being queried.
+	if req.UserId == 0 && current_user_id > 0 {
+		req.UserId = current_user_id
+	}
+	followingUsers, err := command.NewRelationListService(ctx).FollowingList(req, current_user_id)
+	if err != nil {
+		resp = pack.BuildFollowingListResp(err)
+		return resp, nil
+	}
+	resp = pack.BuildFollowingListResp(errno.Success)
+	resp.UserList = followingUsers
+	return resp, nil
 }
 
 // RelationFollowerList implements the RelationSrvImpl interface.
 func (s *RelationSrvImpl) RelationFollowerList(ctx context.Context, req *relation.BloomblogRelationFollowerListRequest) (resp *relation.BloomblogRelationFollowerListResponse, err error) {
 	// TODO: Your code here...
-	return
+	_, payload, err := jwt.VerifyJwt(req.Token, env.JWT_SECRET)
+	if err != nil {
+		resp = pack.BuildFollowerListResp(errno.ErrTokenInvalid)
+		return resp, nil
+	}
+	current_user_id := jwt.GetUserIdFromPayload(payload)
+
+	//Only when UserId not put in
+	//current_user_id is the user who launch this request, req.UserId is the user whose follower list is being queried.
+	if req.UserId == 0 && current_user_id > 0 {
+		req.UserId = current_user_id
+	}
+
+	followers, err := command.NewRelationListService(ctx).FollowerList(req, current_user_id)
+	if err != nil {
+		resp = pack.BuildFollowerListResp(err)
+		return resp, nil
+	}
+	resp = pack.BuildFollowerListResp(errno.Success)
+	resp.UserList = followers
+	return resp, nil
 }

@@ -21,3 +21,11 @@ type UserParam struct {
 	UserId int64  `json:"user_id,omitempty"` // 用户id
 	Token  string `json:"token,omitempty"`   // 用户鉴权token
 }
+
+// The input parameter for follow or unfollow
+type RelationActionParam struct {
+	UserId     int64  `json:"user_id,omitempty"`     // 用户id
+	Token      string `json:"token,omitempty"`       // 用户鉴权token
+	ToUserId   int64  `json:"to_user_id,omitempty"`  // 对方用户id
+	ActionType int32  `json:"action_type,omitempty"` // 1-关注，2-取消关注
+}

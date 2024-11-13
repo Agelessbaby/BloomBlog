@@ -6,6 +6,8 @@ import (
 
 // InitRPC init rpc client
 func InitRPC() {
-	UserConfig := config.CreateConfig("UserConfig")
+	UserConfig := config.CreateConfig("userConfig")
+	RelationConfig := config.CreateConfig("relationConfig")
 	initUserRpc(UserConfig)
+	initRelationRpc(RelationConfig)
 }

@@ -24,6 +24,5 @@ func (s *RelationActionService) RelationAction(req *relation.BloomblogRelationAc
 	if req.ActionType == 2 {
 		return db.DisRelation(s.ctx, req.UserId, req.ToUserId)
 	}
-
 	return errno.ErrBind
 }

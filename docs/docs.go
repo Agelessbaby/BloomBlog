@@ -15,6 +15,69 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/bloomblog/relation/action": {
+            "post": {
+                "description": "Handles actions like follow, unfollow, or other user relation actions.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Relation"
+                ],
+                "summary": "Perform a relation action",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User authentication token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The ID of the user to perform the action on",
+                        "name": "to_user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "1",
+                            "2"
+                        ],
+                        "type": "string",
+                        "example": "1",
+                        "description": "The type of action to perform",
+                        "name": "action_type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Action completed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/relation.BloomblogRelationActionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input parameters",
+                        "schema": {
+                            "$ref": "#/definitions/relation.BloomblogRelationActionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/relation.BloomblogRelationActionResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/bloomblog/user/getuserbyid": {
             "post": {
                 "description": "Get user information by ID and token",
@@ -170,6 +233,19 @@ const docTemplate = `{
                 },
                 "username": {
                     "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "relation.BloomblogRelationActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "0-success，others-failure",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "return statement description",
                     "type": "string"
                 }
             }

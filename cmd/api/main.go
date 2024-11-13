@@ -19,7 +19,7 @@ import (
 	"github.com/hertz-contrib/gzip"
 	hz2config "github.com/hertz-contrib/http2/config"
 	"github.com/hertz-contrib/http2/factory"
-	etcd "github.com/hertz-contrib/registry/etcd"
+	"github.com/hertz-contrib/registry/etcd"
 	"github.com/hertz-contrib/swagger"
 	swaggerFiles "github.com/swaggo/files"
 	"time"
@@ -145,6 +145,8 @@ func registerGroup(h *server.Hertz) {
 	user.POST("/register/", handlers.Register)
 	user.POST("/getuserbyid", handlers.GetUserById)
 	//TODO add the following groups here
+	relation := bloomblog.Group("/relation")
+	relation.POST("/action", handlers.RelationAction)
 }
 
 // 初始化 API 配置

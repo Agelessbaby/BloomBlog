@@ -24,6 +24,15 @@ definitions:
         description: 用户名
         type: string
     type: object
+  relation.BloomblogRelationActionResponse:
+    properties:
+      status_code:
+        description: 0-success，others-failure
+        type: integer
+      status_msg:
+        description: return statement description
+        type: string
+    type: object
   user.BloomBlogUserRegisterResponse:
     properties:
       status_code:
@@ -73,6 +82,49 @@ definitions:
 info:
   contact: {}
 paths:
+  /bloomblog/relation/action:
+    post:
+      consumes:
+      - application/json
+      description: Handles actions like follow, unfollow, or other user relation actions.
+      parameters:
+      - description: User authentication token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: The ID of the user to perform the action on
+        in: query
+        name: to_user_id
+        required: true
+        type: string
+      - description: The type of action to perform
+        enum:
+        - "1"
+        - "2"
+        example: "1"
+        in: query
+        name: action_type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Action completed successfully
+          schema:
+            $ref: '#/definitions/relation.BloomblogRelationActionResponse'
+        "400":
+          description: Invalid input parameters
+          schema:
+            $ref: '#/definitions/relation.BloomblogRelationActionResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/relation.BloomblogRelationActionResponse'
+      summary: Perform a relation action
+      tags:
+      - Relation
   /bloomblog/user/getuserbyid:
     post:
       consumes:

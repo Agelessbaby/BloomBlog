@@ -1,3 +1,6 @@
 cmd/api/api
 .mysql_data/
 .etcd-data/
+cmd/api/api
+cmd/user/output/bin/user
+cmd/relation/output/bin/relation

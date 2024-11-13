@@ -10,6 +10,7 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
 	etcd "github.com/kitex-contrib/registry-etcd"
+	"log"
 	"net"
 )
 
@@ -23,6 +24,8 @@ var (
 )
 
 func main() {
+	klog.SetLevel(klog.LevelDebug)
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	r, err := etcd.NewEtcdRegistry([]string{EtcdAddress})
 	if err != nil {
 		klog.Fatal(err)

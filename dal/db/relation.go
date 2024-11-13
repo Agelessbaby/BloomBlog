@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"github.com/Agelessbaby/BloomBlog/util/errno"
 	"gorm.io/gorm"
 )
@@ -25,6 +26,7 @@ func NewRelation(ctx context.Context, uid int64, tid int64) error {
 		// use tx as transaction instead of DB
 		err := tx.Create(&Relation{UserID: int(uid), ToUserID: int(tid)}).Error
 		if err != nil {
+			fmt.Println(err)
 			return err
 		}
 

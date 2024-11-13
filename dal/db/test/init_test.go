@@ -23,3 +23,12 @@ func TestInitDb(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestFolloingList(t *testing.T) {
+	relations, err := db.FollowingList(context.TODO(), 2)
+	if err != nil {
+		fmt.Println(err)
+		t.Fail()
+	}
+	fmt.Println(relations)
+}

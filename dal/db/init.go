@@ -60,7 +60,10 @@ func initDB() {
 	if err := DB.AutoMigrate(&User{}); err != nil {
 		klog.Error(err.Error())
 	}
-
+	if err := DB.AutoMigrate(&Relation{}); err != nil {
+		klog.Error(err.Error())
+	}
+	//TODO ADD other auto migrate
 	sqlDB, err := DB.DB()
 	if err != nil {
 		klog.Fatal(err)

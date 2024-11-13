@@ -37,9 +37,7 @@ func (s *RelationSrvImpl) RelationAction(ctx context.Context, req *relation.Bloo
 		resp = pack.BuildRelationActionResp(errno.ErrBind)
 		return resp, nil
 	}
-	fmt.Println("ready to transaction")
 	err = command.NewRelationActionService(ctx).RelationAction(req)
-	fmt.Println("transaction done")
 	if err != nil {
 		fmt.Println(1)
 		resp = pack.BuildRelationActionResp(err)

@@ -147,6 +147,8 @@ func registerGroup(h *server.Hertz) {
 	//TODO add the following groups here
 	relation := bloomblog.Group("/relation")
 	relation.POST("/action", handlers.RelationAction)
+	relation.GET("/followlist", handlers.RelationFollowList)
+	relation.GET("/followerlist", handlers.RelationFollowerList)
 }
 
 // 初始化 API 配置

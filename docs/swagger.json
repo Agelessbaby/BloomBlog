@@ -67,6 +67,108 @@
                 }
             }
         },
+        "/bloomblog/relation/followerlist": {
+            "get": {
+                "description": "Retrieves the list of users that follow the specified user.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Relation"
+                ],
+                "summary": "Get follower list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the user to retrieve the follower list for",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User authentication token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved follower list",
+                        "schema": {
+                            "$ref": "#/definitions/relation.BloomblogRelationFollowerListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input parameters",
+                        "schema": {
+                            "$ref": "#/definitions/relation.BloomblogRelationFollowerListResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/relation.BloomblogRelationFollowerListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/bloomblog/relation/followlist": {
+            "get": {
+                "description": "Retrieves the list of users that a specific user is following.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Relation"
+                ],
+                "summary": "Get following list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "The ID of the user to retrieve the following list for",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "User authentication token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved following list",
+                        "schema": {
+                            "$ref": "#/definitions/relation.BloomblogRelationFollowListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input parameters",
+                        "schema": {
+                            "$ref": "#/definitions/relation.BloomblogRelationFollowListResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/relation.BloomblogRelationFollowListResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/bloomblog/user/getuserbyid": {
             "post": {
                 "description": "Get user information by ID and token",
@@ -236,6 +338,43 @@
                 "status_msg": {
                     "description": "return statement description",
                     "type": "string"
+                }
+            }
+        },
+        "relation.BloomblogRelationFollowListResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "0-success others-failure",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "status description",
+                    "type": "string"
+                },
+                "user_list": {
+                    "description": "user list",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user.User"
+                    }
+                }
+            }
+        },
+        "relation.BloomblogRelationFollowerListResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "user_list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/user.User"
+                    }
                 }
             }
         },

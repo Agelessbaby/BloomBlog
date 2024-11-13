@@ -52,6 +52,7 @@ func (s *RelationSrvImpl) RelationFollowList(ctx context.Context, req *relation.
 	_, payload, err := jwt.VerifyJwt(req.Token, env.JWT_SECRET)
 	if err != nil {
 		resp = pack.BuildFollowingListResp(errno.ErrTokenInvalid)
+		return resp, nil
 	}
 	current_user_id := jwt.GetUserIdFromPayload(payload)
 

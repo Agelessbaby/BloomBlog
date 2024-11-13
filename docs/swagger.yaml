@@ -33,6 +33,31 @@ definitions:
         description: return statement description
         type: string
     type: object
+  relation.BloomblogRelationFollowListResponse:
+    properties:
+      status_code:
+        description: 0-success others-failure
+        type: integer
+      status_msg:
+        description: status description
+        type: string
+      user_list:
+        description: user list
+        items:
+          $ref: '#/definitions/user.User'
+        type: array
+    type: object
+  relation.BloomblogRelationFollowerListResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+      user_list:
+        items:
+          $ref: '#/definitions/user.User'
+        type: array
+    type: object
   user.BloomBlogUserRegisterResponse:
     properties:
       status_code:
@@ -123,6 +148,74 @@ paths:
           schema:
             $ref: '#/definitions/relation.BloomblogRelationActionResponse'
       summary: Perform a relation action
+      tags:
+      - Relation
+  /bloomblog/relation/followerlist:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the list of users that follow the specified user.
+      parameters:
+      - description: The ID of the user to retrieve the follower list for
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: User authentication token
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved follower list
+          schema:
+            $ref: '#/definitions/relation.BloomblogRelationFollowerListResponse'
+        "400":
+          description: Invalid input parameters
+          schema:
+            $ref: '#/definitions/relation.BloomblogRelationFollowerListResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/relation.BloomblogRelationFollowerListResponse'
+      summary: Get follower list
+      tags:
+      - Relation
+  /bloomblog/relation/followlist:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the list of users that a specific user is following.
+      parameters:
+      - description: The ID of the user to retrieve the following list for
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: User authentication token
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully retrieved following list
+          schema:
+            $ref: '#/definitions/relation.BloomblogRelationFollowListResponse'
+        "400":
+          description: Invalid input parameters
+          schema:
+            $ref: '#/definitions/relation.BloomblogRelationFollowListResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/relation.BloomblogRelationFollowListResponse'
+      summary: Get following list
       tags:
       - Relation
   /bloomblog/user/getuserbyid:

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	client, err := usersrv.NewClient("github.com/Agelessbaby/BloomBlog.user", client.WithHostPorts("0.0.0.0:8888"))
+	client, err := usersrv.NewClient("github.com/Agelessbaby/BloomBlog.user", client.WithHostPorts("0.0.0.0:8081"))
 	if err != nil {
 		panic(err)
 	}

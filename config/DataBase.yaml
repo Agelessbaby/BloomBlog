@@ -8,7 +8,7 @@ Mysql:
   Port: 3306
   User: "root"
   Password: "123456"
-  DBName: "BloomBlog"
+  DBName: "bloomblog"
   CharSet: "utf8mb4"
   ParseTime: true
   loc: "Local"

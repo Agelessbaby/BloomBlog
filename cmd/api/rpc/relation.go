@@ -70,3 +70,25 @@ func RelationAction(ctx context.Context, req *relation.BloomblogRelationActionRe
 	}
 	return resp, nil
 }
+
+func RelationFollowList(ctx context.Context, req *relation.BloomblogRelationFollowListRequest) (resp *relation.BloomblogRelationFollowListResponse, err error) {
+	resp, err = relationClient.RelationFollowList(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), *resp.StatusMsg)
+	}
+	return resp, nil
+}
+
+func RelationFollowerList(ctx context.Context, req *relation.BloomblogRelationFollowerListRequest) (resp *relation.BloomblogRelationFollowerListResponse, err error) {
+	resp, err = relationClient.RelationFollowerList(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if resp.StatusCode != 0 {
+		return nil, errno.NewErrNo(int(resp.StatusCode), *resp.StatusMsg)
+	}
+	return resp, nil
+}

@@ -4,7 +4,7 @@ package publish
 
 import (
 	fmt "fmt"
-	feed "github.com/Agelessbaby/BloomBlog/cmd/publish/kitex_gen/feed"
+	feed "github.com/Agelessbaby/BloomBlog/cmd/feed/kitex_gen/feed"
 	fastpb "github.com/cloudwego/fastpb"
 )
 
@@ -32,6 +32,11 @@ func (x *BloomblogPublishActionRequest) FastRead(buf []byte, _type int8, number 
 		}
 	case 4:
 		offset, err = x.fastReadField4(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
+	case 5:
+		offset, err = x.fastReadField5(buf, _type)
 		if err != nil {
 			goto ReadFieldError
 		}
@@ -70,6 +75,11 @@ func (x *BloomblogPublishActionRequest) fastReadField3(buf []byte, _type int8) (
 
 func (x *BloomblogPublishActionRequest) fastReadField4(buf []byte, _type int8) (offset int, err error) {
 	x.Title, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *BloomblogPublishActionRequest) fastReadField5(buf []byte, _type int8) (offset int, err error) {
+	x.Cover, offset, err = fastpb.ReadBytes(buf, _type)
 	return offset, err
 }
 
@@ -203,6 +213,7 @@ func (x *BloomblogPublishActionRequest) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField2(buf[offset:])
 	offset += x.fastWriteField3(buf[offset:])
 	offset += x.fastWriteField4(buf[offset:])
+	offset += x.fastWriteField5(buf[offset:])
 	return offset
 }
 
@@ -237,6 +248,14 @@ func (x *BloomblogPublishActionRequest) fastWriteField4(buf []byte) (offset int)
 		return offset
 	}
 	offset += fastpb.WriteString(buf[offset:], 4, x.GetTitle())
+	return offset
+}
+
+func (x *BloomblogPublishActionRequest) fastWriteField5(buf []byte) (offset int) {
+	if len(x.Cover) == 0 {
+		return offset
+	}
+	offset += fastpb.WriteBytes(buf[offset:], 5, x.GetCover())
 	return offset
 }
 
@@ -334,6 +353,7 @@ func (x *BloomblogPublishActionRequest) Size() (n int) {
 	n += x.sizeField2()
 	n += x.sizeField3()
 	n += x.sizeField4()
+	n += x.sizeField5()
 	return n
 }
 
@@ -368,6 +388,14 @@ func (x *BloomblogPublishActionRequest) sizeField4() (n int) {
 		return n
 	}
 	n += fastpb.SizeString(4, x.GetTitle())
+	return n
+}
+
+func (x *BloomblogPublishActionRequest) sizeField5() (n int) {
+	if len(x.Cover) == 0 {
+		return n
+	}
+	n += fastpb.SizeBytes(5, x.GetCover())
 	return n
 }
 
@@ -462,6 +490,7 @@ var fieldIDToName_BloomblogPublishActionRequest = map[int32]string{
 	2: "Images",
 	3: "TextContent",
 	4: "Title",
+	5: "Cover",
 }
 
 var fieldIDToName_BloomblogPublishActionResponse = map[int32]string{

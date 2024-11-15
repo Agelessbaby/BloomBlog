@@ -4,7 +4,7 @@ package feed
 
 import (
 	fmt "fmt"
-	user "github.com/Agelessbaby/BloomBlog/cmd/feed/kitex_gen/user"
+	user "github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user"
 	fastpb "github.com/cloudwego/fastpb"
 )
 
@@ -194,6 +194,11 @@ func (x *Post) FastRead(buf []byte, _type int8, number int32) (offset int, err e
 		if err != nil {
 			goto ReadFieldError
 		}
+	case 10:
+		offset, err = x.fastReadField10(buf, _type)
+		if err != nil {
+			goto ReadFieldError
+		}
 	default:
 		offset, err = fastpb.Skip(buf, _type, number)
 		if err != nil {
@@ -228,6 +233,11 @@ func (x *Post) fastReadField3(buf []byte, _type int8) (offset int, err error) {
 }
 
 func (x *Post) fastReadField4(buf []byte, _type int8) (offset int, err error) {
+	x.CoverUrl, offset, err = fastpb.ReadString(buf, _type)
+	return offset, err
+}
+
+func (x *Post) fastReadField5(buf []byte, _type int8) (offset int, err error) {
 	var v string
 	v, offset, err = fastpb.ReadString(buf, _type)
 	if err != nil {
@@ -237,28 +247,28 @@ func (x *Post) fastReadField4(buf []byte, _type int8) (offset int, err error) {
 	return offset, err
 }
 
-func (x *Post) fastReadField5(buf []byte, _type int8) (offset int, err error) {
+func (x *Post) fastReadField6(buf []byte, _type int8) (offset int, err error) {
 	x.LikeCount, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
-func (x *Post) fastReadField6(buf []byte, _type int8) (offset int, err error) {
+func (x *Post) fastReadField7(buf []byte, _type int8) (offset int, err error) {
 	x.CommentCount, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
-func (x *Post) fastReadField7(buf []byte, _type int8) (offset int, err error) {
+func (x *Post) fastReadField8(buf []byte, _type int8) (offset int, err error) {
 	x.IsLiked, offset, err = fastpb.ReadBool(buf, _type)
 	return offset, err
 }
 
-func (x *Post) fastReadField8(buf []byte, _type int8) (offset int, err error) {
+func (x *Post) fastReadField9(buf []byte, _type int8) (offset int, err error) {
 	x.Title, offset, err = fastpb.ReadString(buf, _type)
 	return offset, err
 }
 
-func (x *Post) fastReadField9(buf []byte, _type int8) (offset int, err error) {
-	x.CreatedAt, offset, err = fastpb.ReadInt64(buf, _type)
+func (x *Post) fastReadField10(buf []byte, _type int8) (offset int, err error) {
+	x.ModifiedAt, offset, err = fastpb.ReadInt64(buf, _type)
 	return offset, err
 }
 
@@ -370,6 +380,7 @@ func (x *Post) FastWrite(buf []byte) (offset int) {
 	offset += x.fastWriteField7(buf[offset:])
 	offset += x.fastWriteField8(buf[offset:])
 	offset += x.fastWriteField9(buf[offset:])
+	offset += x.fastWriteField10(buf[offset:])
 	return offset
 }
 
@@ -398,52 +409,60 @@ func (x *Post) fastWriteField3(buf []byte) (offset int) {
 }
 
 func (x *Post) fastWriteField4(buf []byte) (offset int) {
-	if len(x.ImageUrls) == 0 {
+	if x.CoverUrl == "" {
 		return offset
 	}
-	for i := range x.GetImageUrls() {
-		offset += fastpb.WriteString(buf[offset:], 4, x.GetImageUrls()[i])
-	}
+	offset += fastpb.WriteString(buf[offset:], 4, x.GetCoverUrl())
 	return offset
 }
 
 func (x *Post) fastWriteField5(buf []byte) (offset int) {
-	if x.LikeCount == 0 {
+	if len(x.ImageUrls) == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt64(buf[offset:], 5, x.GetLikeCount())
+	for i := range x.GetImageUrls() {
+		offset += fastpb.WriteString(buf[offset:], 5, x.GetImageUrls()[i])
+	}
 	return offset
 }
 
 func (x *Post) fastWriteField6(buf []byte) (offset int) {
-	if x.CommentCount == 0 {
+	if x.LikeCount == 0 {
 		return offset
 	}
-	offset += fastpb.WriteInt64(buf[offset:], 6, x.GetCommentCount())
+	offset += fastpb.WriteInt64(buf[offset:], 6, x.GetLikeCount())
 	return offset
 }
 
 func (x *Post) fastWriteField7(buf []byte) (offset int) {
-	if !x.IsLiked {
+	if x.CommentCount == 0 {
 		return offset
 	}
-	offset += fastpb.WriteBool(buf[offset:], 7, x.GetIsLiked())
+	offset += fastpb.WriteInt64(buf[offset:], 7, x.GetCommentCount())
 	return offset
 }
 
 func (x *Post) fastWriteField8(buf []byte) (offset int) {
-	if x.Title == "" {
+	if !x.IsLiked {
 		return offset
 	}
-	offset += fastpb.WriteString(buf[offset:], 8, x.GetTitle())
+	offset += fastpb.WriteBool(buf[offset:], 8, x.GetIsLiked())
 	return offset
 }
 
 func (x *Post) fastWriteField9(buf []byte) (offset int) {
-	if x.CreatedAt == 0 {
+	if x.Title == "" {
 		return offset
 	}
-	offset += fastpb.WriteInt64(buf[offset:], 9, x.GetCreatedAt())
+	offset += fastpb.WriteString(buf[offset:], 9, x.GetTitle())
+	return offset
+}
+
+func (x *Post) fastWriteField10(buf []byte) (offset int) {
+	if x.ModifiedAt == 0 {
+		return offset
+	}
+	offset += fastpb.WriteInt64(buf[offset:], 10, x.GetModifiedAt())
 	return offset
 }
 
@@ -555,6 +574,7 @@ func (x *Post) Size() (n int) {
 	n += x.sizeField7()
 	n += x.sizeField8()
 	n += x.sizeField9()
+	n += x.sizeField10()
 	return n
 }
 
@@ -583,52 +603,60 @@ func (x *Post) sizeField3() (n int) {
 }
 
 func (x *Post) sizeField4() (n int) {
-	if len(x.ImageUrls) == 0 {
+	if x.CoverUrl == "" {
 		return n
 	}
-	for i := range x.GetImageUrls() {
-		n += fastpb.SizeString(4, x.GetImageUrls()[i])
-	}
+	n += fastpb.SizeString(4, x.GetCoverUrl())
 	return n
 }
 
 func (x *Post) sizeField5() (n int) {
-	if x.LikeCount == 0 {
+	if len(x.ImageUrls) == 0 {
 		return n
 	}
-	n += fastpb.SizeInt64(5, x.GetLikeCount())
+	for i := range x.GetImageUrls() {
+		n += fastpb.SizeString(5, x.GetImageUrls()[i])
+	}
 	return n
 }
 
 func (x *Post) sizeField6() (n int) {
-	if x.CommentCount == 0 {
+	if x.LikeCount == 0 {
 		return n
 	}
-	n += fastpb.SizeInt64(6, x.GetCommentCount())
+	n += fastpb.SizeInt64(6, x.GetLikeCount())
 	return n
 }
 
 func (x *Post) sizeField7() (n int) {
-	if !x.IsLiked {
+	if x.CommentCount == 0 {
 		return n
 	}
-	n += fastpb.SizeBool(7, x.GetIsLiked())
+	n += fastpb.SizeInt64(7, x.GetCommentCount())
 	return n
 }
 
 func (x *Post) sizeField8() (n int) {
-	if x.Title == "" {
+	if !x.IsLiked {
 		return n
 	}
-	n += fastpb.SizeString(8, x.GetTitle())
+	n += fastpb.SizeBool(8, x.GetIsLiked())
 	return n
 }
 
 func (x *Post) sizeField9() (n int) {
-	if x.CreatedAt == 0 {
+	if x.Title == "" {
 		return n
 	}
-	n += fastpb.SizeInt64(9, x.GetCreatedAt())
+	n += fastpb.SizeString(9, x.GetTitle())
+	return n
+}
+
+func (x *Post) sizeField10() (n int) {
+	if x.ModifiedAt == 0 {
+		return n
+	}
+	n += fastpb.SizeInt64(10, x.GetModifiedAt())
 	return n
 }
 
@@ -650,15 +678,16 @@ var fieldIDToName_PostIdRequest = map[int32]string{
 }
 
 var fieldIDToName_Post = map[int32]string{
-	1: "Id",
-	2: "Author",
-	3: "TextContent",
-	4: "ImageUrls",
-	5: "LikeCount",
-	6: "CommentCount",
-	7: "IsLiked",
-	8: "Title",
-	9: "CreatedAt",
+	1:  "Id",
+	2:  "Author",
+	3:  "TextContent",
+	4:  "CoverUrl",
+	5:  "ImageUrls",
+	6:  "LikeCount",
+	7:  "CommentCount",
+	8:  "IsLiked",
+	9:  "Title",
+	10: "ModifiedAt",
 }
 
 var _ = user.File_user_proto

@@ -58,12 +58,16 @@ func initDB() {
 	}
 
 	if err := DB.AutoMigrate(&User{}); err != nil {
-		klog.Error(err.Error())
+		klog.Fatal(err.Error())
 	}
 	if err := DB.AutoMigrate(&Relation{}); err != nil {
-		klog.Error(err.Error())
+		klog.Fatal(err.Error())
 	}
 	//TODO ADD other auto migrate
+	if err := DB.AutoMigrate(&Post{}); err != nil {
+		klog.Fatal(err.Error())
+	}
+
 	sqlDB, err := DB.DB()
 	if err != nil {
 		klog.Fatal(err)

@@ -4,3 +4,6 @@ cmd/api/api
 cmd/api/api
 cmd/user/output/bin/user
 cmd/relation/output/bin/relation
+util/oss/test/test.jpg
+cmd/publish/output/bin/publish
+data

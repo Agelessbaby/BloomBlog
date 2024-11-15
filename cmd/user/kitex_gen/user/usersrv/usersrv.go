@@ -12,7 +12,7 @@ import (
 	proto "google.golang.org/protobuf/proto"
 )
 
-var errInvalidMessageType = errors.New("invalid message type for service method handlers")
+var errInvalidMessageType = errors.New("invalid message type for service method handler")
 
 var serviceMethods = map[string]kitex.MethodInfo{
 	"Register": kitex.NewMethodInfo(

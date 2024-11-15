@@ -14,10 +14,9 @@ import (
 	"net"
 )
 
-// loglevel could be "info", "debug", "fatal", "error"
 var (
 	loglevel       = flag.String("loglevel", "info", "log level")
-	relationConfig = config.CreateConfig("publishConfig.yaml")
+	relationConfig = config.CreateConfig("publishConfig")
 	ServiceName    = relationConfig.GetString("Server.Name")
 	ServiceAddr    = fmt.Sprintf("%s:%d", relationConfig.GetString("Server.Address"), relationConfig.GetInt("Server.Port"))
 	EtcdAddress    = fmt.Sprintf("%s:%d", relationConfig.GetString("Etcd.Address"), relationConfig.GetInt("Etcd.Port"))

@@ -1,0 +1,38 @@
+syntax = "proto3";
+package publish;
+option go_package = "publish";
+
+import "feed.proto";
+
+// 请求发布帖子
+message bloomblog_publish_action_request {
+  string token = 1;              // 用户鉴权token
+  repeated bytes images = 2;    // 帖子图片数据（支持多张图片）
+  string text_content = 3;      // 帖子文字内容
+  string title = 4;             // 帖子标题
+}
+
+// 发布帖子操作的响应
+message bloomblog_publish_action_response {
+  int32 status_code = 1;        // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
+}
+
+// 请求获取用户发布的帖子列表
+message bloomblog_publish_list_request {
+  int64 user_id = 1;            // 用户id
+  string token = 2;             // 用户鉴权token
+}
+
+// 获取用户已发布帖子列表的响应
+message bloomblog_publish_list_response {
+  int32 status_code = 1;        // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
+  repeated feed.Post post_list = 3; // 用户发布的帖子列表
+}
+
+// 发布服务定义
+service PublishSrv {
+  rpc PublishAction(bloomblog_publish_action_request) returns (bloomblog_publish_action_response); // 发布帖子操作
+  rpc PublishList(bloomblog_publish_list_request) returns (bloomblog_publish_list_response);       // 获取用户已发布帖子列表
+}

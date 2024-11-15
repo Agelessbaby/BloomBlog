@@ -7,3 +7,4 @@ cmd/relation/output/bin/relation
 util/oss/test/test.jpg
 cmd/publish/output/bin/publish
 data
+/log

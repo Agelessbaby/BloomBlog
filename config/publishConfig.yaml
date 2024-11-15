@@ -1,0 +1,18 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v3"
+
+Etcd:
+  Address: "0.0.0.0"
+  Port: 2379
+
+Server:
+  Name: "BloomBlogPublishServer"
+  Address: "0.0.0.0"
+  Port: 8084
+
+Client:
+  Echo: true
+  Foo: "bar"
+  Servers:
+    - "0.0.0.0"

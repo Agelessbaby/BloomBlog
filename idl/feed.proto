@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package feed;
+option go_package = "feed";
+
+import "user.proto";
+// 请求帖子流
+message bloomblog_feed_request {
+  optional int64 latest_time = 1; // 可选，获取指定时间之前的帖子（单位：秒）
+  optional string token = 2;      // 用户登录后的身份凭证（可选）
+}
+
+// 返回帖子流
+message bloomblog_feed_response {
+  int32 status_code = 1;          // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
+  repeated Post post_list = 3;    // 帖子列表
+  optional int64 next_time = 4;   // 返回的帖子中最早的时间，用于下次请求
+}
+
+// 请求帖子详情
+message post_id_request {
+  int64 post_id = 1;              // 帖子的唯一标识
+  int64 search_id = 2;
+}
+
+// 帖子数据结构
+message Post {
+  int64 id = 1;                   // 帖子唯一标识
+  user.User author = 2;           // 发帖用户信息
+  string text_content = 3;        // 帖子的文字内容
+  string cover_url=4;
+  repeated string image_urls = 5; // 帖子的图片地址列表
+  int64 like_count = 6;           // 点赞总数
+  int64 comment_count = 7;        // 评论总数
+  bool is_liked = 8;              // 当前用户是否已点赞
+  string title = 9;               // 帖子标题
+  int64 modified_at = 10;           // 帖子的修改时间
+}
+
+service FeedSrv {
+  rpc GetFeed (bloomblog_feed_request) returns (bloomblog_feed_response);       // 获取帖子流
+  rpc GetPostById (post_id_request) returns (Post); // 获取单个帖子
+}
+
+//kitex -module github.com/Agelessbaby/BloomBlog -type protobuf -I ../../idl -service feed -protobuf Muser.proto=github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user ../../idl/feed.proto

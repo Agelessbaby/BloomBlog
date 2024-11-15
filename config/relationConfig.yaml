@@ -4,16 +4,16 @@ Global:
 
 
 Etcd:
-  Address: "127.0.0.1"
+  Address: "0.0.0.0"
   Port: 2379
 
 Server:
   Name: "BloomBlogRelationServer"
-  Address: "127.0.0.1"
+  Address: "0.0.0.0"
   Port: 8087
 
 Client:
   Echo: true
   Foo: "bar"
   Servers:
-    - "127.0.0.1"
+    - "0.0.0.0"

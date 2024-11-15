@@ -38,3 +38,5 @@ service UserSrv{
   rpc Login (BloomBlog_user_register_request) returns (BloomBlog_user_register_response);
   rpc GetUserById (BloomBlog_user_request) returns (BloomBlog_user_response);
 }
+
+//kitex -module github.com/Agelessbaby/BloomBlog -type protobuf -I ../../idl -service user -protobuf  ../../idl/user.proto

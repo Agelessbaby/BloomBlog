@@ -4,7 +4,7 @@ Global:
 
 Etcd:
   Enable: true
-  Address: "127.0.0.1"
+  Address: "0.0.0.0"
   Port: 2379
 
 Server:
@@ -28,4 +28,4 @@ Client:
   Echo: true
   Foo: "bar"
   Servers:
-    - "127.0.0.1"
+    - "0.0.0.0"

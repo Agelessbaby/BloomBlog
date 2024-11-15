@@ -2,6 +2,8 @@ package pack
 
 import (
 	"errors"
+	"github.com/Agelessbaby/BloomBlog/cmd/feed/kitex_gen/feed"
+	"github.com/Agelessbaby/BloomBlog/cmd/publish/kitex_gen/publish"
 	"github.com/Agelessbaby/BloomBlog/cmd/relation/kitex_gen/relation"
 	"github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user"
 	"github.com/Agelessbaby/BloomBlog/util/errno"
@@ -95,4 +97,61 @@ func followerListResp(err errno.ErrNo) *relation.BloomblogRelationFollowerListRe
 		StatusCode: int32(err.ErrCode),
 		StatusMsg:  &err.ErrMsg,
 	}
+}
+
+// BuildVideoResp build VideoResp from error
+func BuildVideoResp(err error) *feed.BloomblogFeedResponse {
+	if err == nil {
+		return PostResp(errno.Success)
+	}
+
+	e := errno.ErrNo{}
+	if errors.As(err, &e) {
+		return PostResp(e)
+	}
+
+	s := errno.ErrUnknown.WithMessage(err.Error())
+	return PostResp(s)
+}
+
+func PostResp(err errno.ErrNo) *feed.BloomblogFeedResponse {
+	return &feed.BloomblogFeedResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
+}
+
+// BuildPublishResp build PublishResp from error
+func BuildPublishResp(err error) *publish.BloomblogPublishActionResponse {
+	if err == nil {
+		return publishResp(errno.Success)
+	}
+
+	e := errno.ErrNo{}
+	if errors.As(err, &e) {
+		return publishResp(e)
+	}
+
+	s := errno.ErrUnknown.WithMessage(err.Error())
+	return publishResp(s)
+}
+
+func publishResp(err errno.ErrNo) *publish.BloomblogPublishActionResponse {
+	return &publish.BloomblogPublishActionResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
+}
+
+// BuildPublishResp build PublishResp from error
+func BuildPublishListResp(err error) *publish.BloomblogPublishListResponse {
+	if err == nil {
+		return publishListResp(errno.Success)
+	}
+
+	e := errno.ErrNo{}
+	if errors.As(err, &e) {
+		return publishListResp(e)
+	}
+
+	s := errno.ErrUnknown.WithMessage(err.Error())
+	return publishListResp(s)
+}
+
+func publishListResp(err errno.ErrNo) *publish.BloomblogPublishListResponse {
+	return &publish.BloomblogPublishListResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
 }

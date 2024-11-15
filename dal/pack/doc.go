@@ -1,4 +1,3 @@
 package pack
 
-//Besides the packing, those operations which include cross-service are put in this package
-//for example: in User function, it uses db.getrelation
+//In general, the service layer queries database and use this package to pack the data from db package into idl data.

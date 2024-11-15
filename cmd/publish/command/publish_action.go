@@ -5,7 +5,7 @@ import (
 	"context"
 	"github.com/Agelessbaby/BloomBlog/cmd/publish/kitex_gen/publish"
 	"github.com/Agelessbaby/BloomBlog/dal/db"
-	"github.com/Agelessbaby/BloomBlog/util/oss/minio"
+	"github.com/Agelessbaby/BloomBlog/util/oss/oss"
 	"github.com/google/uuid"
 	"strings"
 )
@@ -19,7 +19,7 @@ func NewPublishActionService(ctx context.Context) *PublishActionService {
 }
 
 func (s *PublishActionService) PublishAction(req *publish.BloomblogPublishActionRequest, uid int64) error {
-	MinioImageBucketName := minio.MinioVideoBucketName
+	MinioImageBucketName := oss.MinioVideoBucketName
 	images := req.Images
 	u3, err := uuid.NewV7()
 	if err != nil {
@@ -28,11 +28,11 @@ func (s *PublishActionService) PublishAction(req *publish.BloomblogPublishAction
 	coverName := u3.String() + "." + "jpg"
 	cover := req.Cover
 	coverReader := bytes.NewReader(cover)
-	err = minio.UploadFile(MinioImageBucketName, coverName, coverReader, int64(len(cover)))
+	err = oss.UploadFile(MinioImageBucketName, coverName, coverReader, int64(len(cover)))
 	if err != nil {
 		return err
 	}
-	Url, err := minio.GetFileUrl(MinioImageBucketName, coverName, 0)
+	Url, err := oss.GetFileUrl(MinioImageBucketName, coverName, 0)
 	if err != nil {
 		return err
 	}
@@ -46,11 +46,11 @@ func (s *PublishActionService) PublishAction(req *publish.BloomblogPublishAction
 			return err
 		}
 		fileName := u2.String() + "." + "JPG"
-		err = minio.UploadFile(MinioImageBucketName, fileName, reader, int64(len(image)))
+		err = oss.UploadFile(MinioImageBucketName, fileName, reader, int64(len(image)))
 		if err != nil {
 			return err
 		}
-		url, err := minio.GetFileUrl(MinioImageBucketName, fileName, 0)
+		url, err := oss.GetFileUrl(MinioImageBucketName, fileName, 0)
 		playUrl := strings.Split(url.String(), "?")[0]
 		if err != nil {
 			return err

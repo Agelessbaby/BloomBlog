@@ -45,7 +45,7 @@ func (s *PublishActionService) PublishAction(req *publish.BloomblogPublishAction
 		if err != nil {
 			return err
 		}
-		fileName := u2.String() + "." + "JPG"
+		fileName := u2.String() + "." + "jpg"
 		err = oss.UploadFile(MinioImageBucketName, fileName, reader, int64(len(image)))
 		if err != nil {
 			return err

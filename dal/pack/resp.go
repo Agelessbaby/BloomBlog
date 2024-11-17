@@ -99,21 +99,6 @@ func followerListResp(err errno.ErrNo) *relation.BloomblogRelationFollowerListRe
 	}
 }
 
-// BuildVideoResp build VideoResp from error
-func BuildVideoResp(err error) *feed.BloomblogFeedResponse {
-	if err == nil {
-		return PostResp(errno.Success)
-	}
-
-	e := errno.ErrNo{}
-	if errors.As(err, &e) {
-		return PostResp(e)
-	}
-
-	s := errno.ErrUnknown.WithMessage(err.Error())
-	return PostResp(s)
-}
-
 func PostResp(err errno.ErrNo) *feed.BloomblogFeedResponse {
 	return &feed.BloomblogFeedResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
 }

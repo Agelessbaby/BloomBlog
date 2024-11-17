@@ -34,5 +34,8 @@ func registerGroup(h *server.Hertz) {
 	relation.GET("/followlist", handlers.RelationFollowList)
 	relation.GET("/followerlist", handlers.RelationFollowerList)
 
+	// Publish service
+	publish := bloomblog.Group("/publish")
+	publish.POST("/action", handlers.PublishAction)
 	//TODO Add Publish service here
 }

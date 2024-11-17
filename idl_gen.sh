@@ -1,6 +1,5 @@
 #!/bin/bash
-
-# 设置环境变量
+# Please run this script under project root path
 export Root_Path=$(pwd)
 
 # 验证环境变量

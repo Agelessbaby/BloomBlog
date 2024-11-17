@@ -42,6 +42,24 @@ func (s *PublishSrvImpl) PublishAction(ctx context.Context, req *publish.Bloombl
 
 // PublishList implements the PublishSrvImpl interface.
 func (s *PublishSrvImpl) PublishList(ctx context.Context, req *publish.BloomblogPublishListRequest) (resp *publish.BloomblogPublishListResponse, err error) {
-	// TODO: Your code here...
-	return
+	_, payload, err := jwt.VerifyJwt(req.Token, env.JWT_SECRET)
+	if err != nil {
+		resp = pack.BuildPublishListResp(errno.ErrTokenInvalid)
+		return resp, nil
+	}
+	userid := jwt.GetUserIdFromPayload(payload)
+	if userid <= 0 {
+		resp = pack.BuildPublishListResp(errno.ErrTokenInvalid)
+	}
+	if req.UserId == 0 {
+		req.UserId = userid
+	}
+	posts, err := command.NewPublishListService(ctx).PublishList(req, &userid)
+	if err != nil {
+		resp = pack.BuildPublishListResp(errno.ConvertErr(err))
+		return resp, nil
+	}
+	resp = pack.BuildPublishListResp(errno.Success)
+	resp.PostList = posts
+	return resp, nil
 }

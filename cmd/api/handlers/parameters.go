@@ -29,3 +29,11 @@ type RelationActionParam struct {
 	ToUserId   int64  `json:"to_user_id,omitempty"`  // 对方用户id
 	ActionType int32  `json:"action_type,omitempty"` // 1-关注，2-取消关注
 }
+
+// The inputn parameter for publish posts
+type PublishActionParam struct {
+	Token   string   `json:"token,omitempty"`
+	Images  [][]byte `json:"images,omitempty"`
+	Content string   `json:"content,omitempty"`
+	Title   string   `json:"title,omitempty"`
+}

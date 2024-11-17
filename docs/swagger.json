@@ -4,6 +4,71 @@
         "contact": {}
     },
     "paths": {
+        "/bloomblog/publish/action": {
+            "post": {
+                "description": "This endpoint allows users to publish a blog post with images, title, and content.",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "publish"
+                ],
+                "summary": "Publish a blog post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User authentication token",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The title of the blog post",
+                        "name": "title",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The content of the blog post",
+                        "name": "content",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Multiple image files (repeatable), upload all images as part of 'images' field",
+                        "name": "images",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The response object",
+                        "schema": {
+                            "$ref": "#/definitions/publish.BloomblogPublishActionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input data",
+                        "schema": {
+                            "$ref": "#/definitions/publish.BloomblogPublishActionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/publish.BloomblogPublishActionResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/bloomblog/relation/action": {
             "post": {
                 "description": "Handles actions like follow, unfollow, or other user relation actions.",
@@ -324,6 +389,19 @@
                 },
                 "username": {
                     "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "publish.BloomblogPublishActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
                     "type": "string"
                 }
             }

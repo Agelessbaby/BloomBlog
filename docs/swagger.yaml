@@ -24,6 +24,15 @@ definitions:
         description: 用户名
         type: string
     type: object
+  publish.BloomblogPublishActionResponse:
+    properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+    type: object
   relation.BloomblogRelationActionResponse:
     properties:
       status_code:
@@ -107,6 +116,52 @@ definitions:
 info:
   contact: {}
 paths:
+  /bloomblog/publish/action:
+    post:
+      consumes:
+      - multipart/form-data
+      description: This endpoint allows users to publish a blog post with images,
+        title, and content.
+      parameters:
+      - description: User authentication token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: The title of the blog post
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: The content of the blog post
+        in: formData
+        name: content
+        required: true
+        type: string
+      - description: Multiple image files (repeatable), upload all images as part
+          of 'images' field
+        in: formData
+        name: images
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: The response object
+          schema:
+            $ref: '#/definitions/publish.BloomblogPublishActionResponse'
+        "400":
+          description: Invalid input data
+          schema:
+            $ref: '#/definitions/publish.BloomblogPublishActionResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/publish.BloomblogPublishActionResponse'
+      summary: Publish a blog post
+      tags:
+      - publish
   /bloomblog/relation/action:
     post:
       consumes:

@@ -1,4 +1,4 @@
-package oss
+package minio
 
 import (
 	"github.com/Agelessbaby/BloomBlog/util/config"

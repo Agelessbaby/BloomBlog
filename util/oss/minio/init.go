@@ -1,4 +1,4 @@
-package minio
+package oss
 
 import (
 	"github.com/Agelessbaby/BloomBlog/util/config"
@@ -10,11 +10,11 @@ import (
 var (
 	minioClient          *minio.Client
 	minioConfig          = config.CreateConfig("minioConfig")
-	MinioEndpoint        = minioConfig.GetString("minio.Endpoint")
-	MinioAccessKeyId     = minioConfig.GetString("minio.AccessKeyId")
-	MinioSecretAccessKey = minioConfig.GetString("minio.SecretAccessKey")
-	MinioUseSSL          = minioConfig.GetBool("minio.UseSSL")
-	MinioVideoBucketName = minioConfig.GetString("minio.ImageBucketName")
+	MinioEndpoint        = minioConfig.GetString("test.Endpoint")
+	MinioAccessKeyId     = minioConfig.GetString("test.AccessKeyId")
+	MinioSecretAccessKey = minioConfig.GetString("test.SecretAccessKey")
+	MinioUseSSL          = minioConfig.GetBool("test.UseSSL")
+	MinioVideoBucketName = minioConfig.GetString("test.ImageBucketName")
 )
 
 // Minio 对象存储初始化
@@ -24,12 +24,12 @@ func init() {
 		Secure: MinioUseSSL,
 	})
 	if err != nil {
-		klog.Errorf("minio client init failed: %v", err)
+		klog.Errorf("test client init failed: %v", err)
 	}
 	// fmt.Println(client)
-	klog.Debug("minio client init successfully")
+	klog.Debug("test client init successfully")
 	minioClient = client
 	if err := CreateBucket(MinioVideoBucketName); err != nil {
-		klog.Errorf("minio client init failed: %v", err)
+		klog.Errorf("test client init failed: %v", err)
 	}
 }

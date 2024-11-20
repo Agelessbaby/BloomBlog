@@ -19,11 +19,12 @@ var (
 )
 
 func init() {
+
 	dblog = ormlog.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 		ormlog.Config{
 			SlowThreshold: 100 * time.Millisecond, // slow Sql threshold
-			LogLevel:      ormlog.Silent,          // silent level
+			LogLevel:      ormlog.Info,            // silent level
 			Colorful:      true,                   // enable colorful print
 		},
 	)
@@ -43,6 +44,7 @@ func initDB() {
 		rdbmsConfig.GetString("Mysql.loc"),
 	)
 	var err error
+
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger:                 dblog,
 		PrepareStmt:            true,

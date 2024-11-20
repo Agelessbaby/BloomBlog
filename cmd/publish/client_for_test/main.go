@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	//filePath := "/Users/liuwenjie/GolandProjects/BloomBlog/util/minio/minio/test/test.jpg"
+	//filePath := "/Users/liuwenjie/GolandProjects/BloomBlog/util/test/test/test/test.jpg"
 	//// 读取文件内容
 	//imageData, err := os.ReadFile(filePath)
 	//if err != nil {

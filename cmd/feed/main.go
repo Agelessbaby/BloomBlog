@@ -16,7 +16,7 @@ import (
 
 var (
 	loglevel       = flag.String("loglevel", "info", "log level")
-	relationConfig = config.CreateConfig("relationConfig")
+	relationConfig = config.CreateConfig("feedConfig")
 	ServiceName    = relationConfig.GetString("Server.Name")
 	ServiceAddr    = fmt.Sprintf("%s:%d", relationConfig.GetString("Server.Address"), relationConfig.GetInt("Server.Port"))
 	EtcdAddress    = fmt.Sprintf("%s:%d", relationConfig.GetString("Etcd.Address"), relationConfig.GetInt("Etcd.Port"))

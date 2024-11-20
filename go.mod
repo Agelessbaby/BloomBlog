@@ -7,6 +7,8 @@ require (
 	github.com/cloudwego/fastpb v0.0.5
 	github.com/cloudwego/hertz v0.9.3
 	github.com/cloudwego/kitex v0.11.3
+	github.com/google/uuid v1.6.0
+	github.com/hertz-contrib/cors v0.1.0
 	github.com/hertz-contrib/gzip v0.0.3
 	github.com/hertz-contrib/http2 v0.1.8
 	github.com/hertz-contrib/registry/etcd v0.0.0-20240618152458-11c3cac90e4f
@@ -62,7 +64,6 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/pprof v0.0.0-20241101162523-b92577c0c142 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.23.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect

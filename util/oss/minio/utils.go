@@ -1,4 +1,4 @@
-package minio
+package oss
 
 import (
 	"context"
@@ -34,7 +34,7 @@ func CreateBucket(bucketName string) error {
 	return nil
 }
 
-// UploadLocalFile 上传本地文件（提供文件路径）至 minio
+// UploadLocalFile 上传本地文件（提供文件路径）至 test
 func UploadLocalFile(bucketName string, objectName string, filePath string, contentType string) (int64, error) {
 	ctx := context.Background()
 	info, err := minioClient.FPutObject(ctx, bucketName, objectName, filePath, minio.PutObjectOptions{
@@ -48,7 +48,7 @@ func UploadLocalFile(bucketName string, objectName string, filePath string, cont
 	return info.Size, nil
 }
 
-// UploadFile 上传文件（提供reader）至 minio
+// UploadFile 上传文件（提供reader）至 test
 func UploadFile(bucketName string, objectName string, reader io.Reader, objectsize int64) error {
 	ctx := context.Background()
 	n, err := minioClient.PutObject(ctx, bucketName, objectName, reader, objectsize, minio.PutObjectOptions{
@@ -62,7 +62,7 @@ func UploadFile(bucketName string, objectName string, reader io.Reader, objectsi
 	return nil
 }
 
-// GetFileUrl 从 minio 获取文件Url
+// GetFileUrl 从 test 获取文件Url
 func GetFileUrl(bucketName string, fileName string, expires time.Duration) (*url.URL, error) {
 	ctx := context.Background()
 	reqParams := make(url.Values)

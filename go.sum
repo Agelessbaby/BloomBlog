@@ -94,6 +94,7 @@ github.com/cloudwego/frugal v0.2.1/go.mod h1:8u9jurwMN1lF/yl5csqJ0XmZyHGjsjCZc1X
 github.com/cloudwego/gopkg v0.1.2 h1:650t+RiZGht8qX+y0hl49JXJCuO44GhbGZuxDzr2PyI=
 github.com/cloudwego/gopkg v0.1.2/go.mod h1:WoNTdXDPdvL97cBmRUWXVGkh2l2UFmpd9BUvbW2r0Aw=
 github.com/cloudwego/hertz v0.6.0/go.mod h1:83EedHQvCXpveYh2r9us8YlQ1C28vPg93wPdB/QpJiA=
+github.com/cloudwego/hertz v0.6.2/go.mod h1:2em2hGREvCBawsTQcQxyWBGVlCeo+N1pp2q0HkkbwR0=
 github.com/cloudwego/hertz v0.6.8/go.mod h1:KhztQcZtMQ46gOjZcmCy557AKD29cbumGEV0BzwevwA=
 github.com/cloudwego/hertz v0.9.3 h1:uajvLn6LjEPjUqN/ewUZtWoRQWa2es2XTELdqDlOYMw=
 github.com/cloudwego/hertz v0.9.3/go.mod h1:gGVUfJU/BOkJv/ZTzrw7FS7uy7171JeYIZvAyV3wS3o=
@@ -292,6 +293,8 @@ github.com/hashicorp/serf v0.8.2/go.mod h1:6hOLApaqBFA1NXqRQAsxw9QxuDEvNxSQRwA/J
 github.com/henrylee2cn/ameda v1.4.8/go.mod h1:liZulR8DgHxdK+MEwvZIylGnmcjzQ6N6f2PlWe7nEO4=
 github.com/henrylee2cn/ameda v1.4.10/go.mod h1:liZulR8DgHxdK+MEwvZIylGnmcjzQ6N6f2PlWe7nEO4=
 github.com/henrylee2cn/goutil v0.0.0-20210127050712-89660552f6f8/go.mod h1:Nhe/DM3671a5udlv2AdV2ni/MZzgfv2qrPL5nIi3EGQ=
+github.com/hertz-contrib/cors v0.1.0 h1:PQ5mATygSMzTlYtfyMyHjobYoJeHKe2Qt3tcAOgbI6E=
+github.com/hertz-contrib/cors v0.1.0/go.mod h1:VPReoq+Rvu/lZOfpp5CcX3x4mpZUc3EpSXBcVDcbvOc=
 github.com/hertz-contrib/gzip v0.0.3 h1:x+XamFkUYhPPqMzGWejPh1wdDiwkIpHkgRVIg74Xvt4=
 github.com/hertz-contrib/gzip v0.0.3/go.mod h1:5rQsvQp1qBmt2TYATbbofNAJBSws2Wwst4EdiHLbx4w=
 github.com/hertz-contrib/http2 v0.1.8 h1:kjfCGkUxJZHgfPsnRjx1FLJBG55KvtvSQD214guBQLw=

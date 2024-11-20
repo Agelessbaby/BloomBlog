@@ -106,6 +106,13 @@ func VerifyJwt(token string, secret string) (*JwtHeader, *JwtPayload, error) {
 }
 
 func GetUserIdFromPayload(payload *JwtPayload) int64 {
-	useridVal := payload.UserDefined["userid"]
-	return int64(useridVal.(float64))
+	useridVal, ok := payload.UserDefined["userid"]
+	if !ok {
+		return 0
+	}
+	useridFloat, ok := useridVal.(float64)
+	if !ok {
+		return 0
+	}
+	return int64(useridFloat)
 }

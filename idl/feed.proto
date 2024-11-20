@@ -4,13 +4,13 @@ package feed;
 option go_package = "feed";
 
 import "user.proto";
-// 请求帖子流
+
 message bloomblog_feed_request {
   optional int64 latest_time = 1; // 可选，获取指定时间之前的帖子（单位：秒）
   optional string token = 2;      // 用户登录后的身份凭证（可选）
 }
 
-// 返回帖子流
+
 message bloomblog_feed_response {
   int32 status_code = 1;          // 状态码，0-成功，其他值-失败
   optional string status_msg = 2; // 返回状态描述
@@ -18,13 +18,13 @@ message bloomblog_feed_response {
   optional int64 next_time = 4;   // 返回的帖子中最早的时间，用于下次请求
 }
 
-// 请求帖子详情
+
 message post_id_request {
   int64 post_id = 1;              // 帖子的唯一标识
   int64 search_id = 2;
 }
 
-// 帖子数据结构
+
 message Post {
   int64 id = 1;                   // 帖子唯一标识
   user.User author = 2;           // 发帖用户信息

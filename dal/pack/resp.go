@@ -99,10 +99,6 @@ func followerListResp(err errno.ErrNo) *relation.BloomblogRelationFollowerListRe
 	}
 }
 
-func PostResp(err errno.ErrNo) *feed.BloomblogFeedResponse {
-	return &feed.BloomblogFeedResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
-}
-
 // BuildPublishResp build PublishResp from error
 func BuildPublishResp(err error) *publish.BloomblogPublishActionResponse {
 	if err == nil {
@@ -139,4 +135,23 @@ func BuildPublishListResp(err error) *publish.BloomblogPublishListResponse {
 
 func publishListResp(err errno.ErrNo) *publish.BloomblogPublishListResponse {
 	return &publish.BloomblogPublishListResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
+}
+
+// BuildPostResp build PostResp from error
+func BuildPostResp(err error) *feed.BloomblogFeedResponse {
+	if err == nil {
+		return PostResp(errno.Success)
+	}
+
+	e := errno.ErrNo{}
+	if errors.As(err, &e) {
+		return PostResp(e)
+	}
+
+	s := errno.ErrUnknown.WithMessage(err.Error())
+	return PostResp(s)
+}
+
+func PostResp(err errno.ErrNo) *feed.BloomblogFeedResponse {
+	return &feed.BloomblogFeedResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
 }

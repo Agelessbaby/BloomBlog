@@ -46,7 +46,7 @@ func MGetPosts(ctx context.Context, limit int, latestTime *int64) ([]*Post, erro
 	}
 	conn := DB.WithContext(ctx)
 
-	if err := conn.Limit(limit).Order("update_time desc").Find(&posts, "update_time < ?", time.UnixMilli(*latestTime)).Error; err != nil {
+	if err := conn.Limit(limit).Order("updated_at desc").Find(&posts, "updated_at < ?", time.UnixMilli(*latestTime)).Error; err != nil {
 		return nil, err
 	}
 	return posts, nil

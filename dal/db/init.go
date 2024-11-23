@@ -24,7 +24,7 @@ func init() {
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 		ormlog.Config{
 			SlowThreshold: 100 * time.Millisecond, // slow Sql threshold
-			LogLevel:      ormlog.Info,            // silent level
+			LogLevel:      ormlog.Silent,          // silent level
 			Colorful:      true,                   // enable colorful print
 		},
 	)

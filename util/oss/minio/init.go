@@ -10,11 +10,11 @@ import (
 var (
 	minioClient          *minio.Client
 	minioConfig          = config.CreateConfig("minioConfig")
-	MinioEndpoint        = minioConfig.GetString("test.Endpoint")
-	MinioAccessKeyId     = minioConfig.GetString("test.AccessKeyId")
-	MinioSecretAccessKey = minioConfig.GetString("test.SecretAccessKey")
-	MinioUseSSL          = minioConfig.GetBool("test.UseSSL")
-	MinioVideoBucketName = minioConfig.GetString("test.ImageBucketName")
+	MinioEndpoint        = minioConfig.GetString("Minio.Endpoint")
+	MinioAccessKeyId     = minioConfig.GetString("Minio.AccessKeyId")
+	MinioSecretAccessKey = minioConfig.GetString("Minio.SecretAccessKey")
+	MinioUseSSL          = minioConfig.GetBool("Minio.UseSSL")
+	MinioVideoBucketName = minioConfig.GetString("Minio.ImageBucketName")
 )
 
 // Minio 对象存储初始化

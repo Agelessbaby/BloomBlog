@@ -50,6 +50,7 @@ func GenJWT(userId int64) (string, error) {
 	}
 	return genJWT(header, payload, env.JWT_SECRET)
 }
+
 func genJWT(header JwtHeader, payload JwtPayload, secret string) (string, error) {
 	var part1, part2, signature string
 	//turn header into json
@@ -115,4 +116,8 @@ func GetUserIdFromPayload(payload *JwtPayload) int64 {
 		return 0
 	}
 	return int64(useridFloat)
+}
+
+func TrimPrefix(authHeader string) string {
+	return strings.TrimPrefix(authHeader, "Bearer ")
 }

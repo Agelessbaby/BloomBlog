@@ -19,6 +19,6 @@ cd $Root_Path/cmd/publish
 
 ./build.sh
 
-#cd $Root_Path/cmd/feed
-#
-#./build.sh
+cd $Root_Path/cmd/feed
+
+./build.sh

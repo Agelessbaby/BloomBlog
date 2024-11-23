@@ -7,30 +7,31 @@ import (
 	"github.com/Agelessbaby/BloomBlog/cmd/publish/kitex_gen/publish"
 	"github.com/Agelessbaby/BloomBlog/dal/pack"
 	"github.com/Agelessbaby/BloomBlog/util/errno"
+	"github.com/Agelessbaby/BloomBlog/util/jwt"
 	"github.com/cloudwego/hertz/pkg/app"
 )
 
 // PublishAction handles the publication of a blog post with images.
 //
-// @Summary Publish a blog post
-// @Description This endpoint allows users to publish a blog post with images, title, and content.
+//	@Summary		Publish a blog post
+//	@Description	This endpoint allows users to publish a blog post with images, title, and content.
 //
 //	The images are uploaded as a multipart form, and the first image is used as the cover.
 //
-// @Tags publish
-// @Accept  multipart/form-data
-// @Produce json
-// @Param token query string true "User authentication token"
-// @Param title formData string true "The title of the blog post"
-// @Param content formData string true "The content of the blog post"
-// @Param images formData file true "Multiple image files (repeatable), upload all images as part of 'images' field"
-// @Success 200 {object} publish.BloomblogPublishActionResponse "The response object"
-// @Failure 400 {object} publish.BloomblogPublishActionResponse "Invalid input data"
-// @Failure 500 {object} publish.BloomblogPublishActionResponse "Internal server error"
-// @Router /bloomblog/publish/action [post]
+//	@Tags			publish
+//	@Accept			multipart/form-data
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			title	formData	string									true	"The title of the blog post"
+//	@Param			content	formData	string									true	"The content of the blog post"
+//	@Param			images	formData	file									true	"Multiple image files (repeatable), upload all images as part of 'images' field"
+//	@Success		200		{object}	publish.BloomblogPublishActionResponse	"The response object"
+//	@Failure		400		{object}	publish.BloomblogPublishActionResponse	"Invalid input data"
+//	@Failure		500		{object}	publish.BloomblogPublishActionResponse	"Internal server error"
+//	@Router			/bloomblog/publish/action [post]
 func PublishAction(c context.Context, ctx *app.RequestContext) {
 	var publishVar PublishActionParam
-	token := ctx.Query("token")
+	token := jwt.TrimPrefix(string(ctx.GetHeader("Authorization")))
 	publishVar.Token = token
 	publishVar.Title = ctx.PostForm("title")
 	publishVar.Content = ctx.PostForm("content")

@@ -6,8 +6,14 @@ definitions:
       errMsg:
         type: string
     type: object
-  handlers.UserParam:
+  handlers.RelationActionParam:
     properties:
+      action_type:
+        description: 1-关注，2-取消关注
+        type: integer
+      to_user_id:
+        description: 对方用户id
+        type: integer
       token:
         description: 用户鉴权token
         type: string
@@ -123,11 +129,6 @@ paths:
       description: This endpoint allows users to publish a blog post with images,
         title, and content.
       parameters:
-      - description: User authentication token
-        in: query
-        name: token
-        required: true
-        type: string
       - description: The title of the blog post
         in: formData
         name: title
@@ -159,6 +160,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/publish.BloomblogPublishActionResponse'
+      security:
+      - BearerAuth: []
       summary: Publish a blog post
       tags:
       - publish
@@ -168,25 +171,12 @@ paths:
       - application/json
       description: Handles actions like follow, unfollow, or other user relation actions.
       parameters:
-      - description: User authentication token
-        in: query
-        name: token
+      - description: Relation Action Parameters
+        in: body
+        name: relationAction
         required: true
-        type: string
-      - description: The ID of the user to perform the action on
-        in: query
-        name: to_user_id
-        required: true
-        type: string
-      - description: The type of action to perform
-        enum:
-        - "1"
-        - "2"
-        example: "1"
-        in: query
-        name: action_type
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/handlers.RelationActionParam'
       produces:
       - application/json
       responses:
@@ -202,6 +192,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/relation.BloomblogRelationActionResponse'
+      security:
+      - BearerAuth: []
       summary: Perform a relation action
       tags:
       - Relation
@@ -236,6 +228,8 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/relation.BloomblogRelationFollowerListResponse'
+      security:
+      - BearerAuth: []
       summary: Get follower list
       tags:
       - Relation
@@ -270,21 +264,22 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/relation.BloomblogRelationFollowListResponse'
+      security:
+      - BearerAuth: []
       summary: Get following list
       tags:
       - Relation
   /bloomblog/user/getuserbyid:
-    post:
+    get:
       consumes:
       - application/json
       description: Get user information by ID and token
       parameters:
-      - description: User ID and token
-        in: body
-        name: userVar
+      - description: User ID
+        in: query
+        name: user_id
         required: true
-        schema:
-          $ref: '#/definitions/handlers.UserParam'
+        type: string
       produces:
       - application/json
       responses:
@@ -296,6 +291,8 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/errno.ErrNo'
+      security:
+      - BearerAuth: []
       summary: Get User by ID
       tags:
       - User
@@ -351,4 +348,9 @@ paths:
       summary: User Registration
       tags:
       - User
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

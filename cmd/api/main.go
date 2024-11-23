@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+//	@securityDefinitions.apikey	BearerAuth
+//	@in							header
+//	@name						Authorization
+
 var (
 	apiConfig   = config.CreateConfig("apiConfig")
 	ServiceName = apiConfig.GetString("Server.Name")

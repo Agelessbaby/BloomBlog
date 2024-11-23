@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/bloomblog/publish/action": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "This endpoint allows users to publish a blog post with images, title, and content.",
                 "consumes": [
                     "multipart/form-data"
@@ -29,13 +34,6 @@ const docTemplate = `{
                 ],
                 "summary": "Publish a blog post",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User authentication token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
                     {
                         "type": "string",
                         "description": "The title of the blog post",
@@ -82,6 +80,11 @@ const docTemplate = `{
         },
         "/bloomblog/relation/action": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Handles actions like follow, unfollow, or other user relation actions.",
                 "consumes": [
                     "application/json"
@@ -95,30 +98,13 @@ const docTemplate = `{
                 "summary": "Perform a relation action",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "User authentication token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "The ID of the user to perform the action on",
-                        "name": "to_user_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "enum": [
-                            "1",
-                            "2"
-                        ],
-                        "type": "string",
-                        "example": "1",
-                        "description": "The type of action to perform",
-                        "name": "action_type",
-                        "in": "query",
-                        "required": true
+                        "description": "Relation Action Parameters",
+                        "name": "relationAction",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.RelationActionParam"
+                        }
                     }
                 ],
                 "responses": {
@@ -145,6 +131,11 @@ const docTemplate = `{
         },
         "/bloomblog/relation/followerlist": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves the list of users that follow the specified user.",
                 "consumes": [
                     "application/json"
@@ -196,6 +187,11 @@ const docTemplate = `{
         },
         "/bloomblog/relation/followlist": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Retrieves the list of users that a specific user is following.",
                 "consumes": [
                     "application/json"
@@ -246,7 +242,12 @@ const docTemplate = `{
             }
         },
         "/bloomblog/user/getuserbyid": {
-            "post": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get user information by ID and token",
                 "consumes": [
                     "application/json"
@@ -260,13 +261,11 @@ const docTemplate = `{
                 "summary": "Get User by ID",
                 "parameters": [
                     {
-                        "description": "User ID and token",
-                        "name": "userVar",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/handlers.UserParam"
-                        }
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -378,9 +377,17 @@ const docTemplate = `{
                 }
             }
         },
-        "handlers.UserParam": {
+        "handlers.RelationActionParam": {
             "type": "object",
             "properties": {
+                "action_type": {
+                    "description": "1-关注，2-取消关注",
+                    "type": "integer"
+                },
+                "to_user_id": {
+                    "description": "对方用户id",
+                    "type": "integer"
+                },
                 "token": {
                     "description": "用户鉴权token",
                     "type": "string"
@@ -533,6 +540,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

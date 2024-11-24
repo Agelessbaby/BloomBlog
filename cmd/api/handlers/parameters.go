@@ -30,10 +30,16 @@ type RelationActionParam struct {
 	ActionType int32  `json:"action_type,omitempty"` // 1-关注，2-取消关注
 }
 
-// The inputn parameter for publish posts
+// The input parameter for publish posts
 type PublishActionParam struct {
 	Token   string   `json:"token,omitempty"`
 	Images  [][]byte `json:"images,omitempty"`
 	Content string   `json:"content,omitempty"`
 	Title   string   `json:"title,omitempty"`
+}
+
+// The input parameter for getting user feed
+type FeedParam struct {
+	LatestTime *int64  `json:"latest_time,omitempty"` // 可选参数，限制返回视频的最新投稿时间戳，精确到秒，不填表示当前时间
+	Token      *string `json:"token,omitempty"`       // 可选参数，登录用户设置
 }

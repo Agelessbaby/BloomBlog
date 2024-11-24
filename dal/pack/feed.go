@@ -44,6 +44,7 @@ func Posts(ctx context.Context, ps []*db.Post, fromID *int64) ([]*feed.Post, err
 		}
 		if P != nil {
 			//TODO Add the logic of finding favorite relationship
+
 			Ps = append(Ps, P)
 		}
 	}

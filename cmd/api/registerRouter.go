@@ -38,4 +38,7 @@ func registerGroup(h *server.Hertz) {
 	publish := bloomblog.Group("/publish")
 	publish.POST("/action", handlers.PublishAction)
 	//TODO Add Publish service here
+
+	feed := bloomblog.Group("/feed")
+	feed.GET("/getfeed", handlers.GetFeed)
 }

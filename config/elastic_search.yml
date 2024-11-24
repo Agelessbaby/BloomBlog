@@ -1,0 +1,19 @@
+# 集群名称
+cluster.name: "bloomblog-es-cluster"
+
+# 节点名称
+node.name: "es-node-1"
+
+# 设置为单节点模式
+discovery.type: single-node
+
+# 网络设置
+network.host: 0.0.0.0
+http.port: 9200
+
+# 数据路径（Docker 内部会挂载卷到这个路径）
+path.data: /usr/share/elasticsearch/data
+path.logs: /usr/share/elasticsearch/logs
+
+# 禁用 X-Pack 安全功能（仅适用于开发）
+xpack.security.enabled: false

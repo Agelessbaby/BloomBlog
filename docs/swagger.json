@@ -4,8 +4,125 @@
         "contact": {}
     },
     "paths": {
+        "/bloomblog/favorite/action": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "This endpoint allows a user to favorite or unfavorite a post. The user must provide a valid JWT token in the Authorization header.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "favorite"
+                ],
+                "summary": "Perform favorite action on a post",
+                "parameters": [
+                    {
+                        "description": "Favorite Action Parameters",
+                        "name": "FavoriteAction",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.FavoriteActionParam"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Action performed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/favorite.BloomblogFavoriteActionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/favorite.BloomblogFavoriteActionResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid token",
+                        "schema": {
+                            "$ref": "#/definitions/favorite.BloomblogFavoriteActionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/favorite.BloomblogFavoriteActionResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/bloomblog/favorite/list": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "retrieve the favorite list of a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "favorite"
+                ],
+                "summary": "retrieve the favorite list of a user",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "userid",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Action performed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/favorite.BloomblogFavoriteListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/favorite.BloomblogFavoriteListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid token",
+                        "schema": {
+                            "$ref": "#/definitions/favorite.BloomblogFavoriteListResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/favorite.BloomblogFavoriteListResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/bloomblog/feed/getfeed": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "This endpoint allows users to fetch feed data using the latest timestamp and an optional authentication token.",
                 "consumes": [
                     "application/json"
@@ -186,13 +303,6 @@
                         "name": "user_id",
                         "in": "query",
                         "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User authentication token",
-                        "name": "token",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -240,13 +350,6 @@
                         "type": "string",
                         "description": "The ID of the user to retrieve the following list for",
                         "name": "user_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "User authentication token",
-                        "name": "token",
                         "in": "query",
                         "required": true
                     }
@@ -409,6 +512,39 @@
                 }
             }
         },
+        "favorite.BloomblogFavoriteActionResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "favorite.BloomblogFavoriteListResponse": {
+            "type": "object",
+            "properties": {
+                "post_list": {
+                    "description": "用户点赞视频列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feed.Post"
+                    }
+                },
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
         "feed.BloomblogFeedResponse": {
             "type": "object",
             "properties": {
@@ -481,6 +617,27 @@
                 "title": {
                     "description": "帖子标题",
                     "type": "string"
+                }
+            }
+        },
+        "handlers.FavoriteActionParam": {
+            "type": "object",
+            "properties": {
+                "action_type": {
+                    "description": "1-点赞，2-取消点赞",
+                    "type": "integer"
+                },
+                "post_id": {
+                    "description": "视频id",
+                    "type": "integer"
+                },
+                "token": {
+                    "description": "用户鉴权token",
+                    "type": "string"
+                },
+                "user_id": {
+                    "description": "用户id",
+                    "type": "integer"
                 }
             }
         },

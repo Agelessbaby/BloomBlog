@@ -10,7 +10,7 @@ Etcd:
   Port: 2379
 
 Server:
-  Name: "TiktokFavoriteServer"
+  Name: "BloomBlogFavoriteServer"
   Address: "0.0.0.0"
   Port: 8085
 

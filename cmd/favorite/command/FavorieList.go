@@ -16,12 +16,12 @@ func NewFavoriteListService(ctx context.Context) *FavoriteListService {
 	return &FavoriteListService{ctx: ctx}
 }
 
-func (s *FavoriteListService) FavoriteList(req *favorite.BloomblogFavoriteListRequest) ([]*feed.Post, error) {
+func (s *FavoriteListService) FavoriteList(req *favorite.BloomblogFavoriteListRequest, from_id int64) ([]*feed.Post, error) {
 	favoritePosts, err := db.FavoriteList(s.ctx, req.UserId)
 	if err != nil {
 		return nil, err
 	}
-	posts, err := pack.FavoritePosts(s.ctx, favoritePosts, &req.UserId)
+	posts, err := pack.FavoritePosts(s.ctx, favoritePosts, &from_id)
 	if err != nil {
 		return nil, err
 	}

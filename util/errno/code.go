@@ -61,6 +61,7 @@ var (
 	ErrValidation   = NewErrNo(code.ErrValidation, "Validation failed")
 	ErrTokenInvalid = NewErrNo(code.ErrTokenInvalid, "Token invalid")
 
+	ErrRecordAlreadyExists   = NewErrNo(code.ErrDatabase, "record already exists")
 	ErrDatabase              = NewErrNo(code.ErrDatabase, "Database error")
 	ErrRecordNotFound        = NewErrNo(code.ErrRecordNotFound, "Record not found")
 	ErrInvalidTransaction    = NewErrNo(code.ErrInvalidTransaction, "Invalid transaction when you are trying to `Commit` or `Rollback`")

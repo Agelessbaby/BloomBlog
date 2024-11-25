@@ -2,6 +2,7 @@ package pack
 
 import (
 	"errors"
+	"github.com/Agelessbaby/BloomBlog/cmd/favorite/kitex_gen/favorite"
 	"github.com/Agelessbaby/BloomBlog/cmd/feed/kitex_gen/feed"
 	"github.com/Agelessbaby/BloomBlog/cmd/publish/kitex_gen/publish"
 	"github.com/Agelessbaby/BloomBlog/cmd/relation/kitex_gen/relation"
@@ -154,4 +155,42 @@ func BuildPostResp(err error) *feed.BloomblogFeedResponse {
 
 func PostResp(err errno.ErrNo) *feed.BloomblogFeedResponse {
 	return &feed.BloomblogFeedResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
+}
+
+// BuildFavoriteActionResp build FavoriteActionResp from error
+func BuildFavoriteActionResp(err error) *favorite.BloomblogFavoriteActionResponse {
+	if err == nil {
+		return favoriteActionResp(errno.Success)
+	}
+
+	e := errno.ErrNo{}
+	if errors.As(err, &e) {
+		return favoriteActionResp(e)
+	}
+
+	s := errno.ErrUnknown.WithMessage(err.Error())
+	return favoriteActionResp(s)
+}
+
+func favoriteActionResp(err errno.ErrNo) *favorite.BloomblogFavoriteActionResponse {
+	return &favorite.BloomblogFavoriteActionResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
+}
+
+// BuildFavoriteListResp build FavoriteListResp from error
+func BuildFavoriteListResp(err error) *favorite.BloomblogFavoriteListResponse {
+	if err == nil {
+		return favoriteListResp(errno.Success)
+	}
+
+	e := errno.ErrNo{}
+	if errors.As(err, &e) {
+		return favoriteListResp(e)
+	}
+
+	s := errno.ErrUnknown.WithMessage(err.Error())
+	return favoriteListResp(s)
+}
+
+func favoriteListResp(err errno.ErrNo) *favorite.BloomblogFavoriteListResponse {
+	return &favorite.BloomblogFavoriteListResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
 }

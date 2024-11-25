@@ -1,0 +1,21 @@
+Global:
+  Source: "config(local)"
+  ChangeMe: "v3"
+
+JWT:
+  signingKey: "signingKey"
+
+Etcd:
+  Address: "0.0.0.0"
+  Port: 2379
+
+Server:
+  Name: "TiktokFavoriteServer"
+  Address: "0.0.0.0"
+  Port: 8085
+
+Client:
+  Echo: true
+  Foo: "bar"
+  Servers:
+    - "0.0.0.0"

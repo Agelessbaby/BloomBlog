@@ -1,10 +1,13 @@
 cmd/api/api
 .mysql_data/
 .etcd-data/
+.elastic_data
+util/oss/oss/test
 cmd/api/api
 cmd/user/output/bin/user
 cmd/relation/output/bin/relation
-util/oss/oss/test
 cmd/publish/output/bin/publish
+cmd/feed/output/bin/feed
+cmd/favorite/output/bin/favorite
 data
 /log

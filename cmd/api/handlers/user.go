@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"github.com/Agelessbaby/BloomBlog/cmd/api/rpc"
 	"github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user"
 	"github.com/Agelessbaby/BloomBlog/dal/pack"
@@ -72,7 +71,6 @@ func Register(c context.Context, ctx *app.RequestContext) {
 		Username: registerParam.UserName,
 		Password: registerParam.PassWord,
 	})
-	fmt.Println(err)
 	if err != nil {
 		SendResponse(ctx, pack.BuildUserRegisterResp(errno.ConvertErr(err)))
 		return
@@ -96,7 +94,6 @@ func GetUserById(c context.Context, ctx *app.RequestContext) {
 	var userVar UserParam
 	uid, err := strconv.Atoi(ctx.Query("user_id"))
 	if err != nil {
-		fmt.Println(err)
 		SendResponse(ctx, pack.BuildUserUserResp(errno.ErrBind))
 		return
 	}
@@ -104,7 +101,6 @@ func GetUserById(c context.Context, ctx *app.RequestContext) {
 	token := string(ctx.GetHeader("Authorization"))
 	token = jwt.TrimPrefix(token)
 	userVar.Token = token
-	fmt.Println(userVar)
 	if len(userVar.Token) == 0 || userVar.UserId < 0 {
 		SendResponse(ctx, pack.BuildUserUserResp(errno.ErrBind))
 		return

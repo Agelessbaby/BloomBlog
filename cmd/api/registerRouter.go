@@ -41,4 +41,8 @@ func registerGroup(h *server.Hertz) {
 
 	feed := bloomblog.Group("/feed")
 	feed.GET("/getfeed", handlers.GetFeed)
+
+	favrorite := bloomblog.Group("/favorite")
+	favrorite.POST("/action", handlers.FavoriteAction)
+	favrorite.GET("/list", handlers.List)
 }

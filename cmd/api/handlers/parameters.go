@@ -43,3 +43,15 @@ type FeedParam struct {
 	LatestTime *int64  `json:"latest_time,omitempty"` // 可选参数，限制返回视频的最新投稿时间戳，精确到秒，不填表示当前时间
 	Token      *string `json:"token,omitempty"`       // 可选参数，登录用户设置
 }
+
+type FavoriteActionParam struct {
+	UserId     int64  `json:"user_id,omitempty"`     // 用户id
+	Token      string `json:"token,omitempty"`       // 用户鉴权token
+	PostId     int64  `json:"post_id,omitempty"`     // 视频id
+	ActionType int32  `json:"action_type,omitempty"` // 1-点赞，2-取消点赞
+}
+
+type FavoriteListParam struct {
+	Token  string `json:"token,omitempty"` // 用户鉴权token
+	UserId int64  `json:"user_id,omitempty"`
+}

@@ -42,13 +42,12 @@ func (s *FavoriteSrvImpl) FavoriteList(ctx context.Context, req *favorite.Bloomb
 		resp = pack.BuildFavoriteListResp(errno.ErrTokenInvalid)
 		return resp, nil
 	}
-	user_id := jwt.GetUserIdFromPayload(payload)
-	if user_id <= 0 {
+	from_id := jwt.GetUserIdFromPayload(payload)
+	if from_id <= 0 || req.UserId <= 0 {
 		resp = pack.BuildFavoriteListResp(errno.ErrBind)
 		return resp, nil
 	}
-	req.UserId = user_id
-	favoritePosts, err := command.NewFavoriteListService(ctx).FavoriteList(req)
+	favoritePosts, err := command.NewFavoriteListService(ctx).FavoriteList(req, from_id)
 	if err != nil {
 		resp = pack.BuildFavoriteListResp(err)
 		return resp, nil

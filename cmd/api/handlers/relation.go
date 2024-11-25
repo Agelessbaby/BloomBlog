@@ -57,7 +57,6 @@ func RelationAction(c context.Context, ctx *app.RequestContext) {
 //	@Produce		json
 //	@Security		BearerAuth
 //	@Param			user_id	query		string											true	"The ID of the user to retrieve the following list for"
-//	@Param			token	query		string											true	"User authentication token"
 //	@Success		200		{object}	relation.BloomblogRelationFollowListResponse	"Successfully retrieved following list"
 //	@Failure		400		{object}	relation.BloomblogRelationFollowListResponse	"Invalid input parameters"
 //	@Failure		500		{object}	relation.BloomblogRelationFollowListResponse	"Internal server error"
@@ -96,7 +95,6 @@ func RelationFollowList(c context.Context, ctx *app.RequestContext) {
 //	@Produce		json
 //	@Security		BearerAuth
 //	@Param			user_id	query		string											true	"The ID of the user to retrieve the follower list for"
-//	@Param			token	query		string											true	"User authentication token"
 //	@Success		200		{object}	relation.BloomblogRelationFollowerListResponse	"Successfully retrieved follower list"
 //	@Failure		400		{object}	relation.BloomblogRelationFollowerListResponse	"Invalid input parameters"
 //	@Failure		500		{object}	relation.BloomblogRelationFollowerListResponse	"Internal server error"

@@ -13,17 +13,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	loginResp, err := client.Login(context.TODO(), &user.BloomBlogUserRegisterRequest{
+	resp, err := client.Register(context.TODO(), &user.BloomBlogUserRegisterRequest{
 		Username: "Jeff",
 		Password: "123456",
 	})
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(loginResp)
-	getUserResp, err := client.GetUserById(context.TODO(), &user.BloomBlogUserRequest{
-		UserId: 1,
-		Token:  loginResp.Token,
-	})
-	fmt.Println(getUserResp)
+	fmt.Println(resp, err)
 }

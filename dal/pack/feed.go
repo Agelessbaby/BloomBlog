@@ -29,9 +29,8 @@ func Post(ctx context.Context, p *db.Post, fromID int64) (*feed.Post, error) {
 		CoverUrl:     p.CoverUrl,
 		LikeCount:    int64(p.FavoriteCount),
 		CommentCount: int64(p.CommentCount),
-		//IsLiked:      false,
-		Title:      p.Title,
-		ModifiedAt: p.UpdatedAt.Unix(),
+		Title:        p.Title,
+		ModifiedAt:   p.UpdatedAt.Unix(),
 	}, nil
 }
 
@@ -43,7 +42,16 @@ func Posts(ctx context.Context, ps []*db.Post, fromID *int64) ([]*feed.Post, err
 			return nil, err
 		}
 		if P != nil {
-			//TODO Add the logic of finding favorite relationship
+			flag := false
+			results, err := db.GetFavoriteRelation(ctx, *fromID, int64(p.ID))
+			if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
+				return nil, err
+			} else if errors.Is(err, gorm.ErrRecordNotFound) {
+				flag = false
+			} else if results != nil && results.AuthorID != 0 {
+				flag = true
+			}
+			P.IsLiked = flag
 			Ps = append(Ps, P)
 		}
 	}

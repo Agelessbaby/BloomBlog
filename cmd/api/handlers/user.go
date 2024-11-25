@@ -14,6 +14,7 @@ import (
 )
 
 // Login handles user login
+//
 //	@Summary		User Login
 //	@Description	Authenticate user with username and password
 //	@Tags			User
@@ -45,6 +46,7 @@ func Login(c context.Context, ctx *app.RequestContext) {
 }
 
 // Register handles user registration
+//
 //	@Summary		User Registration
 //	@Description	Register a new user
 //	@Tags			User
@@ -70,7 +72,7 @@ func Register(c context.Context, ctx *app.RequestContext) {
 		Username: registerParam.UserName,
 		Password: registerParam.PassWord,
 	})
-
+	fmt.Println(err)
 	if err != nil {
 		SendResponse(ctx, pack.BuildUserRegisterResp(errno.ConvertErr(err)))
 		return
@@ -79,6 +81,7 @@ func Register(c context.Context, ctx *app.RequestContext) {
 }
 
 // GetUserById retrieves a user by ID
+//
 //	@Summary		Get User by ID
 //	@Description	Get user information by ID and token
 //	@Tags			User

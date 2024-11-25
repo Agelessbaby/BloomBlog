@@ -15,6 +15,49 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/bloomblog/feed/getfeed": {
+            "get": {
+                "description": "This endpoint allows users to fetch feed data using the latest timestamp and an optional authentication token.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "feed"
+                ],
+                "summary": "Retrieve feed",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "The timestamp for the latest feed item (optional). Defaults to now if not provided.",
+                        "name": "latest_time",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation, returns the feed data.",
+                        "schema": {
+                            "$ref": "#/definitions/feed.BloomblogFeedResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input data, such as malformed timestamp.",
+                        "schema": {
+                            "$ref": "#/definitions/feed.BloomblogFeedResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "schema": {
+                            "$ref": "#/definitions/feed.BloomblogFeedResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/bloomblog/publish/action": {
             "post": {
                 "security": [
@@ -373,6 +416,81 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "errMsg": {
+                    "type": "string"
+                }
+            }
+        },
+        "feed.BloomblogFeedResponse": {
+            "type": "object",
+            "properties": {
+                "next_time": {
+                    "description": "返回的帖子中最早的时间，用于下次请求",
+                    "type": "integer"
+                },
+                "post_list": {
+                    "description": "帖子列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feed.Post"
+                    }
+                },
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "feed.Post": {
+            "type": "object",
+            "properties": {
+                "author": {
+                    "description": "发帖用户信息",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/user.User"
+                        }
+                    ]
+                },
+                "comment_count": {
+                    "description": "评论总数",
+                    "type": "integer"
+                },
+                "cover_url": {
+                    "type": "string"
+                },
+                "id": {
+                    "description": "帖子唯一标识",
+                    "type": "integer"
+                },
+                "image_urls": {
+                    "description": "帖子的图片地址列表",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "is_liked": {
+                    "description": "当前用户是否已点赞",
+                    "type": "boolean"
+                },
+                "like_count": {
+                    "description": "点赞总数",
+                    "type": "integer"
+                },
+                "modified_at": {
+                    "description": "帖子的修改时间",
+                    "type": "integer"
+                },
+                "text_content": {
+                    "description": "帖子的文字内容",
+                    "type": "string"
+                },
+                "title": {
+                    "description": "帖子标题",
                     "type": "string"
                 }
             }

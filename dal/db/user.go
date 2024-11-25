@@ -13,6 +13,7 @@ type User struct {
 	Password       string `gorm:"type:varchar(256);not null" json:"password"`
 	FollowingCount int    `gorm:"default:0" json:"following_count"`
 	FollowerCount  int    `gorm:"default:0" json:"follower_count"`
+	FavoritePosts  []Post `gorm:"many2many:user_favorite_posts" json:"favorite_posts"`
 }
 
 func (User) TableName() string {

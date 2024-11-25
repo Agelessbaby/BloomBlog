@@ -15,13 +15,17 @@ type FeedSrvImpl struct{}
 
 // GetFeed implements the FeedSrvImpl interface.
 func (s *FeedSrvImpl) GetFeed(ctx context.Context, req *feed.BloomblogFeedRequest) (resp *feed.BloomblogFeedResponse, err error) {
-	_, payload, err := jwt.VerifyJwt(req.GetToken(), env.JWT_SECRET)
-	if err != nil {
-		resp = pack.BuildPostResp(errno.ErrTokenInvalid)
-	}
-	uid := jwt.GetUserIdFromPayload(payload)
-	if uid <= 0 {
-		resp = pack.BuildPostResp(errno.ErrTokenInvalid)
+	var uid int64
+	if req.GetToken() != "" {
+		_, payload, err := jwt.VerifyJwt(req.GetToken(), env.JWT_SECRET)
+		if err != nil {
+			resp = pack.BuildPostResp(errno.ErrTokenInvalid)
+		}
+		uid = jwt.GetUserIdFromPayload(payload)
+		if uid <= 0 {
+			resp = pack.BuildPostResp(errno.ErrTokenInvalid)
+			return resp, nil
+		}
 	}
 	posts, nexTime, err := command.NewGetFeedService(ctx).GetFeed(req, uid)
 	if err != nil {
@@ -36,6 +40,6 @@ func (s *FeedSrvImpl) GetFeed(ctx context.Context, req *feed.BloomblogFeedReques
 
 // GetPostById implements the FeedSrvImpl interface.
 func (s *FeedSrvImpl) GetPostById(ctx context.Context, req *feed.PostIdRequest) (resp *feed.Post, err error) {
-	// TODO: Your code here...
+	//TODO: implement this function in the future
 	return
 }

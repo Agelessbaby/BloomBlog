@@ -1,0 +1,24 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/lib/mysql/slow.log           # 指定 MySQL 慢查询日志路径
+    fields:
+      service: mysql                      # 添加服务标识
+      timezone: "Asia/Shanghai"           # 添加时区字段，标记为东八区
+    multiline.pattern: '^# Time:'         # 处理多行日志（以 "# Time:" 开头）
+    multiline.negate: true
+    multiline.match: after
+
+processors:
+  - timestamp:
+      field: "@timestamp"                 # 要调整的时间字段
+      layouts:
+        - '2006-01-02 15:04:05'           # 解析 MySQL 慢查询日志的时间格式
+      timezone: "Asia/Shanghai"           # 将时间字段转换为东八区
+
+output.logstash:
+  hosts: ["logstash:5044"]                # 指定 Logstash 的地址和端口
+#output.console:
+#  enabled: true
+#  pretty: true  # 格式化日志输出

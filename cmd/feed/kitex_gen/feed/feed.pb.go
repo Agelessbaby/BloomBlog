@@ -22,7 +22,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// 请求帖子流
 type BloomblogFeedRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -78,7 +77,6 @@ func (x *BloomblogFeedRequest) GetToken() string {
 	return ""
 }
 
-// 返回帖子流
 type BloomblogFeedResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -150,7 +148,6 @@ func (x *BloomblogFeedResponse) GetNextTime() int64 {
 	return 0
 }
 
-// 请求帖子详情
 type PostIdRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -206,7 +203,6 @@ func (x *PostIdRequest) GetSearchId() int64 {
 	return 0
 }
 
-// 帖子数据结构
 type Post struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

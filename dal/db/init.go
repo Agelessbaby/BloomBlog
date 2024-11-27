@@ -65,11 +65,14 @@ func initDB() {
 	if err := DB.AutoMigrate(&Relation{}); err != nil {
 		klog.Fatal(err.Error())
 	}
-	//TODO ADD other auto migrate
+
 	if err := DB.AutoMigrate(&Post{}); err != nil {
 		klog.Fatal(err.Error())
 	}
 
+	if err := DB.AutoMigrate(&Comment{}); err != nil {
+		klog.Fatal(err.Error())
+	}
 	sqlDB, err := DB.DB()
 	if err != nil {
 		klog.Fatal(err)
@@ -83,6 +86,7 @@ func initDB() {
 		klog.Error(err.Error())
 	}
 
+	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxIdleConns(rdbmsConfig.GetInt("Mysql.MaxIdleConns"))
 	sqlDB.SetConnMaxLifetime(time.Hour)
 }

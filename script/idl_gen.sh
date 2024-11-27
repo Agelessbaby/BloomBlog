@@ -24,3 +24,7 @@ kitex -module github.com/Agelessbaby/BloomBlog -type protobuf -I ../../idl -serv
 cd $Root_Path/cmd/favorite
 
 kitex -module github.com/Agelessbaby/BloomBlog -type protobuf -I ../../idl -service favorite -protobuf Mfeed.proto=github.com/Agelessbaby/BloomBlog/cmd/feed/kitex_gen/feed -protobuf Muser.proto=github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user ../../idl/favorite.proto
+
+cd $Root_Path/cmd/comment
+
+kitex -module github.com/Agelessbaby/BloomBlog -type protobuf -I ../../idl -service comment -protobuf Muser.proto=github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user ../../idl/comment.proto

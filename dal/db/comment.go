@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"github.com/Agelessbaby/BloomBlog/util/errno"
+	code "github.com/a76yyyy/ErrnoCode"
 	"gorm.io/gorm"
 )
 
@@ -42,11 +43,14 @@ func NewComment(ctx context.Context, comment *Comment) error {
 	return err
 }
 
-func DeleteComment(ctx context.Context, commentID int64, pid int64) error {
-	comment := new(Comment)
+func DeleteComment(ctx context.Context, commentID int64, pid int64, user_id int) error {
 	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		comment := new(Comment)
 		if err := tx.First(comment, commentID).Error; err != nil {
 			return err
+		}
+		if comment.UserID != user_id {
+			return errno.NewErrNo(code.ErrDatabase, "User has no access to delete this post")
 		}
 		res := tx.Unscoped().Delete(&comment)
 		if err := res.Error; err != nil {

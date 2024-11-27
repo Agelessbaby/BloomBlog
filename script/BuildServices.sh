@@ -25,3 +25,7 @@ cd $Root_Path/cmd/feed
 cd $Root_Path/cmd/favorite
 
 ./build.sh
+
+cd $Root_Path/cmd/comment
+
+./build.sh

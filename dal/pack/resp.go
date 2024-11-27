@@ -2,6 +2,7 @@ package pack
 
 import (
 	"errors"
+	"github.com/Agelessbaby/BloomBlog/cmd/comment/kitex_gen/comment"
 	"github.com/Agelessbaby/BloomBlog/cmd/favorite/kitex_gen/favorite"
 	"github.com/Agelessbaby/BloomBlog/cmd/feed/kitex_gen/feed"
 	"github.com/Agelessbaby/BloomBlog/cmd/publish/kitex_gen/publish"
@@ -193,4 +194,60 @@ func BuildFavoriteListResp(err error) *favorite.BloomblogFavoriteListResponse {
 
 func favoriteListResp(err errno.ErrNo) *favorite.BloomblogFavoriteListResponse {
 	return &favorite.BloomblogFavoriteListResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
+}
+
+// BuildCommentActionResp build CommentActionResp from error
+func BuildCommentActionResp(err error) *comment.BloomblogCommentActionResponse {
+	if err == nil {
+		return commentActionResp(errno.Success)
+	}
+
+	e := errno.ErrNo{}
+	if errors.As(err, &e) {
+		return commentActionResp(e)
+	}
+
+	s := errno.ErrUnknown.WithMessage(err.Error())
+	return commentActionResp(s)
+}
+
+func commentActionResp(err errno.ErrNo) *comment.BloomblogCommentActionResponse {
+	return &comment.BloomblogCommentActionResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
+}
+
+// BuildCommentListResp build CommentListResp from error
+func BuildCommentListResp(err error) *comment.BloomblogCommentListResponse {
+	if err == nil {
+		return commentListResp(errno.Success)
+	}
+
+	e := errno.ErrNo{}
+	if errors.As(err, &e) {
+		return commentListResp(e)
+	}
+
+	s := errno.ErrUnknown.WithMessage(err.Error())
+	return commentListResp(s)
+}
+
+func commentListResp(err errno.ErrNo) *comment.BloomblogCommentListResponse {
+	return &comment.BloomblogCommentListResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
+}
+
+func BuildSlCommentListResp(err error) *comment.Bloomblog_SlCommentListResponse {
+	if err == nil {
+		return slcommentListResp(errno.Success)
+	}
+
+	e := errno.ErrNo{}
+	if errors.As(err, &e) {
+		return slcommentListResp(e)
+	}
+
+	s := errno.ErrUnknown.WithMessage(err.Error())
+	return slcommentListResp(s)
+}
+
+func slcommentListResp(err errno.ErrNo) *comment.Bloomblog_SlCommentListResponse {
+	return &comment.Bloomblog_SlCommentListResponse{StatusCode: int32(err.ErrCode), StatusMsg: &err.ErrMsg}
 }

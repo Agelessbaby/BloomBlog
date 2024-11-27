@@ -37,12 +37,17 @@ func registerGroup(h *server.Hertz) {
 	// Publish service
 	publish := bloomblog.Group("/publish")
 	publish.POST("/action", handlers.PublishAction)
-	//TODO Add Publish service here
+	publish.GET("/list")
 
 	feed := bloomblog.Group("/feed")
 	feed.GET("/getfeed", handlers.GetFeed)
 
 	favrorite := bloomblog.Group("/favorite")
 	favrorite.POST("/action", handlers.FavoriteAction)
-	favrorite.GET("/list", handlers.List)
+	favrorite.GET("/list", handlers.FavoriteList)
+
+	comment := bloomblog.Group("/comment")
+	comment.POST("/action", handlers.CommentAction)
+	comment.GET("/list", handlers.CommentList)
+	comment.GET("/sl-list", handlers.SlCommentList)
 }

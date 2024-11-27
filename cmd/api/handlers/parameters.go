@@ -55,3 +55,24 @@ type FavoriteListParam struct {
 	Token  string `json:"token,omitempty"` // 用户鉴权token
 	UserId int64  `json:"user_id,omitempty"`
 }
+
+type CommentActionParam struct {
+	UserId     int64   `json:"user_id,omitempty"`
+	Token      string  `json:"token,omitempty"`
+	ActionType int32   `json:"action_type,omitempty"`
+	Content    *string `json:"content,omitempty"`
+	PostId     int64   `json:"post_id,omitempty"`
+	CommentId  *int64  `json:"comment_id,omitempty"`
+	ParentId   *int64  `json:"parent_id,omitempty"`
+	ReplyId    *int64  `json:"reply_id,omitempty"`
+}
+
+type CommentListParam struct {
+	Token  string `json:"token,omitempty"`
+	PostId int64  `json:"post_id,omitempty"`
+}
+
+type SlCommentListParam struct {
+	ParentId int64  `json:"parent_id,omitempty"`
+	Token    string `json:"token,omitempty"`
+}

@@ -50,7 +50,7 @@ func FavoriteAction(c context.Context, ctx *app.RequestContext) {
 	SendResponse(ctx, resp)
 }
 
-// List  handles the list action for a post.
+// FavoriteList  handles the list action for a post.
 //
 //	@Summary		retrieve the favorite list of a user
 //	@Description	retrieve the favorite list of a user
@@ -58,13 +58,13 @@ func FavoriteAction(c context.Context, ctx *app.RequestContext) {
 //	@Accept			json
 //	@Produce		json
 //	@Security		BearerAuth
-//	@Param			user_id			query		int64						true	"userid"
-//	@Success		200				{object}	favorite.BloomblogFavoriteListResponse	"Action performed successfully"
-//	@Failure		400				{object}	favorite.BloomblogFavoriteListResponse	"Invalid request"
-//	@Failure		401				{object}	favorite.BloomblogFavoriteListResponse	"Unauthorized, invalid token"
-//	@Failure		500				{object}	favorite.BloomblogFavoriteListResponse	"Internal server error"
+//	@Param			user_id	query		int64									true	"userid"
+//	@Success		200		{object}	favorite.BloomblogFavoriteListResponse	"Action performed successfully"
+//	@Failure		400		{object}	favorite.BloomblogFavoriteListResponse	"Invalid request"
+//	@Failure		401		{object}	favorite.BloomblogFavoriteListResponse	"Unauthorized, invalid token"
+//	@Failure		500		{object}	favorite.BloomblogFavoriteListResponse	"Internal server error"
 //	@Router			/bloomblog/favorite/list [get]
-func List(c context.Context, ctx *app.RequestContext) {
+func FavoriteList(c context.Context, ctx *app.RequestContext) {
 	var Param FavoriteListParam
 	uid, err := strconv.Atoi(ctx.Query("user_id"))
 	if err != nil {

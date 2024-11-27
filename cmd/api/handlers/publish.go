@@ -9,6 +9,7 @@ import (
 	"github.com/Agelessbaby/BloomBlog/util/errno"
 	"github.com/Agelessbaby/BloomBlog/util/jwt"
 	"github.com/cloudwego/hertz/pkg/app"
+	"strconv"
 )
 
 // PublishAction handles the publication of a blog post with images.
@@ -73,4 +74,42 @@ func PublishAction(c context.Context, ctx *app.RequestContext) {
 		return
 	}
 	SendResponse(ctx, resp)
+}
+
+// PublishList retrieves the publishing list of a user
+//
+//	@Summary		get the publishing list
+//	@Description	This endpoint allows users to fetch another user's publishing list
+//
+//	@Tags			publish
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			user_id	query		string									true	"The ID of the user to retrieve the following list for"
+//	@Success		200		{object}	publish.BloomblogPublishListResponse	"The response object"
+//	@Failure		400		{object}	publish.BloomblogPublishListResponse	"Invalid input data"
+//	@Failure		500		{object}	publish.BloomblogPublishListResponse	"Internal server error"
+//	@Router			/bloomblog/publish/action [post]
+func PublishList(ctx context.Context, c *app.RequestContext) {
+	var paramVar UserParam
+	userid, err := strconv.Atoi(c.Query("user_id"))
+	if err != nil {
+		SendResponse(c, pack.BuildPublishListResp(errno.ErrBind))
+		return
+	}
+	paramVar.UserId = int64(userid)
+	paramVar.Token = jwt.TrimPrefix(string(c.GetHeader("Authorization")))
+	if len(paramVar.Token) == 0 || paramVar.UserId <= 0 {
+		SendResponse(c, pack.BuildPublishListResp(errno.ErrBind))
+		return
+	}
+	resp, err := rpc.PublishList(ctx, &publish.BloomblogPublishListRequest{
+		UserId: paramVar.UserId,
+		Token:  paramVar.Token,
+	})
+	if err != nil {
+		SendResponse(c, pack.BuildPublishListResp(errno.ConvertErr(err)))
+		return
+	}
+	SendResponse(c, resp)
 }

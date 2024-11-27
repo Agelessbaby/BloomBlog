@@ -36,6 +36,8 @@ func (s *CommentSrvImpl) CommentAction(ctx context.Context, req *comment.Bloombl
 }
 
 // CommentList implements the CommentSrvImpl interface.
+// retrieves the first level comment list
+// 得到一级评论
 func (s *CommentSrvImpl) CommentList(ctx context.Context, req *comment.BloomblogCommentListRequest) (resp *comment.BloomblogCommentListResponse, err error) {
 	_, payload, err := jwt.VerifyJwt(req.Token, env.JWT_SECRET)
 	if err != nil {
@@ -58,6 +60,8 @@ func (s *CommentSrvImpl) CommentList(ctx context.Context, req *comment.Bloomblog
 }
 
 // SlCommentList implements the CommentSrvImpl interface.
+// retrieves the second level comment list
+// 得到二级评论
 func (s *CommentSrvImpl) SlCommentList(ctx context.Context, req *comment.Bloomblog_SlCommentListRequest) (resp *comment.Bloomblog_SlCommentListResponse, err error) {
 	_, payload, err := jwt.VerifyJwt(req.Token, env.JWT_SECRET)
 	if err != nil {

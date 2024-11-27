@@ -4,6 +4,173 @@
         "contact": {}
     },
     "paths": {
+        "/bloomblog/comment/action": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "This endpoint allows users to perform actions on comments, including adding a new comment, replying to a comment, or deleting a comment.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comment"
+                ],
+                "summary": "Perform actions on comments",
+                "parameters": [
+                    {
+                        "description": "Comment action parameters",
+                        "name": "comment",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CommentActionParam"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response with the result of the comment action",
+                        "schema": {
+                            "$ref": "#/definitions/comment.BloomblogCommentActionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request or validation error",
+                        "schema": {
+                            "$ref": "#/definitions/comment.BloomblogCommentActionResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/comment.BloomblogCommentActionResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/comment.BloomblogCommentActionResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/bloomblog/comment/list": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "This endpoint retrieves the list of comments associated with a specific post. Users must provide a valid token and the post ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comment"
+                ],
+                "summary": "Get comments for a post",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of the post to fetch comments for",
+                        "name": "post_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response containing the list of comments",
+                        "schema": {
+                            "$ref": "#/definitions/comment.BloomblogCommentListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request or validation error",
+                        "schema": {
+                            "$ref": "#/definitions/comment.BloomblogCommentListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/comment.BloomblogCommentListResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/comment.BloomblogCommentListResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/bloomblog/comment/sl-list": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "This endpoint retrieves the list of sub-comments associated with a specific parent comment. Users must provide a valid token and the parent comment ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comment"
+                ],
+                "summary": "Get sub-comments for a comment",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID of the parent comment to fetch sub-comments for",
+                        "name": "parent_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Response containing the list of sub-comments",
+                        "schema": {
+                            "$ref": "#/definitions/comment.Bloomblog_SlCommentListResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request or validation error",
+                        "schema": {
+                            "$ref": "#/definitions/comment.Bloomblog_SlCommentListResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/comment.Bloomblog_SlCommentListResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/comment.Bloomblog_SlCommentListResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/bloomblog/favorite/action": {
             "post": {
                 "security": [
@@ -171,9 +338,9 @@
                         "BearerAuth": []
                     }
                 ],
-                "description": "This endpoint allows users to publish a blog post with images, title, and content.",
+                "description": "This endpoint allows users to fetch another user's publishing list",
                 "consumes": [
-                    "multipart/form-data"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -181,27 +348,13 @@
                 "tags": [
                     "publish"
                 ],
-                "summary": "Publish a blog post",
+                "summary": "get the publishing list",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "The title of the blog post",
-                        "name": "title",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "The content of the blog post",
-                        "name": "content",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "file",
-                        "description": "Multiple image files (repeatable), upload all images as part of 'images' field",
-                        "name": "images",
-                        "in": "formData",
+                        "description": "The ID of the user to retrieve the following list for",
+                        "name": "user_id",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -209,19 +362,19 @@
                     "200": {
                         "description": "The response object",
                         "schema": {
-                            "$ref": "#/definitions/publish.BloomblogPublishActionResponse"
+                            "$ref": "#/definitions/publish.BloomblogPublishListResponse"
                         }
                     },
                     "400": {
                         "description": "Invalid input data",
                         "schema": {
-                            "$ref": "#/definitions/publish.BloomblogPublishActionResponse"
+                            "$ref": "#/definitions/publish.BloomblogPublishListResponse"
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "schema": {
-                            "$ref": "#/definitions/publish.BloomblogPublishActionResponse"
+                            "$ref": "#/definitions/publish.BloomblogPublishListResponse"
                         }
                     }
                 }
@@ -501,6 +654,91 @@
         }
     },
     "definitions": {
+        "comment.BloomblogCommentActionResponse": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "description": "评论成功返回评论内容，不需要重新拉取整个列表",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/comment.Comment"
+                        }
+                    ]
+                },
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "comment.BloomblogCommentListResponse": {
+            "type": "object",
+            "properties": {
+                "comment_list": {
+                    "description": "评论列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/comment.Comment"
+                    }
+                },
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "comment.Bloomblog_SlCommentListResponse": {
+            "type": "object",
+            "properties": {
+                "comment_list": {
+                    "description": "评论列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/comment.Comment"
+                    }
+                },
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "comment.Comment": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "评论内容",
+                    "type": "string"
+                },
+                "create_date": {
+                    "description": "评论发布日期，格式 mm-dd",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "视频评论id",
+                    "type": "integer"
+                },
+                "user": {
+                    "description": "评论用户信息",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/user.User"
+                        }
+                    ]
+                }
+            }
+        },
         "errno.ErrNo": {
             "type": "object",
             "properties": {
@@ -620,6 +858,35 @@
                 }
             }
         },
+        "handlers.CommentActionParam": {
+            "type": "object",
+            "properties": {
+                "action_type": {
+                    "type": "integer"
+                },
+                "comment_id": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "parent_id": {
+                    "type": "integer"
+                },
+                "post_id": {
+                    "type": "integer"
+                },
+                "reply_id": {
+                    "type": "integer"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "handlers.FavoriteActionParam": {
             "type": "object",
             "properties": {
@@ -678,6 +945,26 @@
         "publish.BloomblogPublishActionResponse": {
             "type": "object",
             "properties": {
+                "status_code": {
+                    "description": "状态码，0-成功，其他值-失败",
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "description": "返回状态描述",
+                    "type": "string"
+                }
+            }
+        },
+        "publish.BloomblogPublishListResponse": {
+            "type": "object",
+            "properties": {
+                "post_list": {
+                    "description": "用户发布的帖子列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/feed.Post"
+                    }
+                },
                 "status_code": {
                     "description": "状态码，0-成功，其他值-失败",
                     "type": "integer"

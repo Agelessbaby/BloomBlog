@@ -1,4 +1,60 @@
 definitions:
+  comment.Bloomblog_SlCommentListResponse:
+    properties:
+      comment_list:
+        description: 评论列表
+        items:
+          $ref: '#/definitions/comment.Comment'
+        type: array
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+    type: object
+  comment.BloomblogCommentActionResponse:
+    properties:
+      comment:
+        allOf:
+        - $ref: '#/definitions/comment.Comment'
+        description: 评论成功返回评论内容，不需要重新拉取整个列表
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        type: string
+    type: object
+  comment.BloomblogCommentListResponse:
+    properties:
+      comment_list:
+        description: 评论列表
+        items:
+          $ref: '#/definitions/comment.Comment'
+        type: array
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+    type: object
+  comment.Comment:
+    properties:
+      content:
+        description: 评论内容
+        type: string
+      create_date:
+        description: 评论发布日期，格式 mm-dd
+        type: string
+      id:
+        description: 视频评论id
+        type: integer
+      user:
+        allOf:
+        - $ref: '#/definitions/user.User'
+        description: 评论用户信息
+    type: object
   errno.ErrNo:
     properties:
       errCode:
@@ -81,6 +137,25 @@ definitions:
         description: 帖子标题
         type: string
     type: object
+  handlers.CommentActionParam:
+    properties:
+      action_type:
+        type: integer
+      comment_id:
+        type: integer
+      content:
+        type: string
+      parent_id:
+        type: integer
+      post_id:
+        type: integer
+      reply_id:
+        type: integer
+      token:
+        type: string
+      user_id:
+        type: integer
+    type: object
   handlers.FavoriteActionParam:
     properties:
       action_type:
@@ -122,6 +197,20 @@ definitions:
     type: object
   publish.BloomblogPublishActionResponse:
     properties:
+      status_code:
+        description: 状态码，0-成功，其他值-失败
+        type: integer
+      status_msg:
+        description: 返回状态描述
+        type: string
+    type: object
+  publish.BloomblogPublishListResponse:
+    properties:
+      post_list:
+        description: 用户发布的帖子列表
+        items:
+          $ref: '#/definitions/feed.Post'
+        type: array
       status_code:
         description: 状态码，0-成功，其他值-失败
         type: integer
@@ -212,6 +301,116 @@ definitions:
 info:
   contact: {}
 paths:
+  /bloomblog/comment/action:
+    post:
+      consumes:
+      - application/json
+      description: This endpoint allows users to perform actions on comments, including
+        adding a new comment, replying to a comment, or deleting a comment.
+      parameters:
+      - description: Comment action parameters
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CommentActionParam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response with the result of the comment action
+          schema:
+            $ref: '#/definitions/comment.BloomblogCommentActionResponse'
+        "400":
+          description: Bad request or validation error
+          schema:
+            $ref: '#/definitions/comment.BloomblogCommentActionResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/comment.BloomblogCommentActionResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/comment.BloomblogCommentActionResponse'
+      security:
+      - BearerAuth: []
+      summary: Perform actions on comments
+      tags:
+      - comment
+  /bloomblog/comment/list:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint retrieves the list of comments associated with a
+        specific post. Users must provide a valid token and the post ID.
+      parameters:
+      - description: ID of the post to fetch comments for
+        in: query
+        name: post_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response containing the list of comments
+          schema:
+            $ref: '#/definitions/comment.BloomblogCommentListResponse'
+        "400":
+          description: Bad request or validation error
+          schema:
+            $ref: '#/definitions/comment.BloomblogCommentListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/comment.BloomblogCommentListResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/comment.BloomblogCommentListResponse'
+      security:
+      - BearerAuth: []
+      summary: Get comments for a post
+      tags:
+      - comment
+  /bloomblog/comment/sl-list:
+    get:
+      consumes:
+      - application/json
+      description: This endpoint retrieves the list of sub-comments associated with
+        a specific parent comment. Users must provide a valid token and the parent
+        comment ID.
+      parameters:
+      - description: ID of the parent comment to fetch sub-comments for
+        in: query
+        name: parent_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Response containing the list of sub-comments
+          schema:
+            $ref: '#/definitions/comment.Bloomblog_SlCommentListResponse'
+        "400":
+          description: Bad request or validation error
+          schema:
+            $ref: '#/definitions/comment.Bloomblog_SlCommentListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/comment.Bloomblog_SlCommentListResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/comment.Bloomblog_SlCommentListResponse'
+      security:
+      - BearerAuth: []
+      summary: Get sub-comments for a comment
+      tags:
+      - comment
   /bloomblog/favorite/action:
     post:
       consumes:
@@ -319,44 +518,32 @@ paths:
   /bloomblog/publish/action:
     post:
       consumes:
-      - multipart/form-data
-      description: This endpoint allows users to publish a blog post with images,
-        title, and content.
+      - application/json
+      description: This endpoint allows users to fetch another user's publishing list
       parameters:
-      - description: The title of the blog post
-        in: formData
-        name: title
+      - description: The ID of the user to retrieve the following list for
+        in: query
+        name: user_id
         required: true
         type: string
-      - description: The content of the blog post
-        in: formData
-        name: content
-        required: true
-        type: string
-      - description: Multiple image files (repeatable), upload all images as part
-          of 'images' field
-        in: formData
-        name: images
-        required: true
-        type: file
       produces:
       - application/json
       responses:
         "200":
           description: The response object
           schema:
-            $ref: '#/definitions/publish.BloomblogPublishActionResponse'
+            $ref: '#/definitions/publish.BloomblogPublishListResponse'
         "400":
           description: Invalid input data
           schema:
-            $ref: '#/definitions/publish.BloomblogPublishActionResponse'
+            $ref: '#/definitions/publish.BloomblogPublishListResponse'
         "500":
           description: Internal server error
           schema:
-            $ref: '#/definitions/publish.BloomblogPublishActionResponse'
+            $ref: '#/definitions/publish.BloomblogPublishListResponse'
       security:
       - BearerAuth: []
-      summary: Publish a blog post
+      summary: get the publishing list
       tags:
       - publish
   /bloomblog/relation/action:

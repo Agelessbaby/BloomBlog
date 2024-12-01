@@ -18,7 +18,7 @@ func TestCreateBucket(t *testing.T) {
 }
 
 func TestUploadLocalFile(t *testing.T) {
-	info, err := oss.UploadLocalFile("bloomblogtest", "test.jpg", "./test.jpg", "image/jpg")
+	info, err := oss.UploadLocalFile("bloomblog-images", "test.jpg", "./test.jpg", "image/jpg")
 	fmt.Println(info, err)
 }
 

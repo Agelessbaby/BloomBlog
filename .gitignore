@@ -9,6 +9,7 @@ cmd/relation/output/bin/relation
 cmd/publish/output/bin/publish
 cmd/feed/output/bin/feed
 cmd/favorite/output/bin/favorite
+cmd/comment/output/bin/comment
 data
 /log
 .rabbitmq_data

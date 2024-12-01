@@ -2,6 +2,7 @@ package test
 
 import (
 	"fmt"
+	oss "github.com/Agelessbaby/BloomBlog/util/oss/minio"
 	"os"
 	"strings"
 	"testing"
@@ -10,14 +11,14 @@ import (
 // (TiktokTesst)bucket name  ccontains invalid characters
 // bucket name 只能用小写字母
 func TestCreateBucket(t *testing.T) {
-	err := minio.CreateBucket("bloomblogtest")
+	err := oss.CreateBucket("bloomblog-images")
 	if err != nil {
 		t.Error(err)
 	}
 }
 
 func TestUploadLocalFile(t *testing.T) {
-	info, err := minio.UploadLocalFile("bloomblogtest", "test.jpg", "./test.jpg", "image/jpg")
+	info, err := oss.UploadLocalFile("bloomblogtest", "test.jpg", "./test.jpg", "image/jpg")
 	fmt.Println(info, err)
 }
 
@@ -29,12 +30,12 @@ func TestUploadFile(t *testing.T) {
 	}
 	defer file.Close()
 	fi, _ := os.Stat("./test.jpg")
-	err = minio.UploadFile("bloomblogtest", "test2.jpg", file, fi.Size())
+	err = oss.UploadFile("bloomblogtest", "test2.jpg", file, fi.Size())
 	fmt.Println(err)
 }
 
 func TestGetFileUrl(t *testing.T) {
-	url, err := minio.GetFileUrl("bloomblogtest", "test.jpg", 0)
+	url, err := oss.GetFileUrl("bloomblogtest", "test.jpg", 0)
 	fmt.Println(url, err, strings.Split(url.String(), "?")[0])
 	fmt.Println(url.Path, url.RawPath)
 }

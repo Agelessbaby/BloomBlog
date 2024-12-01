@@ -25,8 +25,8 @@ func (Comment) TableName() string {
 	return "comment"
 }
 
-func NewComment(ctx context.Context, comment *Comment) error {
-	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+func NewComment(comment *Comment) error {
+	err := DB.WithContext(context.TODO()).Transaction(func(tx *gorm.DB) error {
 		err := DB.Create(comment).Error
 		if err != nil {
 			return err
@@ -43,8 +43,8 @@ func NewComment(ctx context.Context, comment *Comment) error {
 	return err
 }
 
-func DeleteComment(ctx context.Context, commentID int64, pid int64, user_id int) error {
-	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+func DeleteComment(commentID int64, pid int64, user_id int) error {
+	err := DB.WithContext(context.TODO()).Transaction(func(tx *gorm.DB) error {
 		comment := new(Comment)
 		if err := tx.First(comment, commentID).Error; err != nil {
 			return err

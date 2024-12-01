@@ -15,6 +15,7 @@ require (
 	github.com/hertz-contrib/swagger v0.1.0
 	github.com/kitex-contrib/registry-etcd v0.2.5
 	github.com/minio/minio-go/v7 v7.0.80
+	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/spf13/viper v1.19.0
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/swag v1.16.4

@@ -1,0 +1,20 @@
+rabbitmq:
+  host: "b-6b19936a-2a26-4984-b0de-791ad0a171d7.mq.ap-southeast-1.amazonaws.com"      # RabbitMQ 服务的 IP 地址
+  port: 5671             # RabbitMQ 的 AMQP 端口
+  management_port: 15672 # RabbitMQ 管理界面的端口
+  username: "admin"      # 用户名
+  password: "bloomblogadmin"   # 密码
+  exg: "bloomblog-exg"
+
+  # SSL 配置（如果需要启用安全连接）
+  ssl:
+    enabled: false       # 是否启用 SSL
+    certfile: "/path/to/cert.pem"
+    keyfile: "/path/to/key.pem"
+    cacertfile: "/path/to/cacert.pem"
+
+
+  # 性能优化
+  performance:
+    memory_high_watermark: 0.7 # 内存高水位
+    disk_free_limit: "1GB"     # 磁盘空间限制

@@ -11,3 +11,4 @@ cmd/feed/output/bin/feed
 cmd/favorite/output/bin/favorite
 data
 /log
+.rabbitmq_data

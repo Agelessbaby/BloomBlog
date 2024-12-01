@@ -3,8 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/Agelessbaby/BloomBlog/cmd/comment/command"
 	comment "github.com/Agelessbaby/BloomBlog/cmd/comment/kitex_gen/comment/commentsrv"
 	"github.com/Agelessbaby/BloomBlog/util/config"
+	"github.com/Agelessbaby/BloomBlog/util/mq"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -34,6 +36,9 @@ func main() {
 		klog.Fatal(err)
 	}
 
+	mq.InitMqConn()
+	go func() { mq.SubscribeByKey(mq.Conn, mq.Exg, command.CommentInMq, "bloomblog-comment") }()
+	go func() { mq.SubscribeByKey(mq.Conn, mq.Exg, command.DelCommentInMq, "bloomblog-delcomment") }()
 	svr := comment.NewServer(new(CommentSrvImpl),
 		server.WithServiceAddr(addr), // address
 		//server.WithMiddleware(middleware.CommonMiddleware),                 // middleware

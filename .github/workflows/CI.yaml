@@ -37,5 +37,6 @@ jobs:
       - name: Wait for infra to set up
         run: sleep 30
 
-      - name: ./script/kubernetes/deploy.sh
+      - name: Deploy services
+        run: ./script/kubernetes/deploy.sh
 

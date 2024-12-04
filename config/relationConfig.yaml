@@ -2,9 +2,8 @@ Global:
   Source: "config(local)"
   ChangeMe: "v3"
 
-
 Etcd:
-  Address: "0.0.0.0"
+  Address: "etcd"
   Port: 2379
 
 Server:

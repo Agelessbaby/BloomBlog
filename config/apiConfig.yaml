@@ -4,7 +4,7 @@ Global:
 
 Etcd:
   Enable: true
-  Address: "0.0.0.0"
+  Address: "etcd"
   Port: 2379
 
 Server:

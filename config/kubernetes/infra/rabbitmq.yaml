@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+        - name: rabbitmq
+          image: rabbitmq:3.12.6-management
+          env:
+            - name: RABBITMQ_DEFAULT_USER
+              value: "admin"   # 自定义用户名
+            - name: RABBITMQ_DEFAULT_PASS
+              value: "bloomblogadmin"  # 自定义密码
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5672
+            - containerPort: 15672
+          resources:
+            requests:
+              cpu: "10m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbitmq
+spec:
+  selector:
+    app: rabbitmq
+  ports:
+    - name: rabbitmq-port  # 添加端口名称
+      protocol: TCP
+      port: 5672           # 外部暴露的端口
+      targetPort: 5672     # Pod 内的服务端口
+    - name: rabbitmq-mgmt-port  # 添加管理端口名称
+      protocol: TCP
+      port: 15672           # 外部暴露的管理端口
+      targetPort: 15672     # Pod 内的管理端口
+  type: ClusterIP           # 使用 ClusterIP

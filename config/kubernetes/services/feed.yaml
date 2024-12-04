@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feed
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: feed
+  template:
+    metadata:
+      labels:
+        app: feed
+    spec:
+      containers:
+        - name: bloomblog-feed
+          image: bloomblog-feed
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8083
+          resources:
+            requests:
+              cpu: "10m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: feed
+spec:
+  selector:
+    app: feed
+  ports:
+    - protocol: TCP
+      port: 8083
+      targetPort: 8083
+  type: ClusterIP

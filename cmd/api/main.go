@@ -26,7 +26,6 @@ func init() {
 }
 
 func main() {
-
 	h := InitHertz()
 	h.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true,

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: publish
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: publish
+  template:
+    metadata:
+      labels:
+        app: publish
+    spec:
+      containers:
+        - name: bloomblog-publish
+          image: bloomblog-publish
+          imagePullPolicy: IfNotPresent
+          # TODO Replace the tokens to your aws tokens, you can also use minio with
+          # changing the host and port of the minio config, the apis are compatible
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              value: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            - name: AWS_SECRET_ACCESS_KEY
+              value: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ports:
+            - containerPort: 8084
+          resources:
+            requests:
+              cpu: "10m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: publish
+spec:
+  selector:
+    app: publish
+  ports:
+    - protocol: TCP
+      port: 8084
+      targetPort: 8084
+  type: ClusterIP

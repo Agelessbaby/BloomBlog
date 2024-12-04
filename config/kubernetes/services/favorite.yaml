@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: favorite
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: favorite
+  template:
+    metadata:
+      labels:
+        app: favorite
+    spec:
+      containers:
+        - name: bloomblog-favorite
+          image: bloomblog-favorite
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8085
+          resources:
+            requests:
+              cpu: "10m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: favorite
+spec:
+  selector:
+    app: favorite
+  ports:
+    - protocol: TCP
+      port: 8085
+      targetPort: 8085
+  type: ClusterIP

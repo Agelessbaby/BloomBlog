@@ -26,7 +26,7 @@ var (
 func InitMqConn() {
 	rabbitmq_once.Do(func() {
 		var err error
-		Conn, err = amqp.Dial(fmt.Sprintf("amqps://%s:%s@%s:%s/", username, password, host, port))
+		Conn, err = amqp.Dial(fmt.Sprintf("amqp://%s:%s@%s:%s/", username, password, host, port))
 		if err != nil {
 			klog.Fatalf("connect to RabbitMQ failed: %s", err)
 		}

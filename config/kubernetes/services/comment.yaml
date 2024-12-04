@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: comment
+  template:
+    metadata:
+      labels:
+        app: comment
+    spec:
+      containers:
+        - name: bloomblog-comment
+          image: bloomblog-comment
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8086
+          resources:
+            requests:
+              cpu: "10m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: comment
+spec:
+  selector:
+    app: comment
+  ports:
+    - protocol: TCP
+      port: 8086
+      targetPort: 8086
+  type: ClusterIP

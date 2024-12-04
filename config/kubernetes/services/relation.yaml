@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relation
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: relation
+  template:
+    metadata:
+      labels:
+        app: relation
+    spec:
+      containers:
+        - name: bloomblog-relation
+          image: bloomblog-relation
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8087
+          resources:
+            requests:
+              cpu: "10m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: relation
+spec:
+  selector:
+    app: relation
+  ports:
+    - protocol: TCP
+      port: 8087
+      targetPort: 8087
+  type: ClusterIP

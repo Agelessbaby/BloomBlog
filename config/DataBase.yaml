@@ -4,7 +4,7 @@ Global:
   DBType: "mysql"
 
 Mysql:
-  Host: "0.0.0.0"
+  Host: "mysql"
   Port: 3306
   User: "root"
   Password: "123456"

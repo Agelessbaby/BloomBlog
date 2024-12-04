@@ -2,10 +2,9 @@ name: Kind CI Workflow
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-      - main
+    branches: [ "main" ]
 
 jobs:
   test:

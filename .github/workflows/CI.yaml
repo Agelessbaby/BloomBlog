@@ -1,0 +1,24 @@
+name: Kind CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Kind
+        uses: engineerd/setup-kind@v0.5.0
+
+      - name: Create Kubernetes cluster
+        run: kind create cluster --config ./config/kubernetes/cluster-bloomblog.yaml
+
+      - name: Test Kubernetes setup
+        run: kubectl get nodes

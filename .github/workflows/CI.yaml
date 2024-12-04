@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
+  CI:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -21,3 +21,21 @@ jobs:
 
       - name: Test Kubernetes setup
         run: kubectl get nodes
+
+      - name: Add execution right
+        run: chmod -R +x script/
+
+      - name: Build Docker images
+        run: ./script/kubernetes/build_images.sh
+
+      - name: Load images into Kind
+        run: ./script/kubernetes/kind/load_images.sh
+
+      - name: Set up infra
+        run: ./script/kubernetes/deploy-infra.sh
+
+      - name: Wait for infra to set up
+        run: sleep 30
+
+      - name: ./script/kubernetes/deploy.sh
+

@@ -1,1 +1,0 @@
-kind create cluster --config ./config/kubernetes/cluster-bloomblog.yaml

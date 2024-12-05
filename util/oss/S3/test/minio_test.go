@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	oss "github.com/Agelessbaby/BloomBlog/util/oss/minio"
+	oss "github.com/Agelessbaby/BloomBlog/util/oss/S3"
 	"os"
 	"strings"
 	"testing"

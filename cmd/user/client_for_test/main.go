@@ -13,7 +13,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	resp, err := client.Register(context.TODO(), &user.BloomBlogUserRegisterRequest{
+	resp, err := client.Login(context.TODO(), &user.BloomBlogUserRegisterRequest{
 		Username: "Jeff",
 		Password: "123456",
 	})

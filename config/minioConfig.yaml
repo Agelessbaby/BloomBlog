@@ -1,9 +1,0 @@
-Global:
-  Source: "config(local)"
-  ChangeMe: "v3"
-
-# Endpoint: 配置为运行minio服务的主机地址
-Minio:
-  Endpoint: s3.ap-southeast-1.amazonaws.com
-  UseSSL: True
-  ImageBucketName : bloomblog-images

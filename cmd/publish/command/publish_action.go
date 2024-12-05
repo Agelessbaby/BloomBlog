@@ -5,7 +5,7 @@ import (
 	"context"
 	"github.com/Agelessbaby/BloomBlog/cmd/publish/kitex_gen/publish"
 	"github.com/Agelessbaby/BloomBlog/dal/db"
-	"github.com/Agelessbaby/BloomBlog/util/oss/minio"
+	"github.com/Agelessbaby/BloomBlog/util/oss/S3"
 	"github.com/google/uuid"
 	"strings"
 )

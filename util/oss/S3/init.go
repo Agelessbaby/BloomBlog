@@ -1,7 +1,6 @@
 package oss
 
 import (
-	"fmt"
 	"github.com/Agelessbaby/BloomBlog/util/config"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/minio/minio-go/v7"
@@ -11,12 +10,12 @@ import (
 
 var (
 	minioClient          *minio.Client
-	minioConfig          = config.CreateConfig("minioConfig")
-	MinioEndpoint        = minioConfig.GetString("Minio.Endpoint")
+	minioConfig          = config.CreateConfig("ossConfig")
+	MinioEndpoint        = minioConfig.GetString("S3.Endpoint")
 	MinioAccessKeyId     = os.Getenv("AWS_ACCESS_KEY_ID")
 	MinioSecretAccessKey = os.Getenv("AWS_SECRET_ACCESS_KEY")
-	MinioUseSSL          = minioConfig.GetBool("Minio.UseSSL")
-	MinioVideoBucketName = minioConfig.GetString("Minio.ImageBucketName")
+	MinioUseSSL          = minioConfig.GetBool("S3.UseSSL")
+	MinioVideoBucketName = minioConfig.GetString("S3.ImageBucketName")
 )
 
 // Minio 对象存储初始化
@@ -28,7 +27,6 @@ func init() {
 	if err != nil {
 		klog.Fatalf("test client init failed: %v", err)
 	}
-	fmt.Println(client)
 	klog.Debug("test client init successfully")
 	minioClient = client
 	//if err := CreateBucket(MinioVideoBucketName); err != nil {

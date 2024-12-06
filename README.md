@@ -75,17 +75,8 @@ A backend social media project using Kitex + Hertz + RPC + Kubernetes，supporti
 2. Using a Linux or Mac machine(Win is ok but you need to change the scripts)
 3. Having a AWS account and adjust the S3 Endpoint and bucket name to yours(in config/ossConfig.yaml)
    ![image.png](docs/S3.png)
-4. Store your AWS tokens in your ~/.zshrc (mac) or ~/.bashrc (Linux)<br>
-   Open your .zshrc or .bashrc
-   ```shell
-   vim ~/.zshrc (mac)
-   vim ~/.bashrc (Linux)
-   ```
-   Add following to your rc file, adjust to your account and make sure your IAM role has the access to S3
-   ```shell
-   export AWS_ACCESS_KEY_ID="YOUR_AWS_ACCESS_KEY_ID"
-   export AWS_SECRET_ACCESS_KEY="YOUR_AWS_SECRET_ACCESS_KEY"
-   ```   
+4. Overwrite your AWS tokens in config/kubernetes/services/publish.yaml,make sure your IAM role has the access to S3
+   ![image.png](docs/AWS_Token.png)
 5. Install Swagger
    ```shell
    go install github.com/swaggo/swag/cmd/swag@latest

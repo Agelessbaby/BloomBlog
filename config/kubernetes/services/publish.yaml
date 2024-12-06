@@ -17,7 +17,7 @@ spec:
           image: bloomblog-publish
           imagePullPolicy: IfNotPresent
           # TODO Replace the tokens to your aws tokens, you can also use S3 with
-          # changing the host and port of the S3 config, the apis are compatible
+          # TODO changing the host and port of the S3 config, the apis are compatible
           env:
             - name: AWS_ACCESS_KEY_ID
               value: ${{ secrets.AWS_ACCESS_KEY_ID }}

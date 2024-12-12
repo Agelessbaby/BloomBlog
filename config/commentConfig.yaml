@@ -1,22 +1,4 @@
-Global:
-  Source: "config(local)"
-  ChangeMe: "v3"
-
-JWT:
-  signingKey: "signingKey"
-
-Etcd:
-  Address: "etcd"
-  Port: 2379
-
 Server:
-  Name: "BloomBlogCommentServer"
+  Name: "bloomblog-comment-server"
   Address: "0.0.0.0"
   Port: 8086
-
-Client:
-  Echo: true
-  Foo: "bar"
-  Servers:
-    - "127.0.0.1"
-    - "192.168.1.1"

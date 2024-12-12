@@ -118,13 +118,13 @@ A backend social media project using Kitex + Hertz + RPC + Kubernetes，supporti
    ![image.png](docs/Kind_cluster_success.png)
 5. Build Docker images
    ```shell
-   ./script/kubernetes/build-images.sh
+   ./script/kubernetes/build_images.sh
    ```
 6. Loading images into Kubernetes cluster
    ```shell
-   ./script/kubernetes/kind.load_images.sh
+   ./script/kubernetes/kind/load_images.sh
    ```
-7. Deploy Infra(Mysql,Rabbitmq,ETCD)
+7. Deploy Infra(Mysql,Rabbitmq)
    ```shell
    ./script/kubernetes/deploy-infra.sh
    ```

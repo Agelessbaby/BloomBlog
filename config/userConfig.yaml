@@ -1,13 +1,5 @@
-Global:
-  Source: "config(local)"
-  ChangeMe: "v3"
-
-Etcd:
-  Address: "etcd"
-  Port: 2379
-
 Server:
-  Name: "BloomBlogUserServer"
+  Name: "bloomblog-user-server"
   Address: "0.0.0.0"
   Port: 8081
   Argon2ID:
@@ -17,8 +9,3 @@ Server:
     SaltLength: 16
     keyLength: 32
 
-Client:
-  Echo: true
-  Foo: "bar"
-  Servers:
-    - "0.0.0.0"

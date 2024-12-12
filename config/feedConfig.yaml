@@ -1,19 +1,5 @@
-Global:
-  Source: "config(local)"
-  ChangeMe: "v3"
-
-Etcd:
-  Address: "etcd"
-  Port: 2379
-
 Server:
-  Name: "BloomBlogFeedServer"
+  Name: "bloomblog-feed-server"
   Address: "0.0.0.0"
   Port: 8083
-
-Client:
-  Echo: true
-  Foo: "bar"
-  Servers:
-    - "0.0.0.0"
 

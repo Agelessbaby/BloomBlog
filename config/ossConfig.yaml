@@ -1,7 +1,3 @@
-Global:
-  Source: "config(local)"
-  ChangeMe: "v3"
-
 S3:
   #TODO change the Endpoint to your S3 Bucket
   Endpoint: BucketName

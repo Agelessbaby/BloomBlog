@@ -3,16 +3,13 @@ package main
 import (
 	"crypto/tls"
 	"github.com/cloudwego/hertz/pkg/app/server"
-	"github.com/cloudwego/hertz/pkg/app/server/registry"
 	hzconfig "github.com/cloudwego/hertz/pkg/common/config"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
-	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/network/netpoll"
 	"github.com/cloudwego/hertz/pkg/network/standard"
 	"github.com/hertz-contrib/gzip"
 	hz2config "github.com/hertz-contrib/http2/config"
 	"github.com/hertz-contrib/http2/factory"
-	"github.com/hertz-contrib/registry/etcd"
 )
 
 // encode the setting into bytes and then decode into struct
@@ -27,20 +24,6 @@ func InitHertz() *server.Hertz {
 	InitHertzCfg()
 
 	opts := []hzconfig.Option{server.WithHostPorts(ServiceAddr)}
-
-	// 服务注册
-	if apiConfig.GetBool("Etcd.Enable") {
-		r, err := etcd.NewEtcdRegistry([]string{EtcdAddress})
-		if err != nil {
-			hlog.Fatal(err)
-		}
-		opts = append(opts, server.WithRegistry(r, &registry.Info{
-			ServiceName: ServiceName,
-			Addr:        utils.NewNetAddr("tcp", ServiceAddr),
-			Weight:      10,
-			Tags:        nil,
-		}))
-	}
 
 	//TODO add tracing
 	//tracer, tracerCfg := hertztracing.NewServerTracer()
@@ -96,6 +79,5 @@ func InitHertz() *server.Hertz {
 			hertzCfg.Tls.Cfg.NextProtos = append(hertzCfg.Tls.Cfg.NextProtos, "h2")
 		}
 	}
-
 	return h
 }

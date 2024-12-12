@@ -1,14 +1,5 @@
-Global:
-  Source: "config(local)"
-  ChangeMe: "v3"
-
-Etcd:
-  Enable: true
-  Address: "etcd"
-  Port: 2379
-
 Server:
-  Name: "BloomBlogServer"
+  Name: "bloomblog-server"
   Address: "0.0.0.0"
   Port: 8088
 
@@ -23,9 +14,3 @@ Hertz:
     CertFile: ""
     KeyFile: ""
     ALPN: true
-
-Client:
-  Echo: true
-  Foo: "bar"
-  Servers:
-    - "0.0.0.0"

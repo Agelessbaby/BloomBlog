@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: comment
+  name: bloomblog-comment-server
 spec:
   replicas: 2
   selector:
@@ -25,7 +25,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: comment
+  name: bloomblog-comment-server
 spec:
   selector:
     app: comment

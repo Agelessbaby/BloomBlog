@@ -10,6 +10,7 @@ import (
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	dns "github.com/kitex-contrib/resolver-dns"
 	"github.com/spf13/viper"
+	"strconv"
 	"time"
 )
 
@@ -17,7 +18,8 @@ var userClient usersrv.Client
 
 func initUserRpc(config *viper.Viper) {
 	ServiceName := config.GetString("Server.Name")
-
+	PortNum := config.GetInt("Server.Port")
+	Port := strconv.Itoa(PortNum)
 	//TODO Add tracing in future
 	//p := provider.NewOpenTelemetryProvider(
 	//	provider.WithServiceName(ServiceName),
@@ -34,7 +36,7 @@ func initUserRpc(config *viper.Viper) {
 	//}()
 
 	c, err := usersrv.NewClient(
-		ServiceName,
+		ServiceName+":"+Port,
 		//TODO Add middleware
 		//client.WithMiddleware(middleware.CommonMiddleware),
 		//client.WithInstanceMW(middleware.ClientMiddleware),

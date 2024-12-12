@@ -2,14 +2,13 @@ package rpc
 
 import (
 	"context"
-	"fmt"
 	"github.com/Agelessbaby/BloomBlog/cmd/favorite/kitex_gen/favorite"
 	"github.com/Agelessbaby/BloomBlog/cmd/favorite/kitex_gen/favorite/favoritesrv"
 	"github.com/Agelessbaby/BloomBlog/util/errno"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/retry"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
-	"github.com/kitex-contrib/registry-etcd"
+	dns "github.com/kitex-contrib/resolver-dns"
 	"github.com/spf13/viper"
 	"time"
 )
@@ -17,12 +16,6 @@ import (
 var favoriteClient favoritesrv.Client
 
 func initFavoriteRpc(config *viper.Viper) {
-	EtcdAddress := fmt.Sprintf("%s:%d", config.GetString("Etcd.Address"), config.GetInt("Etcd.Port"))
-	// 服务发现
-	r, err := etcd.NewEtcdResolver([]string{EtcdAddress})
-	if err != nil {
-		panic(err)
-	}
 	ServiceName := config.GetString("Server.Name")
 
 	//TODO Add tracing in future
@@ -50,7 +43,7 @@ func initFavoriteRpc(config *viper.Viper) {
 		client.WithConnectTimeout(30000*time.Millisecond), // conn timeout
 		client.WithFailureRetry(retry.NewFailurePolicy()), // retry
 		//client.WithSuite(tracing.NewClientSuite()),        // tracer
-		client.WithResolver(r), // resolver
+		client.WithResolver(dns.NewDNSResolver()),
 		// Please keep the same as provider.WithServiceName
 		client.WithClientBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: ServiceName}),
 	)

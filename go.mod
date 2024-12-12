@@ -4,7 +4,6 @@ go 1.23.2
 
 require (
 	github.com/a76yyyy/ErrnoCode v1.0.2
-	github.com/aws/aws-sdk-go v1.55.5
 	github.com/bytedance/sonic v1.12.4
 	github.com/cloudwego/fastpb v0.0.5
 	github.com/cloudwego/hertz v0.9.3
@@ -16,6 +15,7 @@ require (
 	github.com/hertz-contrib/registry/etcd v0.0.0-20240618152458-11c3cac90e4f
 	github.com/hertz-contrib/swagger v0.1.0
 	github.com/kitex-contrib/registry-etcd v0.2.5
+	github.com/kitex-contrib/resolver-dns v0.1.0
 	github.com/minio/minio-go/v7 v7.0.80
 	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/spf13/viper v1.19.0
@@ -72,7 +72,6 @@ require (
 	github.com/jhump/protoreflect v1.17.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.17.11 // indirect

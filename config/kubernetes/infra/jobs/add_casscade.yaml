@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-addcasscade-config
+data:
+  addcasscade.sql: |
+    use bloomblog;
+    ALTER TABLE comment DROP FOREIGN KEY fk_comment_parent;
+    ALTER TABLE comment DROP FOREIGN KEY fk_comment_reply;
+    ALTER TABLE comment
+    ADD CONSTRAINT fk_comment_parent
+    FOREIGN KEY (parent_id) REFERENCES comment (id) ON DELETE CASCADE;
+    ALTER TABLE comment
+    ADD CONSTRAINT fk_comment_reply
+    FOREIGN KEY (reply_id) REFERENCES comment (id) ON DELETE CASCADE;
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysql-addcasscade-config
+spec:
+  template:
+    spec:
+      containers:
+        - name: mysql-addcasscade
+          image: mysql:8
+          command:
+            - sh
+            - -c
+            - mysql -h mysql -u root < /docker-entrypoint-initdb.d/addcasscade.sql
+          env:
+            - name: MYSQL_PWD
+              value: "123456"
+          volumeMounts:
+            - name: addcasscade
+              mountPath: /docker-entrypoint-initdb.d
+      restartPolicy: OnFailure
+      volumes:
+        - name: addcasscade
+          configMap:
+            name: mysql-addcasscade-config

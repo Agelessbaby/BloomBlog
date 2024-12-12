@@ -40,3 +40,5 @@ jobs:
       - name: Deploy services
         run: ./script/kubernetes/deploy.sh
 
+      - name: Add Mysql Casscade
+        run: kubectl apply -f config/kubernetes/infra/jobs/add_casscade.yaml

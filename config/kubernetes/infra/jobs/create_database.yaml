@@ -1,0 +1,35 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-config
+data:
+  init-db.sql: |
+    CREATE DATABASE IF NOT EXISTS bloomblog;
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-mysql-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: init-mysql
+          image: mysql:8
+          command:
+            - sh
+            - -c
+            - mysql -h mysql -u root < /docker-entrypoint-initdb.d/init-db.sql
+          env:
+            - name: MYSQL_PWD
+              value: "123456"
+          volumeMounts:
+            - name: initdb
+              mountPath: /docker-entrypoint-initdb.d
+      restartPolicy: OnFailure
+      volumes:
+        - name: initdb
+          configMap:
+            name: mysql-initdb-config

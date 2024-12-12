@@ -73,5 +73,3 @@ data:
     default-time-zone = 'Asia/Shanghai'
     log_timestamps = SYSTEM
 
-
-

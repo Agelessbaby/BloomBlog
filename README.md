@@ -14,8 +14,6 @@ A backend social media project using Kitex + Hertz + RPC + Kubernetes，supporti
 
 * Using **Kitex** as **micro services** framework and **Hertz** as HTTP Api gateway(both open sourced by bytedance)
 
-* Using **Etcd** as service registry and discovery
-
 * Using **AWS S3** as object storage
 
 * Using **rabbitmq** as message queue
@@ -26,14 +24,14 @@ A backend social media project using Kitex + Hertz + RPC + Kubernetes，supporti
 
 | Service  | Description                          | Techniques            | Protocol | service registry |
 |----------|--------------------------------------|-----------------------|----------|------------------|
-| api      | Routing HTTP request to RPC Services | `Gorm` `Kitex` `Hertz` | `http`   | `etcd`           |
-| user     | User Management                      | `JWT`                 | `proto3` | `etcd`               |
-| relation | User Following Management            | -                     | -        | `etcd`                |
-| feed     | Posts Stream                         | -                     | -        | `etcd`               |
-| favorite | Favorite Management                  | -                     | -        | `etcd`                |
-| comment  | Comment Management                   | `rabbitmq`             | -        | `etcd`                |
-| publish  | Posts Publish Management             | `AWS S3`              | -        | `etcd`                |
-| dal      | Data Access Layer                    | `MySQL` `gorm`        | -        | `etcd`               |
+| api      | Routing HTTP request to RPC Services | `Gorm` `Kitex` `Hertz` | `http`   | `CoreDNS`        |
+| user     | User Management                      | `JWT`                 | `proto3` | `CoreDNS`        |
+| relation | User Following Management            | -                     | -        | `CoreDNS`        |
+| feed     | Posts Stream                         | -                     | -        | `CoreDNS`        |
+| favorite | Favorite Management                  | -                     | -        | `CoreDNS`        |
+| comment  | Comment Management                   | `rabbitmq`             | -        | `CoreDNS`        |
+| publish  | Posts Publish Management             | `AWS S3`              | -        | `CoreDNS`        |
+| dal      | Data Access Layer                    | `MySQL` `gorm`        | -        | `CoreDNS`        |
 
 ![image.png](docs/Services_description.png)
 
@@ -134,35 +132,12 @@ A backend social media project using Kitex + Hertz + RPC + Kubernetes，supporti
    ```shell
    ./script/kubernetes/deploy.sh
    ```
-9. Start a Mysql pod and run a sql file(This only needs to be done once,the tables are created by GORM by Automigrate and the "on delete cascade" feature can't be done using gorm,that's why need this step)<br>
-   Create a mysql-client pod
+   
+9. Start a kubernetes job 
    ```shell
-   kubectl run mysql-client --image=mysql:latest -it --rm -- bash
+   kubectl apply -f config/kubernetes/infra/jobs/add_casscade.yaml
    ```
-   Enter the mysql-client pod
-   ```shell
-   kubectl exec -it mysql-client -- bash
-   ```
-   Connect to Mysql pod(The password is specified in the config/DataBase.yaml)
-   ```shell
-   mysql -h mysql -P 3306 -u root -p
-   ```
-   In mysql client<br>
-   Select Database
-   ```shell
-   use bloomblog
-   ```
-   Run the script
-   ```shell
-   ALTER TABLE comment DROP FOREIGN KEY fk_comment_parent;
-   ALTER TABLE comment DROP FOREIGN KEY fk_comment_reply;
-   ALTER TABLE comment
-   ADD CONSTRAINT fk_comment_parent
-   FOREIGN KEY (parent_id) REFERENCES comment (id) ON DELETE CASCADE;
-   ALTER TABLE comment
-   ADD CONSTRAINT fk_comment_reply
-   FOREIGN KEY (reply_id) REFERENCES comment (id) ON DELETE CASCADE;
-   ```
+   
 10. Verify Deployment<br>
    Verify Pods
    ```shell

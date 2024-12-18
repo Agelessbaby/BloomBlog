@@ -27,6 +27,8 @@ jobs:
         env:
           DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
         run: |
+          mkdir -p /home/runner/.kube
+          chmod 700 /home/runner/.kube
           doctl auth init --access-token "${DIGITALOCEAN_ACCESS_TOKEN}"
           doctl kubernetes cluster kubeconfig save ${{ secrets.CLUSTER_NAME }}
 

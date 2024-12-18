@@ -28,7 +28,7 @@ spec:
         - name: revision
           value: "$(params.revision)"
         - name: context
-          value: "cmd/api" # 子目录
+          value: "cmd/api"
         - name: image-name
           value: "$(params.image-prefix)bloomblog-api:latest"
 
@@ -44,86 +44,86 @@ spec:
         - name: revision
           value: "$(params.revision)"
         - name: context
-          value: "cmd/user" # 子目录
+          value: "cmd/user"
         - name: image-name
           value: "$(params.image-prefix)bloomblog-user:latest"
 
-        - name: build-relation-image
-          taskRef:
-            name: build-and-push
-          workspaces:
-            - name: source
-              workspace: source
-          params:
-            - name: repo-url
-              value: "$(params.repo-url)"
-            - name: revision
-              value: "$(params.revision)"
-            - name: context
-              value: "cmd/relation" # 子目录
-            - name: image-name
-              value: "$(params.image-prefix)bloomblog-relation:latest"
+    - name: build-relation-image
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/relation"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-relation:latest"
 
-        - name: build-favorite-image
-          taskRef:
-            name: build-and-push
-          workspaces:
-            - name: source
-              workspace: source
-          params:
-            - name: repo-url
-              value: "$(params.repo-url)"
-            - name: revision
-              value: "$(params.revision)"
-            - name: context
-              value: "cmd/favorite" # 子目录
-            - name: image-name
-              value: "$(params.image-prefix)bloomblog-favorite:latest"
+    - name: build-favorite-image
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/favorite"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-favorite:latest"
 
-        - name: build-comment-image
-          taskRef:
-            name: build-and-push
-          workspaces:
-            - name: source
-              workspace: source
-          params:
-            - name: repo-url
-              value: "$(params.repo-url)"
-            - name: revision
-              value: "$(params.revision)"
-            - name: context
-              value: "cmd/comment" # 子目录
-            - name: image-name
-              value: "$(params.image-prefix)bloomblog-comment:latest"
+    - name: build-comment-image
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/comment"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-comment:latest"
 
-        - name: build-publish-image
-          taskRef:
-            name: build-and-push
-          workspaces:
-            - name: source
-              workspace: source
-          params:
-            - name: repo-url
-              value: "$(params.repo-url)"
-            - name: revision
-              value: "$(params.revision)"
-            - name: context
-              value: "cmd/publish" # 子目录
-            - name: image-name
-              value: "$(params.image-prefix)bloomblog-publish:latest"
+    - name: build-publish-image
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/publish"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-publish:latest"
 
-        - name: build-feed-image
-          taskRef:
-            name: build-and-push
-          workspaces:
-            - name: source
-              workspace: source
-          params:
-            - name: repo-url
-              value: "$(params.repo-url)"
-            - name: revision
-              value: "$(params.revision)"
-            - name: context
-              value: "cmd/feed" # 子目录
-            - name: image-name
-              value: "$(params.image-prefix)bloomblog-feed:latest"
+    - name: build-feed-image
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/feed"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-feed:latest"

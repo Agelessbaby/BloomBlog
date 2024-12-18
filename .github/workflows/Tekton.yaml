@@ -1,4 +1,4 @@
-name: Trigger Tekton PipelineRun
+name: Trigger Tekton PipelineRun on DigitalOcean
 
 on:
   push:
@@ -14,17 +14,21 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: 安装 kubectl
-      - name: Install kubectl
+      # Step 2: 安装 doctl 和 kubectl
+      - name: Install doctl and kubectl
         run: |
+          sudo snap install doctl
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
+          doctl version
 
-      # Step 3: 加载 kubeconfig
+      # Step 3: 配置 kubeconfig
       - name: Setup Kubeconfig
+        env:
+          KUBECONFIG_CONTENT: ${{ secrets.KUBECONFIG_CONTENT }}
         run: |
-          echo "${{ secrets.KUBECONFIG_CONTENT }}" > kubeconfig.yaml
+          echo "${KUBECONFIG_CONTENT}" > kubeconfig.yaml
           export KUBECONFIG=kubeconfig.yaml
           kubectl cluster-info
 
@@ -37,7 +41,7 @@ jobs:
         run: |
           kubectl apply -f .github/ci/multi-service-pipeline.yaml
 
-      # Step 5: 触发 PipelineRun
+      # Step 5: 触发 Tekton PipelineRun
       - name: Trigger Tekton PipelineRun
         run: |
           kubectl apply -f .github/ci/multi-service-pipeline-run.yaml

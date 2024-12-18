@@ -8,32 +8,34 @@ spec:
       description: Git repository URL
     - name: revision
       description: Git revision (branch/tag)
-      default: main
     - name: context
-      description: The subdirectory for the microservice
+      description: Build context (e.g., directory containing Dockerfile)
     - name: image-name
-      description: Image name with tag (e.g., docker.io/user/service:latest)
-
-  workspaces:
-    - name: source
-
+      description: Name of the image to push
   steps:
     - name: git-clone
       image: alpine/git:latest
       script: |
         git clone -b $(params.revision) $(params.repo-url) /workspace/source
-
-    - name: buildah-build
+    - name: build-image
       image: quay.io/buildah/stable:latest
-      workingDir: /workspace/source
       script: |
-        buildah bud --format=docker -t $(params.image-name) -f $(params.context)/Dockerfile .
+        buildah bud --format=docker -t $(params.image-name) /workspace/source/$(params.context)
       securityContext:
-        privileged: true  # Otherwise the mounting operation will not be allowed
-
+        privileged: true
+      volumeMounts:
+        - name: docker-config
+          mountPath: /root/.docker
     - name: push-image
       image: quay.io/buildah/stable:latest
       script: |
         buildah push $(params.image-name)
       securityContext:
         privileged: true
+      volumeMounts:
+        - name: docker-config
+          mountPath: /root/.docker
+  volumes:
+    - name: docker-config
+      secret:
+        secretName: registry-bloomblog

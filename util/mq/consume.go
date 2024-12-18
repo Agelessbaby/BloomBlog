@@ -18,12 +18,12 @@ func SubscribeByKey(conn *amqp.Connection, exchange string, operationFunc operat
 	defer ch.Close()
 	//声明队列
 	q, err := ch.QueueDeclare(
-		"",    //队列名为空时Server指定一个随机（且唯一）的队列名
-		false, // durable
-		true,  // delete when unused
-		true,  // exclusive
-		false, // no-wait
-		nil,   // arguments
+		"bloomblog-comment"+keys[0], //队列名为空时Server指定一个随机（且唯一）的队列名
+		false,                       // durable
+		true,                        // delete when unused
+		false,                       // exclusive
+		false,                       // no-wait
+		nil,                         // arguments
 	)
 	if err != nil {
 		log.Panicf("declare queue failed: %s", err)

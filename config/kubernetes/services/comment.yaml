@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: bloomblog-comment
-          image: bloomblog-comment
-          imagePullPolicy: IfNotPresent
+          image: registry.digitalocean.com/bloomblog/bloomblog-comment:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8086
           resources:

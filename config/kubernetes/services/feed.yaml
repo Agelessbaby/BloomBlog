@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: bloomblog-feed
-          image: bloomblog-feed
-          imagePullPolicy: IfNotPresent
+          image: registry.digitalocean.com/bloomblog/bloomblog-feed:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8083
           resources:

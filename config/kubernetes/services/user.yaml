@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: bloomblog-user
-          image: bloomblog-user
-          imagePullPolicy: IfNotPresent
+          image: registry.digitalocean.com/bloomblog/bloomblog-user:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8081
           resources:

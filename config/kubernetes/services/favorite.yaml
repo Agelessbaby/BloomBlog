@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: bloomblog-favorite
-          image: bloomblog-favorite
-          imagePullPolicy: IfNotPresent
+          image: registry.digitalocean.com/bloomblog/bloomblog-favorite:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8085
           resources:

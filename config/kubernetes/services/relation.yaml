@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: bloomblog-relation
-          image: bloomblog-relation
-          imagePullPolicy: IfNotPresent
+          image: registry.digitalocean.com/bloomblog/bloomblog-relation:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8087
           resources:

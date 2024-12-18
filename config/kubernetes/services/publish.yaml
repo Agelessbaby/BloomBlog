@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: bloomblog-publish
-          image: bloomblog-publish
-          imagePullPolicy: IfNotPresent
+          image: registry.digitalocean.com/bloomblog/bloomblog-publish:latest
+          imagePullPolicy: Always
           # TODO Replace the tokens to your aws tokens, you can also use S3 with
           # TODO changing the host and port of the S3 config, the apis are compatible
           env:

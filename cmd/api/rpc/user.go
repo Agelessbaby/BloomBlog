@@ -16,10 +16,15 @@ import (
 
 var userClient usersrv.Client
 
-func initUserRpc(config *viper.Viper) {
+func GetEndPoint(config *viper.Viper) string {
 	ServiceName := config.GetString("Server.Name")
 	PortNum := config.GetInt("Server.Port")
 	Port := strconv.Itoa(PortNum)
+	return ServiceName + ":" + Port
+}
+
+func initUserRpc(config *viper.Viper) {
+	ServiceName := GetEndPoint(config)
 	//TODO Add tracing in future
 	//p := provider.NewOpenTelemetryProvider(
 	//	provider.WithServiceName(ServiceName),
@@ -36,7 +41,7 @@ func initUserRpc(config *viper.Viper) {
 	//}()
 
 	c, err := usersrv.NewClient(
-		ServiceName+":"+Port,
+		ServiceName,
 		//TODO Add middleware
 		//client.WithMiddleware(middleware.CommonMiddleware),
 		//client.WithInstanceMW(middleware.ClientMiddleware),

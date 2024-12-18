@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: multi-service-pipeline-run
+spec:
+  pipelineRef:
+    name: multi-service-pipeline
+  params:
+    - name: repo-url
+      value: "https://github.com/Agelessbaby/BloomBlog.git"
+    - name: revision
+      value: "main"
+    - name: image-prefix
+      value: "registry.digitalocean.com/bloomblog/"
+
+  workspaces:
+    - name: source
+      emptyDir: {}

@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-and-push
+spec:
+  params:
+    - name: repo-url
+      description: Git repository URL
+    - name: revision
+      description: Git revision (branch/tag)
+      default: main
+    - name: context
+      description: The subdirectory for the microservice
+    - name: image-name
+      description: Image name with tag (e.g., docker.io/user/service:latest)
+
+  workspaces:
+    - name: source
+
+  steps:
+    - name: git-clone
+      image: alpine/git:latest
+      script: |
+        git clone -b $(params.revision) $(params.repo-url) /workspace/source
+
+    - name: buildah-build
+      image: quay.io/buildah/stable:latest
+      workingDir: /workspace/source
+      script: |
+        buildah bud --format=docker -t $(params.image-name) -f $(params.context)/Dockerfile .
+    
+
+    - name: push-image
+      image: quay.io/buildah/stable:latest
+      script: |
+        buildah push $(params.image-name)

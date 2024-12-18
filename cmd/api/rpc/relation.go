@@ -16,7 +16,7 @@ import (
 var relationClient relationsrv.Client
 
 func initRelationRpc(config *viper.Viper) {
-	ServiceName := config.GetString("Server.Name")
+	ServiceName := GetEndPoint(config)
 
 	//TODO Add tracing in future
 	//p := provider.NewOpenTelemetryProvider(

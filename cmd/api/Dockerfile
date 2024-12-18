@@ -1,16 +1,19 @@
-# 第一阶段：编译阶段
 FROM golang:1.23.2 AS builder
 
-# 设置工作目录
 WORKDIR /app
 
-# 将源码添加到工作目录
 COPY . .
 
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOARCH=amd64
+
+# 安装依赖
 RUN go mod tidy
 
-# 编译 Go 应用
+# 构建应用
 RUN go build -o api ./cmd/api
+
 
 # 第二阶段：运行阶段
 FROM ubuntu:latest

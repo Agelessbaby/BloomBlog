@@ -1,5 +1,5 @@
 S3:
   #TODO change the Endpoint to your S3 Bucket
-  Endpoint: BucketName
+  Endpoint: s3.ap-southeast-1.amazonaws.com
   UseSSL: True
   ImageBucketName : bloomblog-images

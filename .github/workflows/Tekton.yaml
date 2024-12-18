@@ -1,0 +1,48 @@
+name: Trigger Tekton PipelineRun
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger-tekton-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout 仓库代码
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: 安装 kubectl
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+      # Step 3: 加载 kubeconfig
+      - name: Setup Kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG_CONTENT }}" > kubeconfig.yaml
+          export KUBECONFIG=kubeconfig.yaml
+          kubectl cluster-info
+
+      # Step 4: 应用 Tekton Task 和 Pipeline 定义
+      - name: Apply Tekton Task
+        run: |
+          kubectl apply -f .github/ci/build-and-push.yaml
+
+      - name: Apply Tekton Pipeline
+        run: |
+          kubectl apply -f .github/ci/multi-service-pipeline.yaml
+
+      # Step 5: 触发 PipelineRun
+      - name: Trigger Tekton PipelineRun
+        run: |
+          kubectl apply -f .github/ci/multi-service-pipeline-run.yaml
+
+      # Step 6: 查看 PipelineRun 状态
+      - name: Check PipelineRun Status
+        run: |
+          kubectl get pipelinerun -o wide

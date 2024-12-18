@@ -14,10 +14,10 @@ spec:
     spec:
       containers:
         - name: bloomblog-api
-          image: bloomblog-api  # 改成你的镜像名称
-          imagePullPolicy: IfNotPresent
+          image: registry.digitalocean.com/bloomblog/bloomblog-api:latest  # 改成你的镜像名称
+          imagePullPolicy: Always
           ports:
-            - containerPort: 30000  # 容器内部服务监听的端口
+            - containerPort: 8088  # 容器内部服务监听的端口
           resources:
             requests:
               cpu: "10m"
@@ -28,10 +28,10 @@ metadata:
   name: bloomblog-server
 spec:
   selector:
-    app: api
+    app: api  # 确保与 Pod 的标签一致
   ports:
     - protocol: TCP
-      port: 8088
-      targetPort: 8088
-      nodePort: 30000
-  type: NodePort
+      port: 8088         # LoadBalancer 暴露的端口
+      targetPort: 8088   # Pod 内部应用的监听端口
+  type: LoadBalancer      # 定义为 LoadBalancer 类型
+

@@ -6,7 +6,9 @@ WORKDIR /app
 
 # 将源码添加到工作目录
 COPY . .
-
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOARCH=amd64
 RUN go mod tidy
 
 RUN chmod +x ./cmd/favorite/build.sh

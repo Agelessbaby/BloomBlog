@@ -28,9 +28,12 @@ spec:
       workingDir: /workspace/source
       script: |
         buildah bud --format=docker -t $(params.image-name) -f $(params.context)/Dockerfile .
-    
+      securityContext:
+        privileged: true  # Otherwise the mounting operation will not be allowed
 
     - name: push-image
       image: quay.io/buildah/stable:latest
       script: |
         buildah push $(params.image-name)
+      securityContext:
+        privileged: true

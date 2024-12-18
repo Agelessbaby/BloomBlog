@@ -21,18 +21,21 @@ jobs:
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/
-          doctl version
 
-      # Step 3: 配置 kubeconfig
-      - name: Setup Kubeconfig
+      # Step 3: 配置 doctl 并初始化凭据
+      - name: Authenticate with DigitalOcean
         env:
-          KUBECONFIG_CONTENT: ${{ secrets.KUBECONFIG_CONTENT }}
+          DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
         run: |
-          echo "${KUBECONFIG_CONTENT}" > kubeconfig.yaml
-          export KUBECONFIG=kubeconfig.yaml
+          doctl auth init --access-token "${DIGITALOCEAN_ACCESS_TOKEN}"
+          doctl kubernetes cluster kubeconfig save ${{ secrets.CLUSTER_NAME }}
+
+      # Step 4: 查看 Kubernetes 集群信息
+      - name: Verify Kubernetes Connection
+        run: |
           kubectl cluster-info
 
-      # Step 4: 应用 Tekton Task 和 Pipeline 定义
+      # Step 5: 应用 Tekton Task 和 Pipeline 定义
       - name: Apply Tekton Task
         run: |
           kubectl apply -f .github/ci/build-and-push.yaml
@@ -41,12 +44,12 @@ jobs:
         run: |
           kubectl apply -f .github/ci/multi-service-pipeline.yaml
 
-      # Step 5: 触发 Tekton PipelineRun
+      # Step 6: 触发 Tekton PipelineRun
       - name: Trigger Tekton PipelineRun
         run: |
           kubectl apply -f .github/ci/multi-service-pipeline-run.yaml
 
-      # Step 6: 查看 PipelineRun 状态
+      # Step 7: 查看 PipelineRun 状态
       - name: Check PipelineRun Status
         run: |
           kubectl get pipelinerun -o wide

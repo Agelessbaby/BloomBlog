@@ -1,121 +1,138 @@
-tasks:
-  # 第一组两个任务并行执行
-  - name: build-api-image
-    taskRef:
-      name: build-and-push
-    workspaces:
-      - name: source
-        workspace: source
-    params:
-      - name: repo-url
-        value: "$(params.repo-url)"
-      - name: revision
-        value: "$(params.revision)"
-      - name: context
-        value: "cmd/api"
-      - name: image-name
-        value: "$(params.image-prefix)bloomblog-api:latest"
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: multi-service-pipeline
+spec:
+  params:
+    - name: repo-url
+      description: Git repository URL
+    - name: revision
+      description: Git revision (branch/tag)
+      default: main
+    - name: image-prefix
+      description: Image prefix (e.g., docker.io/user/)
 
-  - name: build-user-image
-    taskRef:
-      name: build-and-push
-    workspaces:
-      - name: source
-        workspace: source
-    params:
-      - name: repo-url
-        value: "$(params.repo-url)"
-      - name: revision
-        value: "$(params.revision)"
-      - name: context
-        value: "cmd/user"
-      - name: image-name
-        value: "$(params.image-prefix)bloomblog-user:latest"
+  workspaces:
+    - name: source
 
-  # 第二组两个任务依赖第一组完成后并行执行
-  - name: build-relation-image
-    runAfter: ["build-api-image", "build-user-image"]  # 第二组依赖第一组完成
-    taskRef:
-      name: build-and-push
-    workspaces:
-      - name: source
-        workspace: source
-    params:
-      - name: repo-url
-        value: "$(params.repo-url)"
-      - name: revision
-        value: "$(params.revision)"
-      - name: context
-        value: "cmd/relation"
-      - name: image-name
-        value: "$(params.image-prefix)bloomblog-relation:latest"
+  tasks:
+    # 第一组两个任务并行执行
+    - name: build-api-image
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/api"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-api:latest"
 
-  - name: build-favorite-image
-    runAfter: ["build-api-image", "build-user-image"]  # 第二组依赖第一组完成
-    taskRef:
-      name: build-and-push
-    workspaces:
-      - name: source
-        workspace: source
-    params:
-      - name: repo-url
-        value: "$(params.repo-url)"
-      - name: revision
-        value: "$(params.revision)"
-      - name: context
-        value: "cmd/favorite"
-      - name: image-name
-        value: "$(params.image-prefix)bloomblog-favorite:latest"
+    - name: build-user-image
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/user"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-user:latest"
 
-  # 第三组任务依赖第二组完成后并行执行
-  - name: build-comment-image
-    runAfter: ["build-relation-image", "build-favorite-image"]
-    taskRef:
-      name: build-and-push
-    workspaces:
-      - name: source
-        workspace: source
-    params:
-      - name: repo-url
-        value: "$(params.repo-url)"
-      - name: revision
-        value: "$(params.revision)"
-      - name: context
-        value: "cmd/comment"
-      - name: image-name
-        value: "$(params.image-prefix)bloomblog-comment:latest"
+    # 第二组两个任务依赖第一组完成后并行执行
+    - name: build-relation-image
+      runAfter: [ "build-api-image", "build-user-image" ]  # 第二组依赖第一组完成
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/relation"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-relation:latest"
 
-  - name: build-publish-image
-    runAfter: ["build-relation-image", "build-favorite-image"]
-    taskRef:
-      name: build-and-push
-    workspaces:
-      - name: source
-        workspace: source
-    params:
-      - name: repo-url
-        value: "$(params.repo-url)"
-      - name: revision
-        value: "$(params.revision)"
-      - name: context
-        value: "cmd/publish"
-      - name: image-name
-        value: "$(params.image-prefix)bloomblog-publish:latest"
+    - name: build-favorite-image
+      runAfter: [ "build-api-image", "build-user-image" ]  # 第二组依赖第一组完成
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/favorite"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-favorite:latest"
 
-  # 第四组任务依赖第三组完成后并行执行
-  - name: build-feed-image
-    runAfter: ["build-comment-image", "build-publish-image"]
-    taskRef:
-      name: build-and-push
-    workspaces:
-      - name: source
-        workspace: source
-    params:
-      - name: repo-url
-        value: "$(params.repo-url)"
-      - name: revision
-        value: "$(params.revision)"
-      - name: context
-        value: "cmd/feed"
-      - name: image-name
-        value: "$(params.image-prefix)bloomblog-feed:latest"
+    # 第三组任务依赖第二组完成后并行执行
+    - name: build-comment-image
+      runAfter: [ "build-relation-image", "build-favorite-image" ]
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/comment"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-comment:latest"
+
+    - name: build-publish-image
+      runAfter: [ "build-relation-image", "build-favorite-image" ]
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/publish"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-publish:latest"
+
+    # 第四组任务依赖第三组完成后并行执行
+    - name: build-feed-image
+      runAfter: [ "build-comment-image", "build-publish-image" ]
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/feed"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-feed:latest"

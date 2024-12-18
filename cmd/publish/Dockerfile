@@ -1,5 +1,5 @@
 # 第一阶段：编译阶段
-FROM golang:1.23.2 AS builder
+FROM docker.io/library/golang:1.23.2 AS builder
 
 # 设置工作目录
 WORKDIR /app

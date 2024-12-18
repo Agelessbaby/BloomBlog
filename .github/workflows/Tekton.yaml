@@ -28,10 +28,13 @@ jobs:
           DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
         run: |
           doctl auth init --access-token "${DIGITALOCEAN_ACCESS_TOKEN}"
+
+          doctl kubernetes cluster kubeconfig save ${{ secrets.CLUSTER_NAME }}
+
           mkdir -p ./kube
-          doctl kubernetes cluster kubeconfig save ${{ secrets.CLUSTER_NAME }} --kubeconfig ./kube/config
+          cp ~/.kube/config ./kube/config
+          chmod 600 ./kube/config
           export KUBECONFIG=./kube/config
-          kubectl cluster-info
 
       # Step 4: 查看 Kubernetes 集群信息
       - name: Verify Kubernetes Connection

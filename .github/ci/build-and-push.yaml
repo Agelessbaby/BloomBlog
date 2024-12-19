@@ -20,10 +20,11 @@ spec:
       image: alpine/git:latest
       script: |
         git clone -b $(params.revision) $(params.repo-url) /workspace/source
+
     - name: build-and-push
       image: quay.io/buildah/stable:latest
       script: |
-        buildah bud --format=docker -t $(params.image-name) /workspace/source/$(params.context)
+        buildah bud --format=docker -t $(params.image-name) -f /workspace/source/$(params.context)/Dockerfile /workspace/source
         buildah push $(params.image-name)
       securityContext:
         privileged: true

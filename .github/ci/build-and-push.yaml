@@ -24,12 +24,20 @@ spec:
         git clone -b $(params.revision) $(params.repo-url) /workspace/source
 
     - name: build-and-push
-      image: quay.io/buildah/stable:latest
+      image: registry.fedoraproject.org/fedora:latest # 更加强大的镜像，包含 curl 和其他工具
       script: |
         #!/bin/sh
         set -e
-        # Extract token from .dockerconfigjson
+        # 提取 DO_API_TOKEN
         export DO_API_TOKEN=$(cat /root/.docker/.dockerconfigjson | base64 -d | jq -r '.auths["registry.digitalocean.com"].auth' | base64 -d | cut -d':' -f2)
+
+        # 安装 Buildah 和 DigitalOcean CLI
+        dnf install -y buildah curl jq tar
+        curl -fsSL https://github.com/digitalocean/doctl/releases/download/v1.100.1/doctl-1.100.1-linux-amd64.tar.gz | tar -xz -C /usr/local/bin
+
+        # 验证安装
+        buildah --version
+        doctl version
 
         # Authenticate with DigitalOcean
         echo "${DO_API_TOKEN}" | doctl auth init --access-token

@@ -27,19 +27,22 @@ spec:
       image: quay.io/buildah/stable:latest
       script: |
         #!/bin/sh
+        set -e
+        # Extract token from .dockerconfigjson
+        export DO_API_TOKEN=$(cat /root/.docker/.dockerconfigjson | base64 -d | jq -r '.auths["registry.digitalocean.com"].auth' | base64 -d | cut -d':' -f2)
+
         # Authenticate with DigitalOcean
         echo "${DO_API_TOKEN}" | doctl auth init --access-token
 
-        # Build the container image
+        # Build and push the image
         buildah bud --format=docker -t $(params.image-name) -f /workspace/source/$(params.context)/Dockerfile /workspace/source
-
-        # Push the container image to the registry
         buildah push $(params.image-name)
       securityContext:
         privileged: true
-      env:
-        - name: DO_API_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: registry-bloomblog
-              key: token
+      volumeMounts:
+        - name: registry-bloomblog-secret
+          mountPath: /root/.docker
+  volumes:
+    - name: registry-bloomblog-secret
+      secret:
+        secretName: registry-bloomblog

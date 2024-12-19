@@ -5,16 +5,12 @@ metadata:
 spec:
   workspaces:
     - name: source
-      description: Workspace containing the source code to build
+      description: "Workspace containing the source code to build"
   params:
     - name: repo-url
-      description: Git repository URL
     - name: revision
-      description: Git revision (branch/tag)
     - name: context
-      description: Build context (e.g., directory containing Dockerfile)
     - name: image-name
-      description: Full image name (including registry and tag)
   steps:
     - name: git-clone
       image: alpine/git:latest
@@ -34,14 +30,13 @@ spec:
         dnf install -y buildah curl tar gzip
         echo "Dependencies installed."
 
-        # 将 .dockerconfigjson 拷贝为 config.json，让 buildah 自动使用该认证信息
-        if [ ! -f /root/.docker/.dockerconfigjson ]; then
-          echo "Error: /root/.docker/.dockerconfigjson not found!"
-          exit 1
-        fi
+        echo "Setting up Docker config..."
+        # 创建可写目录来存放 config.json
+        mkdir -p /tmp/docker
+        cp /root/.docker/.dockerconfigjson /tmp/docker/config.json
 
-        cp /root/.docker/.dockerconfigjson /root/.docker/config.json
-        echo "Copied .dockerconfigjson to config.json for buildah authentication."
+        # 告诉 buildah 使用此目录作为 Docker 配置目录
+        export DOCKER_CONFIG=/tmp/docker
 
         echo "Building the image..."
         buildah bud --format=docker -t $(params.image-name) -f /workspace/source/$(params.context)/Dockerfile /workspace/source

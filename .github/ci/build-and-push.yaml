@@ -19,19 +19,26 @@ spec:
     - name: git-clone
       image: alpine/git:latest
       script: |
+        #!/bin/sh
         git clone -b $(params.revision) $(params.repo-url) /workspace/source
 
     - name: build-and-push
-      image: quay.io/buildah/stable:latest
+      image: registry.digitalocean.com/your-registry/buildah-doctl:latest # 使用合并后的自定义镜像
       script: |
+        #!/bin/sh
+        # Authenticate with DigitalOcean
+        echo "${DO_API_TOKEN}" | doctl auth init --access-token
+
+        # Build the image
         buildah bud --format=docker -t $(params.image-name) -f /workspace/source/$(params.context)/Dockerfile /workspace/source
+
+        # Push the image
         buildah push $(params.image-name)
       securityContext:
         privileged: true
-      volumeMounts:
-        - name: docker-config
-          mountPath: /root/.docker
-  volumes:
-    - name: docker-config
-      secret:
-        secretName: registry-bloomblog
+      env:
+        - name: DO_API_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: registry-bloomblog
+              key: token

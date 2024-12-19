@@ -65,42 +65,8 @@ spec:
         - name: image-name
           value: "$(params.image-prefix)bloomblog-relation:latest"
 
-    - name: build-favorite-image
-      runAfter: [ "build-api-image", "build-user-image" ]  # 第二组依赖第一组完成
-      taskRef:
-        name: build-and-push
-      workspaces:
-        - name: source
-          workspace: source
-      params:
-        - name: repo-url
-          value: "$(params.repo-url)"
-        - name: revision
-          value: "$(params.revision)"
-        - name: context
-          value: "cmd/favorite"
-        - name: image-name
-          value: "$(params.image-prefix)bloomblog-favorite:latest"
-
-    - name: build-comment-image
-      runAfter: [ "build-relation-image", "build-favorite-image" ]
-      taskRef:
-        name: build-and-push
-      workspaces:
-        - name: source
-          workspace: source
-      params:
-        - name: repo-url
-          value: "$(params.repo-url)"
-        - name: revision
-          value: "$(params.revision)"
-        - name: context
-          value: "cmd/comment"
-        - name: image-name
-          value: "$(params.image-prefix)bloomblog-comment:latest"
-
     - name: build-publish-image
-      runAfter: [ "build-relation-image", "build-favorite-image" ]
+      runAfter: [ "build-api-image", "build-user-image" ]  # 第二组依赖第一组完成
       taskRef:
         name: build-and-push
       workspaces:
@@ -116,8 +82,42 @@ spec:
         - name: image-name
           value: "$(params.image-prefix)bloomblog-publish:latest"
 
+    - name: build-comment-image
+      runAfter: [ "build-relation-image", "build-publish-image" ]
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/comment"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-comment:latest"
+
+    - name: build-favorite-image
+      runAfter: [ "build-relation-image", "build-publish-image" ]
+      taskRef:
+        name: build-and-push
+      workspaces:
+        - name: source
+          workspace: source
+      params:
+        - name: repo-url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+        - name: context
+          value: "cmd/favorite"
+        - name: image-name
+          value: "$(params.image-prefix)bloomblog-favorite:latest"
+
     - name: build-feed-image
-      runAfter: [ "build-comment-image", "build-publish-image" ]
+      runAfter: [ "build-comment-image", "build-favorite-image" ]
       taskRef:
         name: build-and-push
       workspaces:

@@ -31,11 +31,9 @@ spec:
         echo "Dependencies installed."
 
         echo "Setting up Docker config..."
-        # 创建可写目录来存放 config.json
         mkdir -p /tmp/docker
         cp /root/.docker/.dockerconfigjson /tmp/docker/config.json
 
-        # 告诉 buildah 使用此目录作为 Docker 配置目录
         export DOCKER_CONFIG=/tmp/docker
 
         echo "Building the image..."

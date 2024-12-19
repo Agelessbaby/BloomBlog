@@ -16,7 +16,6 @@ spec:
     - name: source
 
   tasks:
-    # 第一组两个任务并行执行
     - name: build-api-image
       taskRef:
         name: build-and-push
@@ -49,7 +48,6 @@ spec:
         - name: image-name
           value: "$(params.image-prefix)bloomblog-user:latest"
 
-    # 第二组两个任务依赖第一组完成后并行执行
     - name: build-relation-image
       runAfter: [ "build-api-image", "build-user-image" ]  # 第二组依赖第一组完成
       taskRef:
@@ -84,7 +82,6 @@ spec:
         - name: image-name
           value: "$(params.image-prefix)bloomblog-favorite:latest"
 
-    # 第三组任务依赖第二组完成后并行执行
     - name: build-comment-image
       runAfter: [ "build-relation-image", "build-favorite-image" ]
       taskRef:
@@ -119,7 +116,6 @@ spec:
         - name: image-name
           value: "$(params.image-prefix)bloomblog-publish:latest"
 
-    # 第四组任务依赖第三组完成后并行执行
     - name: build-feed-image
       runAfter: [ "build-comment-image", "build-publish-image" ]
       taskRef:

@@ -3,6 +3,9 @@ kind: Task
 metadata:
   name: build-and-push
 spec:
+  workspaces:
+    - name: source
+      description: Workspace containing the source code to build
   params:
     - name: repo-url
       description: Git repository URL
@@ -17,6 +20,9 @@ spec:
       image: alpine/git:latest
       script: |
         git clone -b $(params.revision) $(params.repo-url) /workspace/source
+      volumeMounts:
+        - name: source
+          mountPath: /workspace/source
     - name: build-and-push
       image: quay.io/buildah/stable:latest
       script: |
@@ -31,4 +37,3 @@ spec:
     - name: docker-config
       secret:
         secretName: registry-bloomblog
-

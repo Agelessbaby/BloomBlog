@@ -39,15 +39,18 @@ jobs:
       # Step 4: 应用 Tekton Task 和 Pipeline 定义
       - name: Apply Tekton Task
         run: |
+          kubectl delete -f .github/ci/build-and-push.yaml
           kubectl apply -f .github/ci/build-and-push.yaml
 
       - name: Apply Tekton Pipeline
         run: |
+          kubectl delete -f .github/ci/multi-service-pipeline.yaml
           kubectl apply -f .github/ci/multi-service-pipeline.yaml
 
       # Step 5: 触发 Tekton PipelineRun
       - name: Trigger Tekton PipelineRun
         run: |
+          kubectl delete -f .github/ci/multi-service-pipeline-run.yaml
           kubectl apply -f .github/ci/multi-service-pipeline-run.yaml
 
       # Step 6: 查看 PipelineRun 状态

@@ -20,9 +20,6 @@ spec:
       image: alpine/git:latest
       script: |
         git clone -b $(params.revision) $(params.repo-url) /workspace/source
-      volumeMounts:
-        - name: source
-          mountPath: /workspace/source
     - name: build-and-push
       image: quay.io/buildah/stable:latest
       script: |

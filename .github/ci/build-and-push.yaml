@@ -21,31 +21,54 @@ spec:
       script: |
         #!/bin/sh
         set -e
+        echo "Cloning repository $(params.repo-url) (branch: $(params.revision))..."
         git clone -b $(params.revision) $(params.repo-url) /workspace/source
+        echo "Repository cloned successfully."
+
+    - name: install-dependencies
+      image: registry.fedoraproject.org/fedora:latest
+      script: |
+        #!/bin/sh
+        set -e
+        echo "Installing required tools..."
+        dnf install -y buildah jq curl tar gzip
+        echo "Dependencies installed successfully."
+
+    - name: extract-do-token
+      image: registry.fedoraproject.org/fedora:latest
+      script: |
+        #!/bin/sh
+        set -e
+        echo "Decoding .dockerconfigjson and extracting DO_API_TOKEN..."
+        cat /root/.docker/.dockerconfigjson | base64 -d > /tmp/dockerconfig.json
+        export DO_API_TOKEN=$(jq -r '.auths["registry.digitalocean.com"].auth' /tmp/dockerconfig.json | base64 -d | cut -d':' -f2)
+        if [ -z "$DO_API_TOKEN" ]; then
+          echo "Failed to extract DO_API_TOKEN."
+          exit 1
+        fi
+        echo "DO_API_TOKEN extracted successfully."
+
+    - name: authenticate-digitalocean
+      image: registry.fedoraproject.org/fedora:latest
+      script: |
+        #!/bin/sh
+        set -e
+        echo "Installing doctl..."
+        curl -fsSL https://github.com/digitalocean/doctl/releases/download/v1.120.0/doctl-1.120.0-linux-amd64.tar.gz | tar -xz -C /usr/local/bin
+        echo "Authenticating with DigitalOcean..."
+        doctl auth init --access-token "${DO_API_TOKEN}"
+        echo "Authentication successful."
 
     - name: build-and-push
       image: registry.fedoraproject.org/fedora:latest
       script: |
         #!/bin/sh
         set -e
-
-        # 提取 DO_API_TOKEN
-        export DO_API_TOKEN=$(cat /root/.docker/.dockerconfigjson | base64 -d | jq -r '.auths["registry.digitalocean.com"].auth' | base64 -d | cut -d':' -f2)
-
-        # 安装 Buildah 和 DigitalOcean CLI
-        dnf install -y buildah curl jq tar gzip
-        curl -fsSL https://github.com/digitalocean/doctl/releases/download/v1.120.0/doctl-1.120.0-linux-amd64.tar.gz | tar -xz -C /usr/local/bin
-
-        # 验证安装
-        buildah --version
-        doctl version
-
-        # Authenticate with DigitalOcean
-        doctl auth init --access-token "${DO_API_TOKEN}"
-
-        # 构建并推送镜像
+        echo "Building the image..."
         buildah bud --format=docker -t $(params.image-name) -f /workspace/source/$(params.context)/Dockerfile /workspace/source
+        echo "Pushing the image..."
         buildah push $(params.image-name)
+        echo "Image pushed successfully."
       securityContext:
         privileged: true
       volumeMounts:

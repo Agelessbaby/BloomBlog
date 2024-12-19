@@ -17,18 +17,10 @@ spec:
       image: alpine/git:latest
       script: |
         git clone -b $(params.revision) $(params.repo-url) /workspace/source
-    - name: build-image
+    - name: build-and-push
       image: quay.io/buildah/stable:latest
       script: |
         buildah bud --format=docker -t $(params.image-name) /workspace/source/$(params.context)
-      securityContext:
-        privileged: true
-      volumeMounts:
-        - name: docker-config
-          mountPath: /root/.docker
-    - name: push-image
-      image: quay.io/buildah/stable:latest
-      script: |
         buildah push $(params.image-name)
       securityContext:
         privileged: true
@@ -39,3 +31,4 @@ spec:
     - name: docker-config
       secret:
         secretName: registry-bloomblog
+

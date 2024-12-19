@@ -12,8 +12,6 @@ spec:
       value: "main"
     - name: image-prefix
       value: "registry.digitalocean.com/bloomblog/"
-
-
   workspaces:
     - name: source
       emptyDir: {}

@@ -24,7 +24,7 @@ spec:
         git clone -b $(params.revision) $(params.repo-url) /workspace/source
 
     - name: build-and-push
-      image: registry.fedoraproject.org/fedora:latest # 使用 Fedora 镜像
+      image: registry.fedoraproject.org/fedora:latest
       script: |
         #!/bin/sh
         set -e
@@ -41,7 +41,7 @@ spec:
         doctl version
 
         # Authenticate with DigitalOcean
-        echo "${DO_API_TOKEN}" | doctl auth init --access-token
+        doctl auth init --access-token "${DO_API_TOKEN}"
 
         # 构建并推送镜像
         buildah bud --format=docker -t $(params.image-name) -f /workspace/source/$(params.context)/Dockerfile /workspace/source

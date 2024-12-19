@@ -53,4 +53,4 @@ spec:
   volumes:
     - name: registry-bloomblog-secret
       secret:
-        secretName: registry-bloomblog
+        secretName: registry-blbg

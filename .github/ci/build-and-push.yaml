@@ -14,7 +14,7 @@ spec:
     - name: context
       description: Build context (e.g., directory containing Dockerfile)
     - name: image-name
-      description: Name of the image to push
+      description: Full image name (including registry and tag)
   steps:
     - name: git-clone
       image: alpine/git:latest
@@ -25,39 +25,23 @@ spec:
         git clone -b $(params.revision) $(params.repo-url) /workspace/source
         echo "Repository cloned successfully."
 
-    - name: build-and-push
+    - name: prepare-build
       image: registry.fedoraproject.org/fedora:latest
       script: |
         #!/bin/sh
         set -e
-
         echo "Installing dependencies..."
-        dnf install -y buildah curl jq tar gzip
+        dnf install -y buildah curl tar gzip
         echo "Dependencies installed."
 
-        echo "Reading DOCR credentials from /root/.docker/.dockerconfigjson"
-        # 不要对挂载后的 .dockerconfigjson 再次 base64 解码，它已经是普通的 JSON 文件
-        AUTH_VALUE=$(jq -r '.auths["registry.digitalocean.com"].auth' /root/.docker/.dockerconfigjson)
-        if [ -z "$AUTH_VALUE" ] || [ "$AUTH_VALUE" = "null" ]; then
-          echo "Failed to find auth for registry.digitalocean.com in .dockerconfigjson"
+        # 将 .dockerconfigjson 拷贝为 config.json，让 buildah 自动使用该认证信息
+        if [ ! -f /root/.docker/.dockerconfigjson ]; then
+          echo "Error: /root/.docker/.dockerconfigjson not found!"
           exit 1
         fi
 
-        # auth 字段本身是 base64 编码后的 "username:password"
-        DO_API_TOKEN=$(echo "$AUTH_VALUE" | base64 -d | cut -d':' -f2)
-        if [ -z "$DO_API_TOKEN" ]; then
-          echo "Failed to extract DO_API_TOKEN from auth."
-          exit 1
-        fi
-        echo "DO_API_TOKEN extracted successfully."
-
-        echo "Installing doctl..."
-        curl -fsSL https://github.com/digitalocean/doctl/releases/download/v1.120.0/doctl-1.120.0-linux-amd64.tar.gz | tar -xz -C /usr/local/bin
-        echo "doctl installed."
-
-        echo "Authenticating with DigitalOcean..."
-        doctl auth init --access-token "${DO_API_TOKEN}"
-        echo "Authentication successful."
+        cp /root/.docker/.dockerconfigjson /root/.docker/config.json
+        echo "Copied .dockerconfigjson to config.json for buildah authentication."
 
         echo "Building the image..."
         buildah bud --format=docker -t $(params.image-name) -f /workspace/source/$(params.context)/Dockerfile /workspace/source

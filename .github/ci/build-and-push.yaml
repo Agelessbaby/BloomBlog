@@ -20,19 +20,20 @@ spec:
       image: alpine/git:latest
       script: |
         #!/bin/sh
+        set -e
         git clone -b $(params.revision) $(params.repo-url) /workspace/source
 
     - name: build-and-push
-      image: registry.digitalocean.com/your-registry/buildah-doctl:latest # 使用合并后的自定义镜像
+      image: quay.io/buildah/stable:latest
       script: |
         #!/bin/sh
         # Authenticate with DigitalOcean
         echo "${DO_API_TOKEN}" | doctl auth init --access-token
 
-        # Build the image
+        # Build the container image
         buildah bud --format=docker -t $(params.image-name) -f /workspace/source/$(params.context)/Dockerfile /workspace/source
 
-        # Push the image
+        # Push the container image to the registry
         buildah push $(params.image-name)
       securityContext:
         privileged: true

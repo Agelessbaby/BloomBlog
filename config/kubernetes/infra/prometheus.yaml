@@ -15,7 +15,7 @@ data:
         metrics_path: "/bloomblog-metrics"
         static_configs:
           - targets:
-              - "bloomblog-server:8088"  # 替换为你的服务地址
+              - "bloomblog-server-prometheus.default:9091"  # 替换为你的服务地址
         relabel_configs:
           - source_labels: [__address__]
             target_label: instance
@@ -56,3 +56,17 @@ spec:
         - name: prometheus-config-volume
           configMap:
             name: prometheus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  type: ClusterIP  # 将类型改为 ClusterIP
+  ports:
+    - port: 9090          # Service 暴露的端口
+      targetPort: 9090    # Pod 内部监听的端口
+  selector:
+    app: prometheus        # 必须与 Prometheus Deployment 的标签一致
+

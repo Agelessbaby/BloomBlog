@@ -23,8 +23,8 @@ func registerGroup(h *server.Hertz) {
 
 	// User service
 	user := bloomblog.Group("/user")
-	user.POST("/login/", handlers.Login)
-	user.POST("/register/", handlers.Register)
+	user.POST("/login", handlers.Login)
+	user.POST("/register", handlers.Register)
 	// TODO Now the method is POST, which should be changed into GET
 	user.GET("/getuserbyid", handlers.GetUserById)
 

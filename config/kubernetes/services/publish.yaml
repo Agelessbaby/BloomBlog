@@ -41,3 +41,17 @@ spec:
       port: 8084
       targetPort: 8084
   type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bloomblog-publish-prometheus
+spec:
+  selector:
+    app: publish  # 确保与 Pod 的标签一致
+  ports:
+    - protocol: TCP
+      port: 9091         # ClusterIP 暴露的端口
+      targetPort: 9091   # Pod 内部的应用监听端口
+  type: ClusterIP         # 使用 ClusterIP 类型

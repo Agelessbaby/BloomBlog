@@ -10,6 +10,7 @@ import (
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	prometheus "github.com/kitex-contrib/monitor-prometheus"
 	"log"
 	"net"
 )
@@ -42,6 +43,7 @@ func main() {
 		// Please keep the same as provider.WithServiceName
 		server.WithMiddleware(middleware.TimerMW),
 		server.WithMiddleware(middleware.RecordArgMW),
+		server.WithTracer(prometheus.NewServerTracer(":9091", "/bloomblog-metrics")),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: ServiceName}))
 
 	if err := svr.Run(); err != nil {

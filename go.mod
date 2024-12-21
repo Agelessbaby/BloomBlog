@@ -14,9 +14,9 @@ require (
 	github.com/hertz-contrib/http2 v0.1.8
 	github.com/hertz-contrib/monitor-prometheus v0.1.2
 	github.com/hertz-contrib/swagger v0.1.0
+	github.com/kitex-contrib/monitor-prometheus v0.2.0
 	github.com/kitex-contrib/resolver-dns v0.1.0
 	github.com/minio/minio-go/v7 v7.0.80
-	github.com/prometheus/client_golang v1.17.0
 	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/spf13/viper v1.19.0
 	github.com/swaggo/files v1.0.1
@@ -86,6 +86,7 @@ require (
 	github.com/nyaruka/phonenumbers v1.4.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
+	github.com/prometheus/client_golang v1.17.0 // indirect
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.45.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect

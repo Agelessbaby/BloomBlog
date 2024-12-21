@@ -10,6 +10,7 @@ import (
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
+	prometheus "github.com/kitex-contrib/monitor-prometheus"
 	"net"
 )
 
@@ -34,6 +35,7 @@ func main() {
 		//server.WithMiddleware(middleware.ServerMiddleware),                 // middleware
 		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}), // limit
 		server.WithMuxTransport(), // Multiplex
+		server.WithTracer(prometheus.NewServerTracer(":9091", "/bloomblog-metrics")),
 		//TODO add tracing
 		server.WithMiddleware(middleware.TimerMW),
 		server.WithMiddleware(middleware.RecordArgMW),

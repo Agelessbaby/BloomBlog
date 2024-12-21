@@ -34,3 +34,17 @@ spec:
       port: 8085
       targetPort: 8085
   type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bloomblog-favorite-prometheus
+spec:
+  selector:
+    app: favorite  # 确保与 Pod 的标签一致
+  ports:
+    - protocol: TCP
+      port: 9091         # ClusterIP 暴露的端口
+      targetPort: 9091   # Pod 内部的应用监听端口
+  type: ClusterIP         # 使用 ClusterIP 类型

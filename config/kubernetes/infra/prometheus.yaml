@@ -16,6 +16,12 @@ data:
         static_configs:
           - targets:
               - "bloomblog-server-prometheus.default:9091"  # 替换为你的服务地址
+              - "bloomblog-user-prometheus.default:9091"
+              - "bloomblog-relation-prometheus.default:9091"
+              - "bloomblog-feed-prometheus.default:9091"
+              - "bloomblog-publish-prometheus.default:9091"
+              - "bloomblog-comment-prometheus.default:9091"
+              - "bloomblog-favorite-prometheus.default:9091"
         relabel_configs:
           - source_labels: [__address__]
             target_label: instance
@@ -23,6 +29,7 @@ data:
             replacement: "${1}"
           - target_label: environment
             replacement: production
+
 ---
 apiVersion: apps/v1
 kind: Deployment

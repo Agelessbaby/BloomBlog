@@ -10,7 +10,7 @@ import (
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
 	"github.com/cloudwego/kitex/server"
-
+	"github.com/kitex-contrib/monitor-prometheus"
 	"log"
 	"net"
 )
@@ -38,6 +38,7 @@ func main() {
 		server.WithMuxTransport(), // Multiplex
 		server.WithMiddleware(middleware.TimerMW),
 		server.WithMiddleware(middleware.RecordArgMW),
+		server.WithTracer(prometheus.NewServerTracer(":9091", "/bloomblog-metrics")),
 		//TODO add tracing
 		//server.WithSuite(tracing.NewServerSuite()), // trace
 		// Please keep the same as provider.WithServiceName

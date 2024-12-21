@@ -10,6 +10,7 @@ import (
 	"github.com/hertz-contrib/gzip"
 	hz2config "github.com/hertz-contrib/http2/config"
 	"github.com/hertz-contrib/http2/factory"
+	prometheus "github.com/hertz-contrib/monitor-prometheus"
 )
 
 // encode the setting into bytes and then decode into struct
@@ -23,7 +24,10 @@ func InitHertzCfg() {
 func InitHertz() *server.Hertz {
 	InitHertzCfg()
 
-	opts := []hzconfig.Option{server.WithHostPorts(ServiceAddr)}
+	opts := []hzconfig.Option{
+		server.WithHostPorts(ServiceAddr),
+		server.WithTracer(prometheus.NewServerTracer(":9091", "/bloomblog-metrics")),
+	}
 
 	//TODO add tracing
 	//tracer, tracerCfg := hertztracing.NewServerTracer()

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	user "github.com/Agelessbaby/BloomBlog/cmd/user/kitex_gen/user/usersrv"
 	"github.com/Agelessbaby/BloomBlog/util/config"
+	"github.com/Agelessbaby/BloomBlog/util/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -34,6 +35,8 @@ func main() {
 		server.WithLimit(&limit.Option{MaxConnections: 1000, MaxQPS: 100}), // limit
 		server.WithMuxTransport(), // Multiplex
 		//TODO add tracing
+		server.WithMiddleware(middleware.TimerMW),
+		server.WithMiddleware(middleware.RecordArgMW),
 		//server.WithSuite(tracing.NewServerSuite()), // trace
 		// Please keep the same as provider.WithServiceName
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: ServiceName}))

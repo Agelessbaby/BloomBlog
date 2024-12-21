@@ -1,0 +1,25 @@
+global:
+  scrape_interval: 10s       # 抓取间隔，每隔 10 秒抓取一次指标
+  scrape_timeout: 5s         # 抓取超时时间，必须小于 scrape_interval
+  evaluation_interval: 10s   # 规则评估间隔
+
+scrape_configs:
+  - job_name: "bloomblog-metrics" # 自定义服务名称
+    metrics_path: "/bloomblog-metrics"   # 指标路径，需与你的服务配置一致
+    static_configs:
+      - targets:
+          - "api:8088" # Prometheus 指标暴露地址 (Hertz 服务地址)
+    relabel_configs:         # 规范标签处理
+      - source_labels: [__address__]
+        target_label: instance
+        regex: "(.*):.*"
+        replacement: "${1}"  # 仅保留主机名/IP 作为实例名
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []       # 如有 Alertmanager，可填入其地址
+
+rule_files:
+# 如果有规则文件，可在此处加载
+# - "alerts.rules.yml"

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	relation "github.com/Agelessbaby/BloomBlog/cmd/relation/kitex_gen/relation/relationsrv"
 	"github.com/Agelessbaby/BloomBlog/util/config"
+	"github.com/Agelessbaby/BloomBlog/util/middleware"
 	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/cloudwego/kitex/pkg/limit"
 	"github.com/cloudwego/kitex/pkg/rpcinfo"
@@ -39,6 +40,8 @@ func main() {
 		//TODO add tracing
 		//server.WithSuite(tracing.NewServerSuite()), // trace
 		// Please keep the same as provider.WithServiceName
+		server.WithMiddleware(middleware.TimerMW),
+		server.WithMiddleware(middleware.RecordArgMW),
 		server.WithServerBasicInfo(&rpcinfo.EndpointBasicInfo{ServiceName: ServiceName}))
 
 	if err := svr.Run(); err != nil {

@@ -12,6 +12,13 @@ spec:
       value: "main"
     - name: image-prefix
       value: "registry.digitalocean.com/bloomblog/"
+    - name: argocd-server
+      value: "argocd-server.argocd.svc“"
+    - name: argocd-token
+      valueFrom:
+        secretKeyRef:
+          name: argocd-token
+          key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhcmdvY2QiLCJzdWIiOiJhZG1pbjphcGlLZXkiLCJuYmYiOjE3MzQ4NTc5OTgsImlhdCI6MTczNDg1Nzk5OCwianRpIjoiYmU2OWExMWEtN2JjMy00MmZlLTliNzUtYTJjYzFlNGQ5NDZiIn0.RKyve0huS8_xghMUUklK7ONj2no9HmSsXgyBtdoY9rg"
   workspaces:
     - name: source
       emptyDir: {}

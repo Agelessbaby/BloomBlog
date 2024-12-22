@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: trigger-argocd-sync
+spec:
+  params:
+    - name: app-name
+      description: ArgoCD application nameargocd account generate-token --account admin
+    - name: argocd-server
+      description: ArgoCD server addr
+    - name: argocd-token
+      description: ArgoCD API Token
+  steps:
+    - name: sync-argocd
+      image: curlimages/curl:latest
+      script: |
+        #!/bin/sh
+        curl -X POST \
+          -H "Authorization: Bearer $(params.argocd-token)" \
+          -H "Content-Type: application/json" \
+          -d '{"syncOptions":["Prune=true","SelfHeal=true"]}' \
+          https://$(params.argocd-server)/api/v1/applications/$(params.app-name)/sync

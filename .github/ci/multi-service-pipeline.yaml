@@ -11,6 +11,11 @@ spec:
       default: main
     - name: image-prefix
       description: Image prefix (e.g., docker.io/user/)
+    - name: argocd-server
+      description: ArgoCD server URL
+      default: argocd.example.com
+    - name: argocd-token
+      description: ArgoCD API token
 
   workspaces:
     - name: source
@@ -49,7 +54,7 @@ spec:
           value: "$(params.image-prefix)bloomblog-user:latest"
 
     - name: build-relation-image
-      runAfter: [ "build-api-image", "build-user-image" ]  # 第二组依赖第一组完成
+      runAfter: ["build-api-image", "build-user-image"]
       taskRef:
         name: build-and-push
       workspaces:
@@ -66,7 +71,7 @@ spec:
           value: "$(params.image-prefix)bloomblog-relation:latest"
 
     - name: build-publish-image
-      runAfter: [ "build-api-image", "build-user-image" ]  # 第二组依赖第一组完成
+      runAfter: ["build-api-image", "build-user-image"]
       taskRef:
         name: build-and-push
       workspaces:
@@ -83,7 +88,7 @@ spec:
           value: "$(params.image-prefix)bloomblog-publish:latest"
 
     - name: build-comment-image
-      runAfter: [ "build-relation-image", "build-publish-image" ]
+      runAfter: ["build-relation-image", "build-publish-image"]
       taskRef:
         name: build-and-push
       workspaces:
@@ -100,7 +105,7 @@ spec:
           value: "$(params.image-prefix)bloomblog-comment:latest"
 
     - name: build-favorite-image
-      runAfter: [ "build-relation-image", "build-publish-image" ]
+      runAfter: ["build-relation-image", "build-publish-image"]
       taskRef:
         name: build-and-push
       workspaces:
@@ -117,7 +122,7 @@ spec:
           value: "$(params.image-prefix)bloomblog-favorite:latest"
 
     - name: build-feed-image
-      runAfter: [ "build-comment-image", "build-favorite-image" ]
+      runAfter: ["build-comment-image", "build-favorite-image"]
       taskRef:
         name: build-and-push
       workspaces:
@@ -132,3 +137,15 @@ spec:
           value: "cmd/feed"
         - name: image-name
           value: "$(params.image-prefix)bloomblog-feed:latest"
+
+    - name: trigger-argocd-sync
+      runAfter: ["build-feed-image"]
+      taskRef:
+        name: trigger-argocd-sync
+      params:
+        - name: argocd-server
+          value: "$(params.argocd-server)"
+        - name: argocd-token
+          value: "$(params.argocd-token)"
+        - name: app-name
+          value: "bloomblog"

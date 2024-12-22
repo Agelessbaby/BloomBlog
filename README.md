@@ -1,4 +1,4 @@
-## BloomBlog  https://github.com/Agelessbaby/BloomBlog
+## BloomBlog  
 
 A backend social media project using Kitex + Hertz + RPC + Kubernetes，supporting functionalities for publishing posts, adding comments, liking posts, and dynamically retrieving them in a feed-like manner
 

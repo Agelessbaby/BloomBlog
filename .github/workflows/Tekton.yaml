@@ -45,7 +45,6 @@ jobs:
 
       - name: Trigger Tekton PipelineRun
         run: |
-          kubectl delete -f .github/ci/multi-service-pipeline-run.yaml
           kubectl apply -f .github/ci/multi-service-pipeline-run.yaml
 
       - name: Check PipelineRun Status

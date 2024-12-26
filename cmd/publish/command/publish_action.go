@@ -6,7 +6,9 @@ import (
 	"github.com/Agelessbaby/BloomBlog/cmd/publish/kitex_gen/publish"
 	"github.com/Agelessbaby/BloomBlog/dal/db"
 	"github.com/Agelessbaby/BloomBlog/util/oss/S3"
+	"github.com/cloudwego/kitex/pkg/klog"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 	"strings"
 )
 
@@ -57,7 +59,7 @@ func (s *PublishActionService) PublishAction(req *publish.BloomblogPublishAction
 		}
 		imageurls = append(imageurls, playUrl)
 	}
-	err = db.CreatePost(s.ctx, &db.Post{
+	post := &db.Post{
 		AuthorID:      int(uid),
 		ImageUrls:     imageurls,
 		CoverUrl:      coverUrl,
@@ -65,11 +67,28 @@ func (s *PublishActionService) PublishAction(req *publish.BloomblogPublishAction
 		FavoriteCount: 0,
 		CommentCount:  0,
 		Title:         req.Title,
-	})
+	}
+	err = db.CreatePost(s.ctx, post)
+	//TODO Add the logic of pushing to user email
 	if err != nil {
 		return err
 	}
-	//TODO Add the logic of pushing to user email
-	
+	err = s.pushToFollowers(s.ctx, post)
+	if err != nil {
+		return err
+	}
 	return nil
+}
+
+func (s *PublishActionService) pushToFollowers(ctx context.Context, ps *db.Post) error {
+	relations, err := db.FollowerList(ctx, int64(ps.AuthorID))
+	if err != nil {
+		return err
+	}
+	for _, relation := range relations {
+		err := db.InsertIntoTimeline(s.ctx, ps)
+		if err != nil {
+			klog.Infof("insert into timeline failed:%s %s", relation.UserID, ps.ID)
+		}
+	}
 }

@@ -19,7 +19,7 @@ import (
 var (
 	DB           *gorm.DB
 	dblog        ormlog.Interface
-	redis_client *redis.Client
+	Redis_client *redis.Client
 )
 
 func init() {
@@ -39,7 +39,7 @@ func initCache() {
 	fmt.Println(os.Getenv("REDIS_SECRET"))
 	fmt.Println("1212")
 	cacheConfig := config.CreateConfig("Cache")
-	redis_client = redis.NewClient(&redis.Options{
+	Redis_client = redis.NewClient(&redis.Options{
 		Username: cacheConfig.GetString("redis.Username"),
 		Addr:     fmt.Sprintf("%s:%s", cacheConfig.GetString("redis.Host"), cacheConfig.GetString("redis.Port")),
 		Password: os.Getenv("REDIS_SECRET"),
@@ -48,7 +48,7 @@ func initCache() {
 		},
 		DB: 0,
 	})
-	if err := redis_client.Ping(context.Background()).Err(); err != nil {
+	if err := Redis_client.Ping(context.Background()).Err(); err != nil {
 		klog.Fatalf("init cache failed: %s", err)
 	} else {
 		klog.Infof("Redis cache initialized successfully at %s:%s", cacheConfig.GetString("redis.Host"), cacheConfig.GetString("redis.Port"))

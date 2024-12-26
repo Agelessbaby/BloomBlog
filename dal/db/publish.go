@@ -2,6 +2,8 @@ package db
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -25,4 +27,34 @@ func PublishList(ctx context.Context, authorId int64) ([]*Post, error) {
 		return nil, err
 	}
 	return pubList, nil
+}
+
+type Timeline struct {
+	PID      uint   `json:"pid"`
+	UID      int    `json:"uid"`
+	CoverUrl string `json:"coverUrl"`
+}
+
+// InsertIntoTimeline
+func InsertIntoTimeline(ctx context.Context, post *Post) error {
+	tl := &Timeline{
+		PID:      post.ID,
+		UID:      post.AuthorID,
+		CoverUrl: post.CoverUrl,
+	}
+
+	timelineJSON, err := json.Marshal(tl)
+	if err != nil {
+		return fmt.Errorf("failed to serialize timeline: %w", err)
+	}
+
+	// 使用用户 ID 作为时间线的 Key，将 Timeline 数据存储到 Redis 的列表中
+	key := fmt.Sprintf("%d", post.ID)
+
+	// 将序列化的 Timeline 插入到列表中
+	if err := Redis_client.LPush(ctx, key, timelineJSON).Err(); err != nil {
+		return fmt.Errorf("failed to insert into timeline: %w", err)
+	}
+
+	return nil
 }

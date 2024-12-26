@@ -14,21 +14,6 @@ spec:
       value: "registry.digitalocean.com/bloomblog/"
     - name: argocd-server
       value: "argocd-server.argocd.svc"
-    # argocd-token 将在工作区或步骤中处理
   workspaces:
     - name: source
       emptyDir: {}
-  taskRunSpecs:
-    - pipelineTaskName: your-task-name
-      taskSpec:
-        steps:
-          - name: use-argocd-token
-            image: alpine:latest
-            env:
-              - name: ARGOCD_TOKEN
-                valueFrom:
-                  secretKeyRef:
-                    name: argocd-token
-                    key: "your-key"
-            script: |
-              echo "ArgoCD token is: $ARGOCD_TOKEN"

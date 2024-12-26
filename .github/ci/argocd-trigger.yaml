@@ -5,18 +5,36 @@ metadata:
 spec:
   params:
     - name: app-name
-      description: ArgoCD application nameargocd account generate-token --account admin
+      description: The name of the ArgoCD application to sync
     - name: argocd-server
-      description: ArgoCD server addr
-    - name: argocd-token
-      description: ArgoCD API Token
+      description: The ArgoCD server address (e.g., argocd-server.default.svc.cluster.local)
   steps:
     - name: sync-argocd
       image: curlimages/curl:latest
+      env:
+        - name: ARGOCD_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: argocd-token
+              key: token
       script: |
         #!/bin/sh
-        curl -X POST \
-          -H "Authorization: Bearer $(params.argocd-token)" \
+        # Validate input parameters
+        if [ -z "$(params.app-name)" ]; then
+          echo "Error: app-name is required."
+          exit 1
+        fi
+        if [ -z "$ARGOCD_TOKEN" ]; then
+          echo "Error: ARGOCD_TOKEN is required."
+          exit 1
+        fi
+
+        # Trigger ArgoCD sync
+        echo "Triggering ArgoCD sync for application $(params.app-name)..."
+        curl -m 30 --fail -X POST \
+          -H "Authorization: Bearer $ARGOCD_TOKEN" \
           -H "Content-Type: application/json" \
           -d '{"syncOptions":["Prune=true","SelfHeal=true"]}' \
-          https://$(params.argocd-server)/api/v1/applications/$(params.app-name)/sync
+          https://$(params.argocd-server)/api/v1/applications/$(params.app-name)/sync || exit 1
+
+        echo "ArgoCD sync triggered successfully."

@@ -57,7 +57,7 @@ func (s *PublishActionService) PublishAction(req *publish.BloomblogPublishAction
 		}
 		imageurls = append(imageurls, playUrl)
 	}
-	return db.CreatePost(s.ctx, &db.Post{
+	err = db.CreatePost(s.ctx, &db.Post{
 		AuthorID:      int(uid),
 		ImageUrls:     imageurls,
 		CoverUrl:      coverUrl,
@@ -66,4 +66,10 @@ func (s *PublishActionService) PublishAction(req *publish.BloomblogPublishAction
 		CommentCount:  0,
 		Title:         req.Title,
 	})
+	if err != nil {
+		return err
+	}
+	//TODO Add the logic of pushing to user email
+	
+	return nil
 }

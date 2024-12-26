@@ -1,9 +1,12 @@
 package db
 
 import (
+	"context"
+	"crypto/tls"
 	"fmt"
 	"github.com/Agelessbaby/BloomBlog/util/config"
 	"github.com/cloudwego/kitex/pkg/klog"
+	"github.com/redis/go-redis/v9"
 	"github.com/uptrace/opentelemetry-go-extra/otelgorm"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -14,12 +17,12 @@ import (
 )
 
 var (
-	DB    *gorm.DB
-	dblog ormlog.Interface
+	DB           *gorm.DB
+	dblog        ormlog.Interface
+	redis_client *redis.Client
 )
 
 func init() {
-
 	dblog = ormlog.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 		ormlog.Config{
@@ -28,7 +31,27 @@ func init() {
 			Colorful:      true,                   // enable colorful print
 		},
 	)
+	initCache()
 	initDB()
+}
+
+func initCache() {
+	cacheConfig := config.CreateConfig("Cache")
+	redis_client = redis.NewClient(&redis.Options{
+		Username: cacheConfig.GetString("redis.Username"),
+		Addr:     fmt.Sprintf("%s:%s", cacheConfig.GetString("redis.Host"), cacheConfig.GetString("redis.Port")),
+		Password: cacheConfig.GetString("redis.Password"), //没有密码
+		TLSConfig: &tls.Config{
+			InsecureSkipVerify: true, // 开发环境跳过证书验证（生产建议设置为 false）
+		},
+		DB: 0,
+	})
+	if err := redis_client.Ping(context.Background()).Err(); err != nil {
+		klog.Fatalf("init cache failed: %s", err)
+	} else {
+		klog.Infof("Redis cache initialized successfully at %s:%s", cacheConfig.GetString("redis.Host"), cacheConfig.GetString("redis.Port"))
+	}
+
 }
 
 func initDB() {

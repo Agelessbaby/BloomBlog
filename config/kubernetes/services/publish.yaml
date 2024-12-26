@@ -23,6 +23,8 @@ spec:
               value: ${{ secrets.AWS_ACCESS_KEY_ID }}
             - name: AWS_SECRET_ACCESS_KEY
               value: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            - name: REDIS_SECRET
+              value: ${{secrets.REDIS_SECRET}}
           ports:
             - containerPort: 8084
           resources:

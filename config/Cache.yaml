@@ -1,5 +1,4 @@
 redis:
   Host: db-caching-sgp1-80344-do-user-18567160-0.m.db.ondigitalocean.com
-  Password: AVNS_kOSRC_tm8a1gu8yXpoJ
   Port: 25061
   Username: default

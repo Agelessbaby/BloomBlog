@@ -36,11 +36,13 @@ func init() {
 }
 
 func initCache() {
+	fmt.Println(os.Getenv("REDIS_SECRET"))
+	fmt.Println("1212")
 	cacheConfig := config.CreateConfig("Cache")
 	redis_client = redis.NewClient(&redis.Options{
 		Username: cacheConfig.GetString("redis.Username"),
 		Addr:     fmt.Sprintf("%s:%s", cacheConfig.GetString("redis.Host"), cacheConfig.GetString("redis.Port")),
-		Password: cacheConfig.GetString("redis.Password"), //没有密码
+		Password: os.Getenv("REDIS_SECRET"),
 		TLSConfig: &tls.Config{
 			InsecureSkipVerify: true, // 开发环境跳过证书验证（生产建议设置为 false）
 		},
